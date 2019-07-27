@@ -31773,7 +31773,9 @@ function (_Component) {
       SetControlActionURL: _this.props.SetControlActionURL,
       items: [],
       isLoaded: false,
-      error: null
+      status: null,
+      error: null,
+      message: null
     };
     return _this;
   } //взывается сразу же после отображения компонента на экране приведут к запуску жизненного цикла обновления и к повторному отображению компонента на экране

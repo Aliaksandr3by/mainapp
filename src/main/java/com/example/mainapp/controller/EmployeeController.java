@@ -32,12 +32,9 @@ public class EmployeeController {
 		try {
 
 			this.iHibernateUtil = iHibernateUtil;
-
-			if (this.serviceRegistryBuilder == null) {
-				iHibernateUtil.buidIn(CON, Employee.class);
-				this.serviceRegistryBuilder = this.iHibernateUtil.getServiceRegistryBuilder();
-				this.sessionFactory =  this.iHibernateUtil.getSessionFactory();
-			}
+			iHibernateUtil.buidIn(CON, Employee.class);
+			this.serviceRegistryBuilder = this.iHibernateUtil.getServiceRegistryBuilder();
+			this.sessionFactory = this.iHibernateUtil.getSessionFactory();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -52,12 +49,11 @@ public class EmployeeController {
 
 				try (Session session = sessionFactory.openSession()) {
 
-//					session.beginTransaction();
-//					session.update(Objects.requireNonNull(employee));
-//					session.getTransaction().commit();
+					session.beginTransaction();
+//					session.
+					session.getTransaction().commit();
 
-					return session.createQuery("from com.example.mainapp.DAO.entity.Employee")
-							.list();
+					return session.createQuery("from Employee", Employee.class).list();
 
 				}
 
@@ -97,22 +93,16 @@ public class EmployeeController {
 	public boolean deleteEmployeesOnId(@RequestBody Employee employee) throws Exception {
 		try {
 
-			iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
+			try (Session session = this.sessionFactory.openSession()) {
 
-				try (Session session = sessionFactory.openSession()) {
+				long id = Objects.requireNonNull(employee).getEmployeeId();
 
-					long id = Objects.requireNonNull(employee).getEmployeeId();
+				session.beginTransaction();
+				session.delete(Objects.requireNonNull(employee));
+				session.getTransaction().commit();
 
-					session.beginTransaction();
-					session.delete(Objects.requireNonNull(employee));
-					session.getTransaction().commit();
-
-					return null;
-				}
-
-			});
-
-			return true;
+				return true;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -136,17 +126,11 @@ public class EmployeeController {
 					Employee employee = session.get(Employee.class, id);
 					session.getTransaction().commit();
 
-					return new ArrayList<Employee>(){
+					return new ArrayList<Employee>() {
 						{
 							add(employee);
 						}
 					};
-//							productNames
-//							.stream()
-//							.filter(e -> e.getEmployeeId().equals(id))
-//							.collect(Collectors.toList())
-//							.findFirst().orElseThrow(() -> new NotFoundException())
-//							;
 				}
 
 			});
@@ -162,24 +146,18 @@ public class EmployeeController {
 
 		try {
 
-			iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
+			try (Session session = this.sessionFactory.openSession()) {
 
-				try (Session session = sessionFactory.openSession()) {
+				session.beginTransaction();
+				session.save(Objects.requireNonNull(employee));
+				session.getTransaction().commit();
 
-					session.beginTransaction();
-					session.save(Objects.requireNonNull(employee));
-					session.getTransaction().commit();
+//				List<Employee> productNames =
+//						session.createQuery("from Employee", Employee.class)
+//								.list();
 
-					List<Employee> productNames =
-							session.createQuery("from Employee", Employee.class)
-									.list();
-
-					return productNames;
-				}
-
-			});
-
-			return true;
+				return true;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

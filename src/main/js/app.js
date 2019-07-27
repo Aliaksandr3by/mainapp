@@ -22,7 +22,9 @@ class App extends Component {
 			SetControlActionURL: this.props.SetControlActionURL,
 			items: [],
 			isLoaded: false,
+			status: null,
 			error: null,
+			message: null,
 		};
 	}
 

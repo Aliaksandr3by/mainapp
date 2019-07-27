@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 @Entity
@@ -14,28 +15,28 @@ public class Employee implements Serializable {
 	public Employee() {
 	}
 
+	@Column(name = "employee_id", nullable = false)
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-	@Column(name = "employee_id", unique = true)
-//	@GenericGenerator(name = "increment", strategy = "increment")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeId;
 
-	@Column(name = "first_name")
+	@Column(name = "first_name", nullable = false)
 	@Type(type = "text")
 	private String firstName;
 
-	@Column(name = "last_name")
+	@Column(name = "last_name", nullable = false)
 	@Type(type = "text")
 	private String lastName;
 
-	@Column(name = "department_id", unique = false)
+	@Column(name = "department_id", unique = false, nullable = false)
 	private Long departmentId;
 
-	@Column(name = "job_title")
+	@Column(name = "job_title", nullable = false)
 	@Type(type = "text")
 	private String jobTitle;
 
-	@Column(name = "gender")
+	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private Gender gender;
 
@@ -93,5 +94,23 @@ public class Employee implements Serializable {
 
 	public void setGender(Gender gender) {
 		this.gender = gender;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Employee employee = (Employee) o;
+		return employeeId.equals(employee.employeeId) &&
+				firstName.equals(employee.firstName) &&
+				lastName.equals(employee.lastName) &&
+				departmentId.equals(employee.departmentId) &&
+				jobTitle.equals(employee.jobTitle) &&
+				gender == employee.gender;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(employeeId, firstName, lastName, departmentId, jobTitle, gender);
 	}
 }
