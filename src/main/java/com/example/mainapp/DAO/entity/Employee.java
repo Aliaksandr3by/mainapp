@@ -16,8 +16,8 @@ public class Employee implements Serializable {
 
 	@Id
 	@Column(name = "employee_id", unique = true)
-	@GenericGenerator(name = "increment", strategy = "increment")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GenericGenerator(name = "increment", strategy = "increment")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeId;
 
 	@Column(name = "first_name")

@@ -3,13 +3,17 @@ package com.example.mainapp.controller;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
 import com.example.mainapp.DAO.IHibernateUtil;
+import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -19,6 +23,7 @@ public class EmployeeController {
 	private IHibernateUtil iHibernateUtil;
 
 	private StandardServiceRegistry serviceRegistryBuilder;
+	private SessionFactory sessionFactory;
 
 	private final String CON = "hibernate.postgres.employeedb.cfg.xml";
 
@@ -27,8 +32,11 @@ public class EmployeeController {
 		try {
 
 			this.iHibernateUtil = iHibernateUtil;
+
 			if (this.serviceRegistryBuilder == null) {
-				this.serviceRegistryBuilder = iHibernateUtil.buidIn(CON);
+				iHibernateUtil.buidIn(CON, Employee.class);
+				this.serviceRegistryBuilder = this.iHibernateUtil.getServiceRegistryBuilder();
+				this.sessionFactory =  this.iHibernateUtil.getSessionFactory();
 			}
 
 		} catch (Exception ex) {
@@ -37,15 +45,19 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.GET)
-	public List<Employee> employees() throws Exception {
+	public List<Employee> gatAllEmployees() throws Exception {
 		try {
 
 			return iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
 
 				try (Session session = sessionFactory.openSession()) {
 
+//					session.beginTransaction();
+//					session.update(Objects.requireNonNull(employee));
+//					session.getTransaction().commit();
+
 					return session.createQuery("from com.example.mainapp.DAO.entity.Employee")
-									.list();
+							.list();
 
 				}
 
@@ -57,22 +69,84 @@ public class EmployeeController {
 		}
 	}
 
+
+	@RequestMapping(value = "/employees", method = RequestMethod.PUT)
+	public boolean updateEmployeesOnId(@RequestBody Employee employee) throws Exception {
+
+		try {
+
+			try (Session session = this.sessionFactory.openSession()) {
+//					List<Employee> productNames =
+//							session.createQuery("from com.example.mainapp.DAO.entity.Employee", Employee.class)
+//									.list();
+
+				session.beginTransaction();
+				session.update(Objects.requireNonNull(employee));
+				session.getTransaction().commit();
+
+				return true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@RequestMapping(value = "/employees", method = RequestMethod.DELETE)
+	public boolean deleteEmployeesOnId(@RequestBody Employee employee) throws Exception {
+		try {
+
+			iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
+
+				try (Session session = sessionFactory.openSession()) {
+
+					long id = Objects.requireNonNull(employee).getEmployeeId();
+
+					session.beginTransaction();
+					session.delete(Objects.requireNonNull(employee));
+					session.getTransaction().commit();
+
+					return null;
+				}
+
+			});
+
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
-	public List<Employee> employeesId(@PathVariable Long id) throws Exception {
+	public List<Employee> getEmployeesOnId(@PathVariable Long id) throws Exception {
 		try {
 
 			return iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
 
 				try (Session session = sessionFactory.openSession()) {
 
-					List<Employee> productNames =
-							session.createQuery("from com.example.mainapp.DAO.entity.Employee")
-									.list();
+//					List<Employee> productNames = session
+//							.createQuery("from Employee as Employee where Employee.employeeId = " + id, Employee.class)
+//							.list();
 
-					return productNames
-							.stream()
-							.filter(e -> e.getEmployeeId() == id)
-							.collect(Collectors.toList());
+					session.beginTransaction();
+					Employee employee = session.get(Employee.class, id);
+					session.getTransaction().commit();
+
+					return new ArrayList<Employee>(){
+						{
+							add(employee);
+						}
+					};
+//							productNames
+//							.stream()
+//							.filter(e -> e.getEmployeeId().equals(id))
+//							.collect(Collectors.toList())
+//							.findFirst().orElseThrow(() -> new NotFoundException())
+//							;
 				}
 
 			});
@@ -84,32 +158,28 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.POST)
-	public List<Employee> getEmployees(@RequestBody Employee employee) throws Throwable {
+	public boolean saveEmployees(@RequestBody Employee employee) throws Throwable {
 
 		try {
 
-			return iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
-
-				Employee tmp = employee;
-				if (employee == null) {
-					tmp = new Employee("qwe", "qweqwe", 1L, "", Gender.FEMALE);
-
-				}
+			iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
 
 				try (Session session = sessionFactory.openSession()) {
 
 					session.beginTransaction();
-					session.save(tmp);
+					session.save(Objects.requireNonNull(employee));
 					session.getTransaction().commit();
 
 					List<Employee> productNames =
-							session.createQuery("from com.example.mainapp.DAO.entity.Employee")
+							session.createQuery("from Employee", Employee.class)
 									.list();
 
 					return productNames;
 				}
 
 			});
+
+			return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();

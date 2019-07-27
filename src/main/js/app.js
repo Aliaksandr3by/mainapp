@@ -113,10 +113,10 @@ class App extends Component {
 				<React.Fragment>
 					{
 						items.map((item, i) => {
-							return <div key={item["departmentId"]}>
+							return <div key={item["employeeId"]}>
 								{
 									Object.keys(item).map((element, i) => {
-										return (<p key={element + i}>{item[element]}</p>);
+										return (<p key={`${element}`}>{item[element]}</p>);
 									})
 								}
 							</div>;

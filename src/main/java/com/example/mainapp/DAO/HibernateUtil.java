@@ -15,16 +15,23 @@ import java.util.Objects;
 @Qualifier(value = "hibernateUtil")
 public class HibernateUtil implements IHibernateUtil {
 
-	private StandardServiceRegistry serviceRegistryBuilder;
-
 	public StandardServiceRegistry getServiceRegistryBuilder() {
 		return serviceRegistryBuilder;
 	}
 
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	private StandardServiceRegistry serviceRegistryBuilder;
+
+	private SessionFactory sessionFactory;
+
+
 	public HibernateUtil() {
 	}
 
-	public StandardServiceRegistry buidIn(String hibernateCFG) throws Exception {
+	public void buidIn(String hibernateCFG, Class typeClass) throws Exception {
 
 		try {
 
@@ -32,7 +39,10 @@ public class HibernateUtil implements IHibernateUtil {
 					.configure(Objects.requireNonNull(hibernateCFG, "hibernate.cfg.xml"))
 					.build();
 
-			return serviceRegistryBuilder;
+			sessionFactory = new MetadataSources(this.serviceRegistryBuilder)
+					.addAnnotatedClass(typeClass)
+					.buildMetadata()
+					.buildSessionFactory();
 
 		} catch (Exception e) {
 			e.printStackTrace();

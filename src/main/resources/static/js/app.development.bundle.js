@@ -31897,10 +31897,10 @@ function (_Component) {
       if (isLoaded && items.length > 0) {
         return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_16___default.a.Fragment, null, items.map(function (item, i) {
           return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement("div", {
-            key: item["departmentId"]
+            key: item["employeeId"]
           }, Object.keys(item).map(function (element, i) {
             return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement("p", {
-              key: element + i
+              key: "".concat(element)
             }, item[element]);
           }));
         }));
