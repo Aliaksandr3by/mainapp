@@ -1,6 +1,7 @@
 node_modules/
 src/main/resources/static
 src/main/resources/tmp
+/package-lock.json
 
 HELP.md
 target/
@@ -34,7 +35,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/.mvn/wrapper/maven-wrapper.jar
-/.mvn/wrapper/maven-wrapper.properties
-/.mvn/wrapper/MavenWrapperDownloader.java
-/package-lock.json
+
