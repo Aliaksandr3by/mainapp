@@ -7,10 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,8 +36,29 @@ public class EmployeeController {
 		}
 	}
 
+	@RequestMapping(value = "/employees", method = RequestMethod.GET)
+	public List<Employee> employees() throws Exception {
+		try {
+
+			return iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
+
+				try (Session session = sessionFactory.openSession()) {
+
+					return session.createQuery("from com.example.mainapp.DAO.entity.Employee")
+									.list();
+
+				}
+
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
-	public List<Employee> data(@PathVariable Long id) throws Exception {
+	public List<Employee> employeesId(@PathVariable Long id) throws Exception {
 		try {
 
 			return iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
@@ -65,19 +83,23 @@ public class EmployeeController {
 		}
 	}
 
-	@RequestMapping(value = "/employees", method = RequestMethod.GET)
-	public List<Employee> getEmployees() throws Throwable {
+	@RequestMapping(value = "/employees", method = RequestMethod.POST)
+	public List<Employee> getEmployees(@RequestBody Employee employee) throws Throwable {
 
 		try {
 
 			return iHibernateUtil.setUp(Employee.class, (sessionFactory) -> {
 
+				Employee tmp = employee;
+				if (employee == null) {
+					tmp = new Employee("qwe", "qweqwe", 1L, "", Gender.FEMALE);
+
+				}
+
 				try (Session session = sessionFactory.openSession()) {
 
 					session.beginTransaction();
-					session.save(
-							new Employee("qwe", "qweqwe", 1L, "", Gender.FEMALE)
-					);
+					session.save(tmp);
 					session.getTransaction().commit();
 
 					List<Employee> productNames =

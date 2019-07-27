@@ -31669,13 +31669,21 @@ function (_Component) {
       var _ref = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(e) {
-        var response, result;
+        var data, response, result;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                _context.next = 3;
+                data = {
+                  "employeeId": 3,
+                  "firstName": "qwe",
+                  "lastName": "qweqwe",
+                  "departmentId": 1,
+                  "jobTitle": "",
+                  "gender": "FEMALE"
+                };
+                _context.next = 4;
                 return fetch("".concat(_this.props.SetControlActionURL.urlControlActionGreeting), {
                   method: "GET",
                   // *GET, POST, PUT, DELETE, etc.
@@ -31691,16 +31699,16 @@ function (_Component) {
                   redirect: "follow",
                   // manual, *follow, error
                   referrer: "no-referrer" // no-referrer, *client
-                  // body: JSON.stringify({}),
+                  // body: JSON.stringify(data),
 
                 });
 
-              case 3:
+              case 4:
                 response = _context.sent;
-                _context.next = 6;
+                _context.next = 7;
                 return response.json();
 
-              case 6:
+              case 7:
                 result = _context.sent;
                 console.dir(result);
 
@@ -31711,17 +31719,17 @@ function (_Component) {
 
                 return _context.abrupt("return", result);
 
-              case 12:
-                _context.prev = 12;
+              case 13:
+                _context.prev = 13;
                 _context.t0 = _context["catch"](0);
                 console.error(_context.t0);
 
-              case 15:
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 12]]);
+        }, _callee, null, [[0, 13]]);
       }));
 
       return function (_x) {

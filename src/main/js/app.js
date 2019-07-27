@@ -52,6 +52,15 @@ class App extends Component {
 	 */
 	getAll = async (e) => {
 		try {
+			const data = {
+				"employeeId": 3,
+				"firstName": "qwe",
+				"lastName": "qweqwe",
+				"departmentId": 1,
+				"jobTitle": "",
+				"gender": "FEMALE"
+			};
+
 			const response = await fetch(`${this.props.SetControlActionURL.urlControlActionGreeting}`, {
 				method: "GET", // *GET, POST, PUT, DELETE, etc.
 				mode: "cors", // no-cors, cors, *same-origin
@@ -62,7 +71,7 @@ class App extends Component {
 				},
 				redirect: "follow", // manual, *follow, error
 				referrer: "no-referrer", // no-referrer, *client
-				// body: JSON.stringify({}),
+				// body: JSON.stringify(data),
 			});
 
 			const result = await response.json();
@@ -107,7 +116,7 @@ class App extends Component {
 							return <div key={item["departmentId"]}>
 								{
 									Object.keys(item).map((element, i) => {
-										return (<p key={element+i}>{item[element]}</p>);
+										return (<p key={element + i}>{item[element]}</p>);
 									})
 								}
 							</div>;
