@@ -1,0 +1,18 @@
+body {
+    display: grid;
+    font-size: 16px;
+}
+
+#root {
+    /*background-color: #ffa1a1*/
+}
+
+.W100 {
+    width: 100%;
+ }
+
+@media screen and (min-width: 992px) {
+    .wrapper {
+        overflow-x: auto;
+    }
+}
