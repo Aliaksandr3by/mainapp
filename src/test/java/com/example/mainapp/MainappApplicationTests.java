@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class MainappApplicationTests {
 
-	EmployeeController employeeController = new EmployeeController(new HibernateUtil());
+	private EmployeeController employeeController = new EmployeeController(new HibernateUtil());
 
-	Employee employee = new Employee("test", "test", 1L, "test", Gender.FEMALE);
+	private Employee employee = new Employee("test", "test", 1L, "test", Gender.FEMALE);
 
 
 	//FIXME

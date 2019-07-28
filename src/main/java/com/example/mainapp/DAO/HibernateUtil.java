@@ -64,11 +64,11 @@ public class HibernateUtil implements IHibernateUtil {
 
 			try (StandardServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder()
 					.configure(Objects.requireNonNull(hibernateCFG, "hibernate.cfg.xml"))
-					.build();) {
+					.build()) {
 
 				try (SessionFactory sessionFactory = new MetadataSources(serviceRegistryBuilder)
 						.buildMetadata()
-						.buildSessionFactory();) {
+						.buildSessionFactory()) {
 
 					return iHibernateUtilSession.Func(sessionFactory);
 				}

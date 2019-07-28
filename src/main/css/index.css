@@ -11,6 +11,10 @@ body {
     width: 100%;
  }
 
+.employee:hover{
+    background-color: aqua;
+}
+
 @media screen and (min-width: 992px) {
     .wrapper {
         overflow-x: auto;

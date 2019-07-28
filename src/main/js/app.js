@@ -20,7 +20,7 @@ class App extends Component {
 		super(props);
 		this.state = {
 			SetControlActionURL: this.props.SetControlActionURL,
-			items: [],
+			items: this.getAll(),
 			isLoaded: false,
 			status: null,
 			error: null,
@@ -80,10 +80,47 @@ class App extends Component {
 
 			console.dir(result);
 
-			this.setState({
-				items: result,
-				isLoaded: true,
+			if (Array.isArray(result) && result.length >= 0) {
+
+				this.setState({
+					items: result ,
+					isLoaded: true,
+				});
+			}
+			return result;
+
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	deleteById = async (e) => {
+		try {
+			const id = e.currentTarget.dataset.employee;
+			const data = {
+				"employeeId": Number(id),
+			};
+
+			const response = await fetch(`${this.props.SetControlActionURL.ActionControlDeleteEmployee}`, {
+				method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
 			});
+
+			const result = await response.json();
+
+			console.log(result);
+
+			if (result) {
+				const a = this.state.items.filter(item => item.employeeId !== Number(id));
+				this.setState((state, props) => {
+					return {
+						items: [...a]
+					};
+				});
+			}
 
 			return result;
 
@@ -110,12 +147,13 @@ class App extends Component {
 
 		const {SetControlActionURL, items, isLoaded, error} = this.state;
 
-		if (isLoaded && items.length > 0) {
+		if (isLoaded && items.length >= 0) {
 			return (
 				<React.Fragment>
 					{
 						items.map((item, i) => {
-							return <div key={item["employeeId"]}>
+							return <div title={"Удалить"} className={"employee"} data-employee={item["employeeId"]} onClick={e => this.deleteById(e)}
+										key={item["employeeId"]}>
 								{
 									Object.keys(item).map((element, i) => {
 										return (<p key={`${element}`}>{item[element]}</p>);
@@ -135,8 +173,9 @@ class App extends Component {
 		} else if (!isLoaded) {
 			return (
 				<React.Fragment>
-					<a href={SetControlActionURL.urlControlActionGreeting}>eeeee</a>
-					<button type="button" className="btn" onClick={(e) => this.getAll(e)}>Войти</button>
+					{/*<a href={SetControlActionURL.urlControlActionGreeting}>eeeee</a>*/}
+					{/*<button type="button" className="btn" onClick={(e) => this.getAll(e)}>Войти</button>*/}
+					<p>Loading</p>
 				</React.Fragment>
 			);
 		}

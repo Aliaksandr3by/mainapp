@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,8 +42,6 @@ public class EmployeeController {
 
 			try (Session session = this.sessionFactory.openSession()) {
 
-				session.beginTransaction();
-
 				return session.createQuery("from Employee", Employee.class).list();
 			}
 
@@ -64,10 +61,12 @@ public class EmployeeController {
 				session.beginTransaction();
 
 //				List<Employee> productNames = session
-//							.createQuery("from Employee as Employee where Employee.employeeId = " + id, Employee.class)
-//							.list();
+//						.createQuery("from Employee where employeeId = :employeeId", Employee.class)
+//						.setParameter("employeeId", id)
+//						.list();
 
-				Employee employee = session.get(Employee.class, id);
+				Employee el = session.get(Employee.class, id);
+				session.getTransaction().commit();
 
 				/**
 				 *     "error": "Internal Server Error",
@@ -86,7 +85,8 @@ public class EmployeeController {
 //					}
 //				};
 
-				return employee;
+
+				return el;
 			}
 
 		} catch (RuntimeException e) {
@@ -102,12 +102,31 @@ public class EmployeeController {
 
 			try (Session session = this.sessionFactory.openSession()) {
 
-				List<Employee> productNames = session
-						.createQuery("from Employee", Employee.class)
-						.list();
-
 				session.beginTransaction();
+
+//				String hql = "UPDATE Employee SET " +
+//						"firstName = :firstName, " +
+//						"lastName = :lastName," +
+//						"gender = :gender," +
+//						"jobTitle = :jobTitle," +
+//						"departmentId = :departmentId " +
+//						"where employeeId = :employeeId";
+//
+//				Query query = session.createQuery(hql);
+//
+//				query
+//						.setParameter("employeeId", employee.getEmployeeId())
+//						.setParameter("departmentId", employee.getDepartmentId())
+//						.setParameter("firstName", employee.getFirstName())
+//						.setParameter("lastName", employee.getLastName())
+//						.setParameter("gender", employee.getGender())
+//						.setParameter("jobTitle", employee.getJobTitle())
+//				;
+//
+//				int rows = query.executeUpdate();
+
 				session.update(Objects.requireNonNull(employee));
+
 				session.getTransaction().commit();
 
 				return session.get(Employee.class, employee.getEmployeeId()).equals(employee);
@@ -123,12 +142,20 @@ public class EmployeeController {
 	public boolean deleteEmployeeById(@RequestBody Employee employee) throws RuntimeException {
 		try {
 
-			if (employee.getDepartmentId() == null) throw new NotFoundException("non id");
+			if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
 
 			try (Session session = this.sessionFactory.openSession()) {
 
 				session.beginTransaction();
-				session.delete(Objects.requireNonNull(employee));
+
+//				Query query = session.createQuery("DELETE Employee where employeeId = :eId");
+//				query.setParameter("eId", employee.getEmployeeId());
+//				int rows = query.executeUpdate();
+
+				if (!Objects.isNull(session.load(Employee.class, employee.getEmployeeId()))) {
+					session.delete(employee);
+				}
+
 				session.getTransaction().commit();
 
 				return true;
@@ -148,12 +175,10 @@ public class EmployeeController {
 			try (Session session = this.sessionFactory.openSession()) {
 
 				session.beginTransaction();
-				long id = (long) session.save(Objects.requireNonNull(employee));
-				session.getTransaction().commit();
 
-//				List<Employee> productNames =
-//						session.createQuery("from Employee", Employee.class)
-//								.list();
+				long id = (long) session.save(Objects.requireNonNull(employee));
+
+				session.getTransaction().commit();
 
 				return id;
 			}

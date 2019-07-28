@@ -5,6 +5,6 @@ import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public interface IHibernateUtilSession {
+interface IHibernateUtilSession {
 	List<Employee> Func(SessionFactory sessionFactory);
 }
