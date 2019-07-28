@@ -2,6 +2,7 @@ package com.example.mainapp.controller;
 
 import com.example.mainapp.DAO.IHibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -107,7 +108,7 @@ public class EmployeeController {
 				session.update(Objects.requireNonNull(employee));
 				session.getTransaction().commit();
 
-				return true;
+				return session.get(Employee.class, employee.getEmployeeId()).equals(employee);
 			}
 
 		} catch (RuntimeException e) {
@@ -117,16 +118,19 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.DELETE)
-	public boolean deleteEmployeesOnId(@RequestBody Employee employee) throws RuntimeException {
+	public boolean deleteOneEmployees(@RequestBody Employee employee) throws RuntimeException {
 		try {
+
+			if (employee.getDepartmentId() == null) throw new NotFoundException("non id");
 
 			try (Session session = this.sessionFactory.openSession()) {
 
-				long id = Objects.requireNonNull(employee).getEmployeeId();
 
 				session.beginTransaction();
 				session.delete(Objects.requireNonNull(employee));
 				session.getTransaction().commit();
+
+				Employee employee1 = session.get(Employee.class, employee.getDepartmentId());
 
 				return true;
 			}
@@ -152,7 +156,7 @@ public class EmployeeController {
 //						session.createQuery("from Employee", Employee.class)
 //								.list();
 
-				return true;
+				return !Objects.isNull(session.get(Employee.class, employee.getEmployeeId()));
 			}
 
 		} catch (RuntimeException e) {
