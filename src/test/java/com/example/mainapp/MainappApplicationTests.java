@@ -6,13 +6,10 @@ import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
 import com.example.mainapp.controller.EmployeeController;
 import com.example.mainapp.exeptions.NotFoundException;
-import org.hibernate.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,52 +21,79 @@ public class MainappApplicationTests {
 
 	Employee employee = new Employee("test", "test", 1L, "test", Gender.FEMALE);
 
-	@Test(expected = ObjectNotFoundException.class)
-	public void mustGetObjectNotFoundException() {
-		employeeController.getEmployeesOnId(99L);
-	}
 
+	//FIXME
+//	@Test(expected = ObjectNotFoundException.class)
+//	public void mustGetObjectNotFoundException() {
+//		employeeController.getEmployeeById(99L);
+//	}
+
+	/**
+	 * получение несуществующего элемента
+	 */
 	@Test
 	public void mustGetNull() {
-		assertNull(employeeController.getEmployeesOnId(99L));
+
+		assertNull(employeeController.getEmployeeById(9999999L));
 	}
 
+	/**
+	 * получение существующего элемента
+	 */
 	@Test
 	public void mustGetEmployeesOnId() {
 
-		assertNotNull(employeeController.getEmployeesOnId(1L));
+		long t = employeeController.saveEmployeeById(this.employee);
+		assertNotNull(employeeController.getEmployeeById(t));
 	}
 
+	/**
+	 * получение всех элементов
+	 */
 	@Test
 	public void mustGetAllEmployees() {
 
-		assertNotNull(employeeController.gatAllEmployees());
+		assertTrue(employeeController.saveEmployeeById(this.employee) > 0);
+		assertNotNull(employeeController.getEmployees());
+		assertTrue(employeeController.getEmployees().size() > 0);
 	}
 
 	/**
-	 * delete /  save
+	 * успешное сохранение
 	 */
 	@Test
-	public void mustTest() {
-		Employee employee = employeeController.getEmployeesOnId(3L);
+	public void mustSave() {
 
-		if (!Objects.isNull(employee)) {
-
-			assertNotNull(employee);
-			assertTrue(employeeController.deleteOneEmployees(employee));
-
-		} else {
-			assertTrue(employeeController.saveEmployees(this.employee));
-		}
-
+		assertTrue(employeeController.saveEmployeeById(this.employee) > 0);
 	}
 
 	/**
-	 * delete Throw
+	 * неуспешное сохранение
+	 */
+	@Test
+	public void mustNoSave() {
+
+		assertThrows(NullPointerException.class, () -> employeeController.saveEmployeeById(null));
+	}
+
+	/**
+	 * успешное удаление
+	 */
+	@Test
+	public void mustDeleted() {
+
+		long t = employeeController.saveEmployeeById(this.employee);
+		employee.setEmployeeId(t);
+		assertTrue(employeeController.deleteEmployeeById(this.employee));
+	}
+
+	/**
+	 * ошибка удаления Throw
 	 */
 	@Test
 	public void mustGetNotFoundExceptionsWithDelete() {
-		assertThrows(NotFoundException.class, () -> employeeController.deleteOneEmployees(new Employee()));
+		NotFoundException thrown = assertThrows(NotFoundException.class, () -> employeeController.deleteEmployeeById(new Employee()));
+		assertTrue(thrown.getMessage().contains("non id"));
 	}
 
 }

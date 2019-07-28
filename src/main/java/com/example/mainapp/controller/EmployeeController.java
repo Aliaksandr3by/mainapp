@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.GET)
-	public List<Employee> gatAllEmployees() throws RuntimeException {
+	public List<Employee> getEmployees() throws RuntimeException {
 		try {
 
 			try (Session session = this.sessionFactory.openSession()) {
@@ -55,7 +56,7 @@ public class EmployeeController {
 
 
 	@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
-	public Employee getEmployeesOnId(@PathVariable Long id) throws RuntimeException {
+	public Employee getEmployeeById(@PathVariable Long id) throws RuntimeException {
 		try {
 
 			try (Session session = this.sessionFactory.openSession()) {
@@ -95,14 +96,15 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.PUT)
-	public boolean updateEmployeesOnId(@RequestBody Employee employee) throws RuntimeException {
+	public boolean updateEmployeeById(@RequestBody Employee employee) throws RuntimeException {
 
 		try {
 
 			try (Session session = this.sessionFactory.openSession()) {
-//					List<Employee> productNames =
-//							session.createQuery("from com.example.mainapp.DAO.entity.Employee", Employee.class)
-//									.list();
+
+				List<Employee> productNames = session
+						.createQuery("from Employee", Employee.class)
+						.list();
 
 				session.beginTransaction();
 				session.update(Objects.requireNonNull(employee));
@@ -118,19 +120,16 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.DELETE)
-	public boolean deleteOneEmployees(@RequestBody Employee employee) throws RuntimeException {
+	public boolean deleteEmployeeById(@RequestBody Employee employee) throws RuntimeException {
 		try {
 
 			if (employee.getDepartmentId() == null) throw new NotFoundException("non id");
 
 			try (Session session = this.sessionFactory.openSession()) {
 
-
 				session.beginTransaction();
 				session.delete(Objects.requireNonNull(employee));
 				session.getTransaction().commit();
-
-				Employee employee1 = session.get(Employee.class, employee.getDepartmentId());
 
 				return true;
 			}
@@ -142,21 +141,21 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/employees", method = RequestMethod.POST)
-	public boolean saveEmployees(@RequestBody Employee employee) throws RuntimeException {
+	public long saveEmployeeById(@RequestBody Employee employee) throws RuntimeException {
 
 		try {
 
 			try (Session session = this.sessionFactory.openSession()) {
 
 				session.beginTransaction();
-				session.save(Objects.requireNonNull(employee));
+				long id = (long) session.save(Objects.requireNonNull(employee));
 				session.getTransaction().commit();
 
 //				List<Employee> productNames =
 //						session.createQuery("from Employee", Employee.class)
 //								.list();
 
-				return !Objects.isNull(session.get(Employee.class, employee.getEmployeeId()));
+				return id;
 			}
 
 		} catch (RuntimeException e) {
