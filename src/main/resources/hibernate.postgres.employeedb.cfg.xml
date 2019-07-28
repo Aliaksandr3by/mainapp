@@ -22,7 +22,7 @@
 
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <mapping class="com.example.mainapp.DAO.entity.Employee"/>
+        <mapping class="com.example.mainapp.DAO.entity.Employee"/><!--не работает HQL связка-->
 
         <!--        		<property name="default_entity_mode">dynamic-map</property>-->
         <!--        		<mapping resource="by/data/myweb/entity/ProductName.hbm.xml"/>-->

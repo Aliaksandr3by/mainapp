@@ -31,20 +31,26 @@ public class HibernateUtil implements IHibernateUtil {
 	public HibernateUtil() {
 	}
 
-	public void buidIn(String hibernateCFG, Class typeClass) throws Exception {
+	public void buidIn(String hibernateCFG, Class typeClass) throws RuntimeException {
 
 		try {
 
-			serviceRegistryBuilder = new StandardServiceRegistryBuilder()
+			this.serviceRegistryBuilder = new StandardServiceRegistryBuilder()
 					.configure(Objects.requireNonNull(hibernateCFG, "hibernate.cfg.xml"))
 					.build();
 
-			sessionFactory = new MetadataSources(this.serviceRegistryBuilder)
-					.addAnnotatedClass(typeClass)
+			this.sessionFactory = new MetadataSources(this.serviceRegistryBuilder)
 					.buildMetadata()
 					.buildSessionFactory();
 
-		} catch (Exception e) {
+//			serviceRegistryBuilder.close();
+//			sessionFactory.close();
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			StandardServiceRegistryBuilder.destroy(this.serviceRegistryBuilder);
+			throw e;
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			StandardServiceRegistryBuilder.destroy(this.serviceRegistryBuilder);
 			throw e;
@@ -52,17 +58,22 @@ public class HibernateUtil implements IHibernateUtil {
 
 	}
 
-	public List<Employee> setUp(Class typeClass, IHibernateUtilSession iHibernateUtilSession) throws Exception {
+	public List<Employee> setUp(String hibernateCFG, Class typeClass, IHibernateUtilSession iHibernateUtilSession) throws RuntimeException {
 
 		try {
-			SessionFactory sessionFactory = new MetadataSources(this.serviceRegistryBuilder)
-					.addAnnotatedClass(typeClass)
-					.buildMetadata()
-					.buildSessionFactory();
 
-			return iHibernateUtilSession.Func(sessionFactory);
+			try (StandardServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder()
+					.configure(Objects.requireNonNull(hibernateCFG, "hibernate.cfg.xml"))
+					.build();) {
 
-		} catch (Exception e) {
+				try (SessionFactory sessionFactory = new MetadataSources(serviceRegistryBuilder)
+						.buildMetadata()
+						.buildSessionFactory();) {
+
+					return iHibernateUtilSession.Func(sessionFactory);
+				}
+			}
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			throw e;
 		}

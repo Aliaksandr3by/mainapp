@@ -1,20 +1,18 @@
-psql -h localhost -p 5432 -U guest employeedb
+--psql -h localhost -p 5432 -U guest employeedb
 
 CREATE USER guest WITH SUPERUSER PASSWORD 'guest';
 
 create database employeedb owner guest;
-
 drop database employeedb;
 
 CREATE TABLE "employee" (
-	"employee_id" BIGINT NOT NULL,
+	"employee_id" BIGINT NOT NULL PRIMARY KEY,
 	"department_id" BIGINT NULL DEFAULT NULL,
 	"first_name" TEXT NOT NULL,
 	"gender" INTEGER NOT NULL,
 	"job_title" TEXT NOT NULL,
-	"last_name" TEXT NOT NULL,
-	PRIMARY KEY ("employee_id")
-)
+	"last_name" TEXT NOT NULL
+);
 
 DROP TABLE IF EXISTS employee;
 
