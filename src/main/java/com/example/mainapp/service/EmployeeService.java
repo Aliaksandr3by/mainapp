@@ -3,11 +3,13 @@ package com.example.mainapp.service;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,15 +23,7 @@ public class EmployeeService {
 		}
 	}
 
-	public static Employee getEmployeeById(SessionFactory sessionFactory, @PathVariable Long id) throws HibernateException {
-
-		//FIXME
-// session.load (hibernateLazyInitializer) не работает с try+res и с FAIL_ON_EMPTY_BEANS
-//		Session session = sessionFactory.openSession();
-//		session.beginTransaction();
-//		Employee el = session.load(Employee.class, id);
-//		session.getTransaction().commit();
-//		return el;
+	public static Employee getEmployeeById(SessionFactory sessionFactory, @PathVariable Long id) throws ObjectNotFoundException, HibernateException {
 
 		try (Session session = sessionFactory.openSession()) {
 
@@ -41,6 +35,7 @@ public class EmployeeService {
 //						.list();
 
 			Employee el = session.get(Employee.class, id);
+//			Employee el = session.load(Employee.class, id); //proxy
 
 			session.getTransaction().commit();
 

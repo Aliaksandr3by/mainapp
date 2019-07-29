@@ -26,3 +26,4 @@ DELETE FROM employee WHERE employee.employee_id = 3;
 INSERT INTO employee (employee_id, department_id, first_name, gender, job_title, last_name) VALUES (31, 3, 'qwe', 1, 'qweqe', 'qweqe');
 
 UPDATE employee SET first_name='dfgdgdfg', department_Id=99,job_Title='dfgdg',gender=1,last_Name='dfgdg' WHERE employee_id = 2;
+

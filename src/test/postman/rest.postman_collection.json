@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "c6b03c02-7775-45e6-8f72-60c3b492b417",
+		"name": "rest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/employee/employees/50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees",
+								"50"
+							],
+							"query": [
+								{
+									"key": "employeeId",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"departmentId\": 3,\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employee/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"employeeId\": 69,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 0\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employee/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"employeeId\": 50\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employee/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

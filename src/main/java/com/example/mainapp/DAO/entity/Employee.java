@@ -22,6 +22,7 @@ public class Employee implements Serializable {
 	@Column(name = "employee_id", nullable = false)
 	@GenericGenerator(name = "increment", strategy = "increment")
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Basic(fetch = FetchType.EAGER)
 	@Id
 	private Long employeeId;
 
