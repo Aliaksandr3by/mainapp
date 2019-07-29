@@ -58,7 +58,7 @@ public class HibernateUtil implements IHibernateUtil {
 
 	}
 
-	public List<Employee> setUp(String hibernateCFG, Class typeClass, IHibernateUtilSession iHibernateUtilSession) throws RuntimeException {
+	public List<Employee> setUp(String hibernateCFG, Class typeClass, IHibernateUtilSessionFactory iHibernateUtilSessionFactory) throws RuntimeException {
 
 		try {
 
@@ -70,7 +70,7 @@ public class HibernateUtil implements IHibernateUtil {
 						.buildMetadata()
 						.buildSessionFactory()) {
 
-					return iHibernateUtilSession.Func(sessionFactory);
+					return iHibernateUtilSessionFactory.Func(sessionFactory);
 				}
 			}
 		} catch (RuntimeException e) {

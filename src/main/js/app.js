@@ -83,7 +83,7 @@ class App extends Component {
 			if (Array.isArray(result) && result.length >= 0) {
 
 				this.setState({
-					items: result ,
+					items: result,
 					isLoaded: true,
 				});
 			}
@@ -152,14 +152,15 @@ class App extends Component {
 				<React.Fragment>
 					{
 						items.map((item, i) => {
-							return <div title={"Удалить"} className={"employee"} data-employee={item["employeeId"]} onClick={e => this.deleteById(e)}
-										key={item["employeeId"]}>
-								{
+							return (<div className={"employee"} key={item["employeeId"]}>
+								<button data-employee={item["employeeId"]} type="button" className="btn"
+										onClick={(e) => this.deleteById(e)}>{`delete ${item["firstName"]}`}</button>
+								<div>{
 									Object.keys(item).map((element, i) => {
 										return (<p key={`${element}`}>{item[element]}</p>);
 									})
-								}
-							</div>;
+								}</div>
+							</div>);
 						})
 					}
 				</React.Fragment>

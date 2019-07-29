@@ -9,7 +9,7 @@ import java.util.List;
 public interface IHibernateUtil {
 	void buidIn(String hibernateCFG, Class typeClass) throws RuntimeException;
 
-	List<Employee> setUp(String hibernateCFG, Class typeClass, IHibernateUtilSession iHibernateUtilSession) throws RuntimeException;
+	List<Employee> setUp(String hibernateCFG, Class typeClass, IHibernateUtilSessionFactory iHibernateUtilSessionFactory) throws RuntimeException;
 
 	StandardServiceRegistry getServiceRegistryBuilder();
 

@@ -4,8 +4,8 @@ package com.example.mainapp;
 import com.example.mainapp.DAO.HibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
-import com.example.mainapp.controller.EmployeeController;
 import com.example.mainapp.exeptions.NotFoundException;
+import com.example.mainapp.rest.EmployeeController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,11 +21,10 @@ public class MainappApplicationTests {
 
 	private Employee employee = new Employee("test", "test", 1L, "test", Gender.FEMALE);
 
-
 	//FIXME
 //	@Test(expected = ObjectNotFoundException.class)
 //	public void mustGetObjectNotFoundException() {
-//		employeeController.getEmployeeById(99L);
+//		employeeController.getEmployeeById(999999L);
 //	}
 
 	/**
@@ -45,6 +44,8 @@ public class MainappApplicationTests {
 
 		long t = employeeController.saveEmployeeById(this.employee);
 		assertNotNull(employeeController.getEmployeeById(t));
+		this.employee.setEmployeeId(t);
+		assertTrue(employeeController.deleteEmployeeById(this.employee));
 	}
 
 	/**

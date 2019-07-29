@@ -32170,18 +32170,20 @@ function (_Component) {
       if (isLoaded && items.length >= 0) {
         return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_18___default.a.Fragment, null, items.map(function (item, i) {
           return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", {
-            title: "Удалить",
             className: "employee",
+            key: item["employeeId"]
+          }, react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("button", {
             "data-employee": item["employeeId"],
+            type: "button",
+            className: "btn",
             onClick: function onClick(e) {
               return _this2.deleteById(e);
-            },
-            key: item["employeeId"]
-          }, Object.keys(item).map(function (element, i) {
+            }
+          }, "delete ".concat(item["firstName"])), react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", null, Object.keys(item).map(function (element, i) {
             return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", {
               key: "".concat(element)
             }, item[element]);
-          }));
+          })));
         }));
       } else if (error) {
         return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_18___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", null, "error"));
