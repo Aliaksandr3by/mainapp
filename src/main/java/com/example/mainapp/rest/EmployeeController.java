@@ -37,6 +37,10 @@ public class EmployeeController {
 		}
 	}
 
+	/**
+	 * Все элементы
+	 * @return
+	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.GET)
 	public List<Employee> getEmployees() {
 		try {
@@ -50,6 +54,11 @@ public class EmployeeController {
 	}
 
 
+	/**
+	 * элемент по ID
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
 	public Employee getEmployeeById(@PathVariable Long id) {
 		try {
@@ -62,6 +71,11 @@ public class EmployeeController {
 		}
 	}
 
+	/**
+	 * Обновление по ID
+	 * @param employee
+	 * @return
+	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.PUT)
 	public boolean updateEmployeeById(@RequestBody Employee employee) {
 
@@ -75,6 +89,11 @@ public class EmployeeController {
 		}
 	}
 
+	/**
+	 * удаление по id
+	 * @param employee
+	 * @return
+	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.DELETE)
 	public boolean deleteEmployeeById(@RequestBody Employee employee) {
 		try {
@@ -87,7 +106,11 @@ public class EmployeeController {
 		}
 	}
 
-
+	/**
+	 * Сохранение элемента
+	 * @param employee
+	 * @return
+	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.POST)
 	public long saveEmployeeById(@RequestBody Employee employee) {
 

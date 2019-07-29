@@ -46,6 +46,8 @@ public class EmployeeService {
 
 	public static boolean updateEmployeeById(SessionFactory sessionFactory, Employee employee) throws HibernateException {
 
+		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+
 		try (Session session = sessionFactory.openSession()) {
 
 			session.beginTransaction();
