@@ -69,7 +69,7 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Полное Обновление по ID или добавление
+	 * Полное Обновление по ID или добавление при отсутствии ID
 	 * @param employee
 	 * @return
 	 */

@@ -2,14 +2,14 @@ package com.example.mainapp.service;
 
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.Transient;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,8 +36,9 @@ public class EmployeeService {
 //						.setParameter("employeeId", id)
 //						.list();
 
-			Employee el = session.get(Employee.class, id);
-//			Employee el = session.load(Employee.class, id);
+
+//			Employee el = session.get(Employee.class, id);
+			Employee el =  Hibernate.unproxy(session.load(Employee.class, id), Employee.class);
 
 			session.getTransaction().commit();
 
@@ -108,11 +109,15 @@ public class EmployeeService {
 	}
 
 	private static Employee EmployeeUpdater(Employee old, Employee update){
+
+		if(old.equals(update)) throw new NotFoundException("Object is equals "); //XXX
+
 		if(update.getFirstName() != null) old.setFirstName(update.getFirstName());
 		if(update.getLastName() != null) old.setLastName(update.getLastName());
 		if(update.getGender() != null) old.setGender(update.getGender());
 		if(update.getJobTitle() != null) old.setJobTitle(update.getJobTitle());
 		if(update.getDepartmentId() != null) old.setDepartmentId(update.getDepartmentId());
+
 		return old;
 	}
 
