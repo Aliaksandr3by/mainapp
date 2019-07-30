@@ -6,6 +6,7 @@ import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.rest.EmployeeController;
+import org.hibernate.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +34,8 @@ public class MainappApplicationTests {
 	@Test
 	public void mustGetNull() {
 
-		assertNull(employeeController.getEmployeeById(9999999L));
+//		assertNull(employeeController.getEmployeeById(9999999L));
+		assertThrows(ObjectNotFoundException.class, () -> employeeController.getEmployeeById(-1L));
 	}
 
 	/**
