@@ -23,7 +23,9 @@ public class EmployeeService {
 		}
 	}
 
-	public static Employee getEmployeeById(SessionFactory sessionFactory, @PathVariable Long id) throws ObjectNotFoundException, HibernateException {
+	public static Employee getEmployeeById(SessionFactory sessionFactory, Long id) throws ObjectNotFoundException {
+
+		if (id == null) throw new NotFoundException("non id");
 
 		try (Session session = sessionFactory.openSession()) {
 
@@ -35,7 +37,7 @@ public class EmployeeService {
 //						.list();
 
 			Employee el = session.get(Employee.class, id);
-//			Employee el = session.load(Employee.class, id); //proxy
+//			Employee el = session.load(Employee.class, id);
 
 			session.getTransaction().commit();
 
@@ -44,9 +46,15 @@ public class EmployeeService {
 
 	}
 
-	public static boolean updateEmployeeById(SessionFactory sessionFactory, Employee employee) throws HibernateException {
-
-		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+	/**
+	 * add or update if there is no ID
+	 *
+	 * @param sessionFactory
+	 * @param employee
+	 * @return
+	 * @throws HibernateException
+	 */
+	public static boolean putEmployeeById(SessionFactory sessionFactory, Employee employee) {
 
 		try (Session session = sessionFactory.openSession()) {
 
@@ -73,7 +81,7 @@ public class EmployeeService {
 //
 //				int rows = query.executeUpdate();
 
-			session.update(Objects.requireNonNull(employee));
+			session.saveOrUpdate(Objects.requireNonNull(employee));
 
 			session.getTransaction().commit();
 
@@ -81,7 +89,34 @@ public class EmployeeService {
 		}
 	}
 
-	public static boolean deleteEmployeeById(SessionFactory sessionFactory, Employee employee) throws NotFoundException, HibernateException {
+	public static boolean patchEmployeeById(SessionFactory sessionFactory, Employee employee) throws NotFoundException {
+
+		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+
+		try (Session session = sessionFactory.openSession()) {
+
+			session.beginTransaction();
+
+			Employee tmp = EmployeeUpdater(session.get(Employee.class, employee.getEmployeeId()),employee );
+
+			session.update(Objects.requireNonNull(tmp));
+
+			session.getTransaction().commit();
+
+			return true;
+		}
+	}
+
+	private static Employee EmployeeUpdater(Employee old, Employee update){
+		if(update.getFirstName() != null) old.setFirstName(update.getFirstName());
+		if(update.getLastName() != null) old.setLastName(update.getLastName());
+		if(update.getGender() != null) old.setGender(update.getGender());
+		if(update.getJobTitle() != null) old.setJobTitle(update.getJobTitle());
+		if(update.getDepartmentId() != null) old.setDepartmentId(update.getDepartmentId());
+		return old;
+	}
+
+	public static boolean deleteEmployeeById(SessionFactory sessionFactory, Employee employee) throws NotFoundException {
 
 		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
 
@@ -104,7 +139,7 @@ public class EmployeeService {
 	}
 
 
-	public static long saveEmployeeById(SessionFactory sessionFactory, Employee employee) throws HibernateException {
+	public static long saveEmployeeById(SessionFactory sessionFactory, Employee employee) {
 
 		try (Session session = sessionFactory.openSession()) {
 

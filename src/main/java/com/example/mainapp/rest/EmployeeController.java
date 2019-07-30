@@ -2,9 +2,7 @@ package com.example.mainapp.rest;
 
 import com.example.mainapp.DAO.IHibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
-import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.service.EmployeeService;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/employee")
@@ -72,22 +69,41 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Обновление по ID
+	 * Полное Обновление по ID или добавление
 	 * @param employee
 	 * @return
 	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.PUT)
-	public boolean updateEmployeeById(@RequestBody Employee employee) {
+	public boolean putEmployeeById(@RequestBody Employee employee) {
 
 		try {
 
-			return EmployeeService.updateEmployeeById(this.sessionFactory, employee);
+			return EmployeeService.putEmployeeById(this.sessionFactory, employee);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
+
+	/**
+	 * Частичное Обновление по ID
+	 * @param employee
+	 * @return
+	 */
+	@RequestMapping(value = "/employees", method = RequestMethod.PATCH)
+	public boolean patchPartEmployeeById(@RequestBody Employee employee) {
+
+		try {
+
+			return EmployeeService.patchEmployeeById(this.sessionFactory, employee);
+
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 
 	/**
 	 * удаление по id

@@ -14,7 +14,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/employee/employees/50",
+							"raw": "http://localhost:8080/employee/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -23,7 +23,7 @@
 							"path": [
 								"employee",
 								"employees",
-								"50"
+								""
 							],
 							"query": [
 								{
@@ -80,6 +80,37 @@
 				{
 					"name": "http://localhost:8080/employee/employees",
 					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"employeeId\": 49,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 1\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employee/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
 						"method": "PUT",
 						"header": [
 							{
@@ -91,7 +122,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 69,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 0\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 49,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 1\r\n    }"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employee/employees",
@@ -127,7 +158,43 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 50\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 59\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employee/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "patch",
+			"item": [
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"employeeId\": 49,\r\n        \"firstName\": \"1ghjgjgjgjgjh\"\r\n    }"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employee/employees",
