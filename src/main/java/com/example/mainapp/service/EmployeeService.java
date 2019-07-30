@@ -38,7 +38,7 @@ public class EmployeeService {
 
 
 //			Employee el = session.get(Employee.class, id);
-			Employee el =  Hibernate.unproxy(session.load(Employee.class, id), Employee.class);
+			Employee el = Hibernate.unproxy(session.load(Employee.class, id), Employee.class);
 
 			session.getTransaction().commit();
 
@@ -93,12 +93,13 @@ public class EmployeeService {
 	public static boolean patchEmployeeById(SessionFactory sessionFactory, Employee employee) throws NotFoundException {
 
 		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+		if (employee.IsEmpty()) throw new NotFoundException("is empty");
 
 		try (Session session = sessionFactory.openSession()) {
 
 			session.beginTransaction();
 
-			Employee tmp = EmployeeUpdater(session.get(Employee.class, employee.getEmployeeId()),employee );
+			Employee tmp = EmployeeUpdater(session.get(Employee.class, employee.getEmployeeId()), employee);
 
 			session.update(Objects.requireNonNull(tmp));
 
@@ -108,15 +109,15 @@ public class EmployeeService {
 		}
 	}
 
-	private static Employee EmployeeUpdater(Employee old, Employee update){
+	private static Employee EmployeeUpdater(Employee old, Employee update) {
 
-		if(old.equals(update)) throw new NotFoundException("Object is equals "); //XXX
+		if (old.equals(update)) throw new NotFoundException("Object is equals "); //XXX
 
-		if(update.getFirstName() != null) old.setFirstName(update.getFirstName());
-		if(update.getLastName() != null) old.setLastName(update.getLastName());
-		if(update.getGender() != null) old.setGender(update.getGender());
-		if(update.getJobTitle() != null) old.setJobTitle(update.getJobTitle());
-		if(update.getDepartmentId() != null) old.setDepartmentId(update.getDepartmentId());
+		if (update.getFirstName() != null) old.setFirstName(update.getFirstName());
+		if (update.getLastName() != null) old.setLastName(update.getLastName());
+		if (update.getGender() != null) old.setGender(update.getGender());
+		if (update.getJobTitle() != null) old.setJobTitle(update.getJobTitle());
+		if (update.getDepartmentId() != null) old.setDepartmentId(update.getDepartmentId());
 
 		return old;
 	}

@@ -101,6 +101,20 @@ public class Employee implements Serializable {
 		this.gender = gender;
 	}
 
+	public boolean IsEmpty() {
+
+		if (this.getFirstName() == null
+				&& this.getLastName() == null
+				&& this.getGender() == null
+				&& this.getJobTitle() == null
+				&& this.getDepartmentId() == null
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
