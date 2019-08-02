@@ -58,27 +58,5 @@ public class HibernateUtil implements IHibernateUtil {
 
 	}
 
-	public List<Employee> setUp(String hibernateCFG, Class typeClass, IHibernateUtilSessionFactory iHibernateUtilSessionFactory) throws RuntimeException {
-
-		try {
-
-			try (StandardServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder()
-					.configure(Objects.requireNonNull(hibernateCFG, "hibernate.cfg.xml"))
-					.build()) {
-
-				try (SessionFactory sessionFactory = new MetadataSources(serviceRegistryBuilder)
-						.buildMetadata()
-						.buildSessionFactory()) {
-
-					return iHibernateUtilSessionFactory.Func(sessionFactory);
-				}
-			}
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			throw e;
-		}
-
-	}
-
 }
 

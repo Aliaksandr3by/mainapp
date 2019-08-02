@@ -44,9 +44,9 @@ public class MainappApplicationTests {
 	@Test
 	public void mustGetEmployeesOnId() {
 
-		long t = employeeController.saveEmployeeById(this.employee);
-		assertNotNull(employeeController.getEmployeeById(t));
-		this.employee.setEmployeeId(t);
+		Employee t = employeeController.saveEmployee(this.employee);
+		assertNotNull(employeeController.getEmployeeById(t.getEmployeeId()));
+		this.employee.setEmployeeId(t.getEmployeeId());
 		assertTrue(employeeController.deleteEmployeeById(this.employee));
 	}
 
@@ -56,7 +56,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustGetAllEmployees() {
 
-		assertTrue(employeeController.saveEmployeeById(this.employee) > 0);
+		assertNotNull(employeeController.saveEmployee(this.employee));
 		assertNotNull(employeeController.getEmployees());
 		assertTrue(employeeController.getEmployees().size() > 0);
 	}
@@ -67,7 +67,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustSave() {
 
-		assertTrue(employeeController.saveEmployeeById(this.employee) > 0);
+		assertNotNull(employeeController.saveEmployee(this.employee));
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustNoSave() {
 
-		assertThrows(NullPointerException.class, () -> employeeController.saveEmployeeById(null));
+		assertThrows(NullPointerException.class, () -> employeeController.saveEmployee(null));
 	}
 
 	/**
@@ -85,8 +85,8 @@ public class MainappApplicationTests {
 	@Test
 	public void mustDeleted() {
 
-		long t = employeeController.saveEmployeeById(this.employee);
-		employee.setEmployeeId(t);
+		Employee t = employeeController.saveEmployee(this.employee);
+		employee.setEmployeeId(t.getEmployeeId());
 		assertTrue(employeeController.deleteEmployeeById(this.employee));
 	}
 

@@ -53,4 +53,9 @@ public final class Model {
 	public List<Employee> getList() {
 		return model.stream().collect(Collectors.toList());
 	}
+
+	public static void main(String ...args){
+
+	}
+
 }

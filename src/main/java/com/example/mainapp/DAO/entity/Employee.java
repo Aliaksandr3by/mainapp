@@ -22,7 +22,6 @@ public class Employee implements Serializable {
 	@Column(name = "employee_id", nullable = false)
 	@GenericGenerator(name = "increment", strategy = "increment")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Basic(fetch = FetchType.EAGER)
 	@Id
 	private Long employeeId;
 
@@ -99,20 +98,6 @@ public class Employee implements Serializable {
 
 	public void setGender(Gender gender) {
 		this.gender = gender;
-	}
-
-	public boolean IsEmpty() {
-
-		if (this.getFirstName() == null
-				&& this.getLastName() == null
-				&& this.getGender() == null
-				&& this.getJobTitle() == null
-				&& this.getDepartmentId() == null
-		) {
-			return true;
-		}
-
-		return false;
 	}
 
 	@Override

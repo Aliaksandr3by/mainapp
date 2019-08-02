@@ -3,13 +3,7 @@ package com.example.mainapp.service;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.*;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.persistence.Transient;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,20 +25,28 @@ public class EmployeeService {
 
 			session.beginTransaction();
 
-//				List<Employee> productNames = session
-//						.createQuery("from Employee where employeeId = :employeeId", Employee.class)
-//						.setParameter("employeeId", id)
-//						.list();
-
-
-//			Employee el = session.get(Employee.class, id);
-			Employee el = Hibernate.unproxy(session.load(Employee.class, id), Employee.class);
+			Employee el = session.get(Employee.class, id);
+//			Employee el = Hibernate.unproxy(session.load(Employee.class, id), Employee.class);
 
 			session.getTransaction().commit();
 
 			return el;
 		}
 
+	}
+
+	public static Employee saveEmployeeById(SessionFactory sessionFactory, Employee employee) {
+
+		try (Session session = sessionFactory.openSession()) {
+
+			session.beginTransaction();
+
+			long id = (long) session.save(Objects.requireNonNull(employee));
+
+			session.getTransaction().commit();
+
+			return session.get(Employee.class, id);
+		}
 	}
 
 	/**
@@ -57,43 +59,28 @@ public class EmployeeService {
 	 */
 	public static boolean putEmployeeById(SessionFactory sessionFactory, Employee employee) {
 
+		boolean isCreated = false;
+
 		try (Session session = sessionFactory.openSession()) {
 
-			session.beginTransaction();
+			isCreated = Objects.isNull(employee.getEmployeeId());
 
-//				String hql = "UPDATE Employee SET " +
-//						"firstName = :firstName, " +
-//						"lastName = :lastName," +
-//						"gender = :gender," +
-//						"jobTitle = :jobTitle," +
-//						"departmentId = :departmentId " +
-//						"where employeeId = :employeeId";
-//
-//				Query query = session.createQuery(hql);
-//
-//				query
-//						.setParameter("employeeId", employee.getEmployeeId())
-//						.setParameter("departmentId", employee.getDepartmentId())
-//						.setParameter("firstName", employee.getFirstName())
-//						.setParameter("lastName", employee.getLastName())
-//						.setParameter("gender", employee.getGender())
-//						.setParameter("jobTitle", employee.getJobTitle())
-//				;
-//
-//				int rows = query.executeUpdate();
+			session.beginTransaction();
 
 			session.saveOrUpdate(Objects.requireNonNull(employee));
 
 			session.getTransaction().commit();
 
-			return session.get(Employee.class, employee.getEmployeeId()).equals(employee);
+			if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+
+			return isCreated;
 		}
 	}
 
 	public static boolean patchEmployeeById(SessionFactory sessionFactory, Employee employee) throws NotFoundException {
 
 		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
-		if (employee.IsEmpty()) throw new NotFoundException("is empty");
+		if (IsEmpty(employee)) throw new NotFoundException("is empty");
 
 		try (Session session = sessionFactory.openSession()) {
 
@@ -107,6 +94,20 @@ public class EmployeeService {
 
 			return true;
 		}
+	}
+
+	public static boolean IsEmpty(Employee tmp) {
+
+		if (tmp.getFirstName() == null
+				&& tmp.getLastName() == null
+				&& tmp.getGender() == null
+				&& tmp.getJobTitle() == null
+				&& tmp.getDepartmentId() == null
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private static Employee EmployeeUpdater(Employee old, Employee update) {
@@ -130,10 +131,6 @@ public class EmployeeService {
 
 			session.beginTransaction();
 
-//				Query query = session.createQuery("DELETE Employee where employeeId = :eId");
-//				query.setParameter("eId", employee.getEmployeeId());
-//				int rows = query.executeUpdate();
-
 			if (!Objects.isNull(session.load(Employee.class, employee.getEmployeeId()))) {
 				session.delete(employee);
 			}
@@ -141,21 +138,6 @@ public class EmployeeService {
 			session.getTransaction().commit();
 
 			return true;
-		}
-	}
-
-
-	public static long saveEmployeeById(SessionFactory sessionFactory, Employee employee) {
-
-		try (Session session = sessionFactory.openSession()) {
-
-			session.beginTransaction();
-
-			long id = (long) session.save(Objects.requireNonNull(employee));
-
-			session.getTransaction().commit();
-
-			return id;
 		}
 	}
 
