@@ -31970,13 +31970,13 @@ function (_Component) {
               case 5:
                 response = _context2.sent;
                 _context2.next = 8;
-                return response.json();
+                return response;
 
               case 8:
                 result = _context2.sent;
                 console.log(result);
 
-                if (result) {
+                if (Number(result.status) === 204) {
                   a = _this.state.items.filter(function (item) {
                     return item.employeeId !== Number(id);
                   });
@@ -32167,7 +32167,7 @@ function (_Component) {
           isLoaded = _this$state.isLoaded,
           error = _this$state.error;
 
-      if (isLoaded && items.length >= 0) {
+      if (isLoaded && items.length > 0) {
         return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_18___default.a.Fragment, null, items.map(function (item, i) {
           return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", {
             className: "employee",
@@ -32189,6 +32189,8 @@ function (_Component) {
         return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_18___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", null, "error"));
       } else if (!isLoaded) {
         return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_18___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", null, "Loading"));
+      } else if (items.length === 0) {
+        return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_18___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", null, "length is 0"));
       }
     }
   }]);
@@ -32270,8 +32272,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (rootContainer) {
     var SetControlActionURL = {
-      urlControlActionGreeting: "/employee/employees",
-      ActionControlDeleteEmployee: "/employee/employees"
+      urlControlActionGreeting: "/employees/",
+      ActionControlDeleteEmployee: "/employees/"
     };
     react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Root__WEBPACK_IMPORTED_MODULE_3__["default"], {
       SetControlActionURL: SetControlActionURL

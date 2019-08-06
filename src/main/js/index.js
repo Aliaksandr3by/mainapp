@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (rootContainer) {
 
         const SetControlActionURL = {
-            urlControlActionGreeting: "/employee/employees",
-            ActionControlDeleteEmployee: "/employee/employees",
+            urlControlActionGreeting: "/employees/",
+            ActionControlDeleteEmployee: "/employees/",
         };
 
         ReactDOM.render(<Root SetControlActionURL={SetControlActionURL}/>, rootContainer);

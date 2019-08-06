@@ -14,16 +14,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/employee/employees/91",
+							"raw": "http://localhost:8080/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employee",
 								"employees",
-								"91"
+								""
 							],
 							"query": [
 								{
@@ -55,18 +54,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"departmentId\": 3,\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n}"
+							"raw": "{\r\n\t\"employeeId\": 31,\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"departmentId\": 2,\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employee/employees",
+							"raw": "http://localhost:8080/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employee",
-								"employees"
+								"employees",
+								""
 							]
 						}
 					},
@@ -122,18 +121,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 90,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 1\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 15,\r\n        \"firstName\": \"tttttttttttttttttttttttt\",\r\n        \"lastName\": \"ttttttttt\",\r\n         \"departmentId\": 2,\r\n        \"jobTitle\": \"ttttttttt\",\r\n        \"gender\": 0\r\n    }"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employee/employees",
+							"raw": "http://localhost:8080/employees/15",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employee",
-								"employees"
+								"employees",
+								"15"
 							]
 						}
 					},
@@ -158,18 +157,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 59\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 6\r\n    }"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employee/employees",
+							"raw": "http://localhost:8080/employees/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employee",
-								"employees"
+								"employees",
+								"7"
 							]
 						}
 					},
@@ -194,18 +193,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 91,\r\n        \"firstName\": \"ggggggggggg\",\r\n        \"gender\": 0\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 15,\r\n        \"firstName\": \"sasha\",\r\n        \"gender\": 0\r\n    }"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employee/employees",
+							"raw": "http://localhost:8080/employees/15",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employee",
-								"employees"
+								"employees",
+								"15"
 							]
 						}
 					},

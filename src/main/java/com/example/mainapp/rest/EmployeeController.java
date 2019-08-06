@@ -2,7 +2,6 @@ package com.example.mainapp.rest;
 
 import com.example.mainapp.DAO.IHibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
-import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.service.EmployeeService;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -12,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.ErrorManager;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,11 +45,17 @@ public class EmployeeController {
 	 *
 	 * @return
 	 */
-	@GetMapping(value = "")
+	@GetMapping(value = "/")
 	public List<Employee> getEmployees() {
 		try {
 
-			return EmployeeService.getEmployees(this.sessionFactory).stream().collect(Collectors.toList());
+			List<Employee> tmp = EmployeeService.getEmployees(this.sessionFactory)
+					.stream()
+					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
+					.peek(e -> System.out.println(e))
+					.collect(Collectors.toList());
+
+			return tmp;
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -89,7 +94,7 @@ public class EmployeeController {
 	 * @param employee
 	 * @return
 	 */
-	@PostMapping()
+	@PostMapping(value = "/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Employee saveEmployee(@RequestBody Employee employee) {
 
@@ -109,7 +114,7 @@ public class EmployeeController {
 	 * @param employee
 	 * @return
 	 */
-	@PutMapping(value = "")
+	@PutMapping(value = "/")
 	public ResponseEntity<Employee> putEmployeeById(@RequestBody Employee employee) {
 
 		try {
@@ -150,7 +155,7 @@ public class EmployeeController {
 	 * @param employee
 	 * @return
 	 */
-	@PatchMapping(value = "")
+	@PatchMapping(value = "/")
 	public boolean patchPartEmployeeById(@RequestBody Employee employee) {
 
 		try {
@@ -187,15 +192,10 @@ public class EmployeeController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public boolean deleteEmployeeById(@PathVariable("employeeId") Long id) {
 		try {
-			Employee tnp = new Employee();
-			tnp.setEmployeeId(id);
+			Employee tmp = new Employee();
+			tmp.setEmployeeId(id);
 
-			//не работает(
-//			Employee tmp = new Employee(){{
-//				setEmployeeId(id);
-//			}};
-
-			return EmployeeService.deleteEmployeeById(this.sessionFactory, tnp);
+			return EmployeeService.deleteEmployeeById(this.sessionFactory, tmp);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -204,7 +204,7 @@ public class EmployeeController {
 	}
 
 	@DeleteMapping(value = "/")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "object was deleted")
 	public boolean deleteEmployeeById(@RequestBody Employee employee) {
 		try {
 

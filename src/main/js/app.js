@@ -109,11 +109,11 @@ class App extends Component {
 				body: JSON.stringify(data),
 			});
 
-			const result = await response.json();
+			const result = await response;
 
 			console.log(result);
 
-			if (result) {
+			if (Number(result.status) === 204) {
 				const a = this.state.items.filter(item => item.employeeId !== Number(id));
 				this.setState((state, props) => {
 					return {
@@ -147,7 +147,7 @@ class App extends Component {
 
 		const {SetControlActionURL, items, isLoaded, error} = this.state;
 
-		if (isLoaded && items.length >= 0) {
+		if (isLoaded && items.length > 0) {
 			return (
 				<React.Fragment>
 					{
@@ -174,9 +174,13 @@ class App extends Component {
 		} else if (!isLoaded) {
 			return (
 				<React.Fragment>
-					{/*<a href={SetControlActionURL.urlControlActionGreeting}>eeeee</a>*/}
-					{/*<button type="button" className="btn" onClick={(e) => this.getAll(e)}>Войти</button>*/}
 					<p>Loading</p>
+				</React.Fragment>
+			);
+		} else if (items.length === 0) {
+			return (
+				<React.Fragment>
+					<p>length is 0</p>
 				</React.Fragment>
 			);
 		}
