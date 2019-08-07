@@ -4,7 +4,6 @@ import com.example.mainapp.DAO.IHibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.service.EmployeeService;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,19 +20,16 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
-	private IHibernateUtil iHibernateUtil;
-
-	private StandardServiceRegistry serviceRegistryBuilder;
-	private SessionFactory sessionFactory;
+	private EmployeeService<Employee> employeeService;
 
 	@Autowired
 	public EmployeeController(@Qualifier("hibernateUtil") IHibernateUtil iHibernateUtil) {
 		try {
 
-			this.iHibernateUtil = iHibernateUtil;
-			iHibernateUtil.buidIn("hibernate.postgres.employeedb.cfg.xml", Employee.class);
-			this.serviceRegistryBuilder = this.iHibernateUtil.getServiceRegistryBuilder();
-			this.sessionFactory = this.iHibernateUtil.getSessionFactory();
+			SessionFactory sessionFactory = iHibernateUtil
+					.buidIn("hibernate.postgres.employeedb.cfg.xml", Employee.class);
+
+			this.employeeService = new EmployeeService<Employee>(Employee.class, sessionFactory);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -49,7 +45,7 @@ public class EmployeeController {
 	public List<Employee> getEmployees() {
 		try {
 
-			List<Employee> tmp = EmployeeService.getEmployees(this.sessionFactory)
+			List<Employee> tmp = employeeService.getEmployees()
 					.stream()
 					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
 					.peek(e -> System.out.println(e))
@@ -74,7 +70,7 @@ public class EmployeeController {
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) {
 		try {
 
-			Employee employee = EmployeeService.getEmployeeById(this.sessionFactory, id);
+			Employee employee = employeeService.getEmployeeById(id);
 
 			if (!Objects.isNull(employee)) {
 				return new ResponseEntity<>(employee, HttpStatus.OK);
@@ -100,7 +96,7 @@ public class EmployeeController {
 
 		try {
 
-			return EmployeeService.saveEmployeeById(this.sessionFactory, employee);
+			return employeeService.saveEmployeeById(employee);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -119,7 +115,7 @@ public class EmployeeController {
 
 		try {
 
-			if (!EmployeeService.putEmployeeById(this.sessionFactory, employee)) {
+			if (!employeeService.putEmployeeById(employee)) {
 				return new ResponseEntity<>(employee, HttpStatus.OK);
 			}
 			return new ResponseEntity<>(null, HttpStatus.CREATED);
@@ -137,7 +133,7 @@ public class EmployeeController {
 
 			employee.setEmployeeId(id);
 
-			if (!EmployeeService.putEmployeeById(this.sessionFactory, employee)) {
+			if (!employeeService.putEmployeeById(employee)) {
 				return new ResponseEntity<>(employee, HttpStatus.OK);
 			}
 			return new ResponseEntity<>(null, HttpStatus.CREATED);
@@ -160,7 +156,7 @@ public class EmployeeController {
 
 		try {
 
-			return EmployeeService.patchEmployeeById(this.sessionFactory, employee);
+			return employeeService.patchEmployeeById(employee);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -175,7 +171,7 @@ public class EmployeeController {
 		try {
 
 			employee.setEmployeeId(id);
-			return EmployeeService.patchEmployeeById(this.sessionFactory, employee);
+			return employeeService.patchEmployeeById(employee);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -195,7 +191,7 @@ public class EmployeeController {
 			Employee tmp = new Employee();
 			tmp.setEmployeeId(id);
 
-			return EmployeeService.deleteEmployeeById(this.sessionFactory, tmp);
+			return employeeService.deleteEmployeeById(tmp);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -208,7 +204,7 @@ public class EmployeeController {
 	public boolean deleteEmployeeById(@RequestBody Employee employee) {
 		try {
 
-			return EmployeeService.deleteEmployeeById(this.sessionFactory, employee);
+			return employeeService.deleteEmployeeById(employee);
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();

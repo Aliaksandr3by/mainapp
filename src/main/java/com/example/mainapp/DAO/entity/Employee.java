@@ -1,11 +1,7 @@
 package com.example.mainapp.DAO.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -15,6 +11,34 @@ import java.util.Objects;
 @Entity
 @Table(name = "employee")
 public class Employee implements Serializable {
+
+
+	public boolean IsEmpty(Employee tmp) {
+
+		if (tmp.getFirstName() == null
+				&& tmp.getLastName() == null
+				&& tmp.getGender() == null
+				&& tmp.getJobTitle() == null
+				&& tmp.getDepartmentId() == null
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public Employee employeeUpdater(Employee patch) {
+
+		if (this.equals(patch)) throw new NotFoundException("Object is equals ");//FIXME
+
+		if (patch.getFirstName() != null) this.setFirstName(patch.getFirstName());
+		if (patch.getLastName() != null) this.setLastName(patch.getLastName());
+		if (patch.getGender() != null) this.setGender(patch.getGender());
+		if (patch.getJobTitle() != null) this.setJobTitle(patch.getJobTitle());
+		if (patch.getDepartmentId() != null) this.setDepartmentId(patch.getDepartmentId());
+
+		return this;
+	}
 
 	public Employee() {
 	}
@@ -116,5 +140,17 @@ public class Employee implements Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(employeeId, firstName, lastName, departmentId, jobTitle, gender);
+	}
+
+	@Override
+	public String toString() {
+		return "Employee{" +
+				"employeeId=" + employeeId +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", departmentId=" + departmentId +
+				", jobTitle='" + jobTitle + '\'' +
+				", gender=" + gender +
+				'}';
 	}
 }

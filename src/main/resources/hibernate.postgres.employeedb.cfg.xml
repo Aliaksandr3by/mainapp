@@ -11,7 +11,7 @@
         <property name="connection.driver_class">org.postgresql.Driver</property>
 
         <property name="connection.url">jdbc:postgresql://localhost:5432/employeedb</property>
-
+        <property name="default_schema">public</property>
         <property name="connection.username">guest</property>
         <property name="connection.password">guest</property>
 
@@ -20,7 +20,9 @@
         <property name="use_sql_comments">true</property>
 
         <property name="current_session_context_class">thread</property>
-        <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+        <property name="hibernate.current_session_context_class">
+            org.hibernate.context.internal.ThreadLocalSessionContext
+        </property>
         <property name="connection.pool_size">100</property>
 
         <property name="hibernate.hbm2ddl.auto">update</property>

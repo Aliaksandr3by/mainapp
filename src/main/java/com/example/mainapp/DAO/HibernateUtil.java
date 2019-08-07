@@ -31,7 +31,7 @@ public class HibernateUtil implements IHibernateUtil {
 	public HibernateUtil() {
 	}
 
-	public void buidIn(String hibernateCFG, Class typeClass) throws RuntimeException {
+	public SessionFactory buidIn(String hibernateCFG, Class typeClass) throws RuntimeException {
 
 		try {
 
@@ -42,6 +42,8 @@ public class HibernateUtil implements IHibernateUtil {
 			this.sessionFactory = new MetadataSources(this.serviceRegistryBuilder)
 					.buildMetadata()
 					.buildSessionFactory();
+
+			return this.sessionFactory;
 
 //			serviceRegistryBuilder.close();
 //			sessionFactory.close();
