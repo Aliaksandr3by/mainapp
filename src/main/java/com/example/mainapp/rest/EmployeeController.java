@@ -3,17 +3,14 @@ package com.example.mainapp.rest;
 import com.example.mainapp.DAO.IHibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.service.EmployeeService;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/employees", produces = "application/json")
@@ -21,15 +18,16 @@ import java.util.stream.Collectors;
 public class EmployeeController {
 
 	private EmployeeService<Employee> employeeService;
+	private IHibernateUtil hibernateUtil;
 
 	@Autowired
 	public EmployeeController(@Qualifier("hibernateUtil") IHibernateUtil iHibernateUtil) {
 		try {
 
-			SessionFactory sessionFactory = iHibernateUtil
-					.buidIn("hibernate.postgres.employeedb.cfg.xml", Employee.class);
+			this.hibernateUtil = iHibernateUtil;
+			this.hibernateUtil.buidIn("hibernate.cfg.xml", Employee.class);
 
-			this.employeeService = new EmployeeService<Employee>(Employee.class, sessionFactory);
+			this.employeeService = new EmployeeService<>(Employee.class, this.hibernateUtil.getSessionFactory());
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -45,11 +43,12 @@ public class EmployeeController {
 	public List<Employee> getEmployees() {
 		try {
 
-			List<Employee> tmp = employeeService.getEmployees()
-					.stream()
-					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
-					.peek(e -> System.out.println(e))
-					.collect(Collectors.toList());
+			List<Employee> tmp = employeeService.getEmployees("employeeId")
+//					.stream()
+//					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
+//					.peek(e -> System.out.println(e))
+//					.collect(Collectors.toList())
+					;
 
 			return tmp;
 

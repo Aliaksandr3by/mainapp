@@ -14,19 +14,68 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+class tttt implements Runnable {
+
+	public static int count = 0;
+
+	EmployeeController employeeController;
+	Employee employee;
+	Thread tmp;
+
+	public tttt(EmployeeController employeeController, Employee employee) {
+		this.employeeController = employeeController;
+		this.employee = employee;
+		tmp = new Thread(this);
+		tmp.start();
+	}
+
+	@Override
+	public void run() {
+		try {
+			++count;
+			Thread.currentThread().sleep((long) Math.ceil(Math.random() * 5000));
+			this.employeeController.saveEmployee(employee);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MainappApplicationTests {
 
 	private EmployeeController employeeController = new EmployeeController(new HibernateUtil());
 
-	private Employee employee = new Employee("test", "test", 1L, "test", Gender.FEMALE);
+	private Employee employee = new Employee(
+			"fn" + Math.random() * 20,
+			"ln" + Math.random() * 20,
+			(long) Math.ceil(Math.random() * 2),
+			"jt" + Math.random() * 20,
+			Gender.FEMALE);
 
 	//FIXME
 //	@Test(expected = ObjectNotFoundException.class)
 //	public void mustGetObjectNotFoundException() {
 //		employeeController.getEmployeeById(999999L);
 //	}
+
+	@Test
+	public void voidThread() throws InterruptedException {
+
+		for (int i = 0; i < 10; i++) {
+			tttt tr = new tttt(
+					new EmployeeController(new HibernateUtil()),
+					new Employee(
+							tttt.count + "fn" + Math.floor(Math.random() * 3),
+							tttt.count + "ln" + Math.ceil(Math.random() * 3),
+							(long) Math.round(Math.random() * 2),
+							i + "jt" + (Math.random() * 3),
+							Gender.FEMALE));
+		}
+		System.out.println(tttt.count);
+		Thread.currentThread().join(7000);
+	}
 
 	/**
 	 * получение несуществующего элемента
@@ -35,7 +84,7 @@ public class MainappApplicationTests {
 	public void mustGetNull() {
 
 //		assertNull(employeeController.getEmployeeById(9999999L));
-		assertThrows(ObjectNotFoundException.class, () -> employeeController.getEmployeeById(-1L));
+		assertThrows(NotFoundException.class, () -> employeeController.getEmployeeById(null));
 	}
 
 	/**

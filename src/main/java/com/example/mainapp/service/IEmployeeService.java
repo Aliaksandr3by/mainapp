@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IEmployeeService<T extends Employee> {
 
-	List<T> getEmployees();
+	List<T> getEmployees(String orderBy);
 
 	T getEmployeeById(Long id) throws ObjectNotFoundException;
 

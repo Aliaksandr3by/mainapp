@@ -1,6 +1,5 @@
 package com.example.mainapp.DAO;
 
-import com.example.mainapp.DAO.entity.Employee;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -8,7 +7,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -26,7 +24,6 @@ public class HibernateUtil implements IHibernateUtil {
 	private StandardServiceRegistry serviceRegistryBuilder;
 
 	private SessionFactory sessionFactory;
-
 
 	public HibernateUtil() {
 	}
@@ -60,5 +57,8 @@ public class HibernateUtil implements IHibernateUtil {
 
 	}
 
-}
+	public void destroyStandardServiceRegistry() {
+		StandardServiceRegistryBuilder.destroy(this.serviceRegistryBuilder);
+	}
 
+}

@@ -12,4 +12,6 @@ public interface IHibernateUtil {
 	StandardServiceRegistry getServiceRegistryBuilder();
 
 	SessionFactory getSessionFactory();
+
+	void destroyStandardServiceRegistry();
 }

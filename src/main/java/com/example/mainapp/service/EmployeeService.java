@@ -6,7 +6,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -25,15 +30,32 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		this.sessionFactory = sessionFactory;
 	}
 
-	public List<T> getEmployees() {
+	public synchronized List<T> getEmployees(String orderBy) {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
-			return session.createQuery("from Employee e", typeParameterClass).list();
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+			CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.typeParameterClass);
+
+			Root<T> criteriaRoot = criteriaQuery.from(this.typeParameterClass);
+
+			Path<String> employeeId = criteriaRoot.get(orderBy);
+
+			criteriaQuery
+					.select(criteriaRoot)
+					.orderBy(criteriaBuilder.asc(employeeId))
+			;
+
+			Query<T> query = session.createQuery(criteriaQuery);
+
+			List<T> tmp = query.list();
+
+			return tmp;
 		}
 	}
 
-	public T getEmployeeById(Long id) throws ObjectNotFoundException {
+	public synchronized T getEmployeeById(Long id) throws ObjectNotFoundException {
 
 		if (id == null) throw new NotFoundException("non id");
 
@@ -43,7 +65,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		}
 	}
 
-	public T saveEmployeeById(T employee) {
+	public synchronized T saveEmployeeById(T employee) {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -74,7 +96,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	 * @return
 	 * @throws HibernateException
 	 */
-	public boolean putEmployeeById(@NotNull T employee) {
+	public synchronized boolean putEmployeeById(@NotNull T employee) {
 
 		boolean isCreated = false;
 
@@ -104,7 +126,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		}
 	}
 
-	public boolean patchEmployeeById(T employee) throws NotFoundException {
+	public synchronized boolean patchEmployeeById(T employee) throws NotFoundException {
 
 		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
 		if (employee.IsEmpty(employee)) throw new NotFoundException("is empty");
@@ -133,7 +155,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		}
 	}
 
-	public boolean deleteEmployeeById(T employee) throws NotFoundException {
+	public synchronized boolean deleteEmployeeById(T employee) throws NotFoundException {
 
 		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
 
