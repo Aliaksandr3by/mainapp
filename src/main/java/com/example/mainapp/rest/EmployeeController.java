@@ -2,6 +2,7 @@ package com.example.mainapp.rest;
 
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.service.IEmployeeService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.Objects;
 public class EmployeeController {
 
 	@Resource(name = "providerEmployeeService")
+//	@Qualifier("providerEmployeeService")
 	private IEmployeeService<Employee> employeeService;
 
 
@@ -88,23 +90,17 @@ public class EmployeeController {
 	 * @param employee
 	 * @return
 	 */
-	@PutMapping(value = "/")
+	@PutMapping(value = "")
 	public ResponseEntity<Employee> putEmployeeById(@RequestBody Employee employee) {
 
-		if (!employeeService.putEmployeeById(employee)) {
-			return new ResponseEntity<>(employee, HttpStatus.OK);
+		boolean isCreated = Objects.isNull(employee.getEmployeeId());
+
+		Employee tmp = null;
+
+		if (Objects.nonNull(tmp = employeeService.putEmployeeById(employee))) {
+			return new ResponseEntity<>(tmp, isCreated ? HttpStatus.CREATED : HttpStatus.OK);
 		}
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
-	}
 
-	@PutMapping(value = "/{employeeId}")
-	public ResponseEntity<Employee> putEmployeeByGetId(@PathVariable("employeeId") Long id, @RequestBody Employee employee) {
-
-		employee.setEmployeeId(id);
-
-		if (!employeeService.putEmployeeById(employee)) {
-			return new ResponseEntity<>(employee, HttpStatus.OK);
-		}
 		return new ResponseEntity<>(null, HttpStatus.CREATED);
 	}
 
@@ -115,36 +111,15 @@ public class EmployeeController {
 	 * @param employee
 	 * @return
 	 */
-	@PatchMapping(value = "/")
-	public boolean patchPartEmployeeById(@RequestBody Employee employee) {
+	@PatchMapping(value = "")
+	public ResponseEntity<Employee> patchPartEmployeeById(@RequestBody Employee employee) {
 
-		return employeeService.patchEmployeeById(employee);
+		Employee tmp = employeeService.patchEmployeeById(employee);
+
+		return new ResponseEntity<>(tmp, HttpStatus.OK);
 	}
 
-	//при указании в запросе
-	@PatchMapping(value = "/{employeeId}")
-	public boolean patchPartEmployeeByGetId(@PathVariable("employeeId") Long id, @RequestBody Employee employee) {
-
-		employee.setEmployeeId(id);
-		return employeeService.patchEmployeeById(employee);
-	}
-
-	/**
-	 * удаление по id
-	 *
-	 * @return
-	 */
-	@DeleteMapping(value = "/{employeeId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public boolean deleteEmployeeById(@PathVariable("employeeId") Long id) {
-
-		Employee tmp = new Employee();
-		tmp.setEmployeeId(id);
-
-		return employeeService.deleteEmployeeById(tmp);
-	}
-
-	@DeleteMapping(value = "/")
+	@DeleteMapping(value = "")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "object was deleted")
 	public boolean deleteEmployeeById(@RequestBody Employee employee) {
 

@@ -18,9 +18,9 @@ public interface IEmployeeService<T extends Employee> {
 
 	T saveEmployeeById(T employee);
 
-	boolean putEmployeeById(T employee);
+	T putEmployeeById(T employee);
 
-	boolean patchEmployeeById(T employee) throws NotFoundException;
+	T patchEmployeeById(T employee) throws NotFoundException;
 
 	boolean deleteEmployeeById(T employee) throws NotFoundException;
 }

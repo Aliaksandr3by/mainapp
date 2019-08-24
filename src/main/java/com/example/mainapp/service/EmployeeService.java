@@ -2,6 +2,7 @@ package com.example.mainapp.service;
 
 import com.example.mainapp.DAO.HibernateUtil;
 import com.example.mainapp.DAO.IHibernateUtil;
+import com.example.mainapp.DAO.entity.Department;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.HibernateException;
@@ -9,6 +10,8 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -29,6 +32,8 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	private Class<T> typeParameterClass;
 
+	private Logger logger;
+
 	public void setTypeParameterClass(Class<T> typeParameterClass) {
 		this.typeParameterClass = typeParameterClass;
 	}
@@ -45,9 +50,10 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	}
 
-	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass) {
+	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass, Logger logger) {
 		this.sessionFactory = sessionFactory;
 		this.typeParameterClass = typeParameterClass;
+		this.logger = logger;
 	}
 
 	public synchronized List<T> getEmployees(String orderBy) {
@@ -116,15 +122,19 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	 * @return
 	 * @throws HibernateException
 	 */
-	public synchronized boolean putEmployeeById(@NotNull T employee) {
-
-		boolean isCreated = false;
+	public synchronized T putEmployeeById(@NotNull T employee) {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
 
-				isCreated = Objects.isNull(employee.getEmployeeId());
+				T tmp = null;
+
+				if (Objects.nonNull(employee.getEmployeeId()) && Objects.isNull(tmp = session.get(typeParameterClass, employee.getEmployeeId()))) {
+					throw new NotFoundException("id is not found");
+				}
+
+				if (Objects.nonNull(tmp)) session.detach(tmp);
 
 				session.beginTransaction();
 
@@ -134,9 +144,10 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
 
-				return isCreated;
+				return employee;
 
 			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
 					e.printStackTrace();
@@ -146,30 +157,35 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		}
 	}
 
-	public synchronized boolean patchEmployeeById(T employee) throws NotFoundException {
-
-		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
-		if (employee.IsEmpty(employee)) throw new NotFoundException("is empty");
+	public synchronized T patchEmployeeById(T employee) throws NotFoundException {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
 				session.beginTransaction();
 
-				Employee tmp = session.get(typeParameterClass, employee.getEmployeeId());
+				T tmp = null;
+
+				if (Objects.isNull(employee.getEmployeeId()) || Objects.isNull(tmp = session.get(typeParameterClass, employee.getEmployeeId()))) {
+					throw new NotFoundException("ID not found during patch");
+				}
+
 				tmp.employeeUpdater(employee);
 
 				session.update(Objects.requireNonNull(tmp));
 
 				session.getTransaction().commit();
 
-				return true;
+				return tmp;
 
 			} catch (Exception e) {
+
+				logger.error("patch: " + e.getMessage(), e);
+
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
-					e.printStackTrace();
 				}
+
 				throw e;
 			}
 		}
@@ -194,10 +210,13 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 				return true;
 
 			} catch (Exception e) {
+
+				logger.error("logger: " + e.getMessage(), e);
+
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
-					e.printStackTrace();
 				}
+
 				throw e;
 			}
 		}
