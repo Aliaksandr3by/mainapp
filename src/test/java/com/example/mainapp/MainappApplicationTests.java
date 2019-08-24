@@ -6,7 +6,7 @@ import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.rest.EmployeeController;
-import org.hibernate.ObjectNotFoundException;
+import com.example.mainapp.service.EmployeeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class tttt implements Runnable {
+class TestThread implements Runnable {
 
 	public static int count = 0;
 
@@ -22,7 +22,7 @@ class tttt implements Runnable {
 	Employee employee;
 	Thread tmp;
 
-	public tttt(EmployeeController employeeController, Employee employee) {
+	public TestThread(EmployeeController employeeController, Employee employee) {
 		this.employeeController = employeeController;
 		this.employee = employee;
 		tmp = new Thread(this);
@@ -45,7 +45,7 @@ class tttt implements Runnable {
 @SpringBootTest
 public class MainappApplicationTests {
 
-	private EmployeeController employeeController = new EmployeeController(new HibernateUtil());
+	private EmployeeController employeeController = new EmployeeController();
 
 	private Employee employee = new Employee(
 			"fn" + Math.random() * 20,
@@ -64,16 +64,16 @@ public class MainappApplicationTests {
 	public void voidThread() throws InterruptedException {
 
 		for (int i = 0; i < 10; i++) {
-			tttt tr = new tttt(
-					new EmployeeController(new HibernateUtil()),
+			TestThread tr = new TestThread(
+					new EmployeeController(),
 					new Employee(
-							tttt.count + "fn" + Math.floor(Math.random() * 3),
-							tttt.count + "ln" + Math.ceil(Math.random() * 3),
+							TestThread.count + "fn" + Math.floor(Math.random() * 3),
+							TestThread.count + "ln" + Math.ceil(Math.random() * 3),
 							(long) Math.round(Math.random() * 2),
 							i + "jt" + (Math.random() * 3),
 							Gender.FEMALE));
 		}
-		System.out.println(tttt.count);
+		System.out.println(TestThread.count);
 		Thread.currentThread().join(7000);
 	}
 

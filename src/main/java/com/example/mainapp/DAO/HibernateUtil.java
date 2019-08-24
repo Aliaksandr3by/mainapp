@@ -7,11 +7,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @Qualifier(value = "hibernateUtil")
 public class HibernateUtil implements IHibernateUtil {
+
+	private StandardServiceRegistry serviceRegistryBuilder;
+
+	private SessionFactory sessionFactory;
+
+	private String hibernateCFG;
 
 	public StandardServiceRegistry getServiceRegistryBuilder() {
 		return serviceRegistryBuilder;
@@ -21,19 +27,31 @@ public class HibernateUtil implements IHibernateUtil {
 		return sessionFactory;
 	}
 
-	private StandardServiceRegistry serviceRegistryBuilder;
-
-	private SessionFactory sessionFactory;
+	public String getHibernateCFG() {
+		return hibernateCFG;
+	}
 
 	public HibernateUtil() {
 	}
 
-	public SessionFactory buidIn(String hibernateCFG, Class typeClass) throws RuntimeException {
+	public HibernateUtil(String hibernateCFG) {
+		this.buildIn(hibernateCFG);
+	}
+
+	public SessionFactory buildIn(String hibernateCFG) throws RuntimeException {
+
+		this.hibernateCFG = hibernateCFG;
+		return this.build();
+	}
+
+	public SessionFactory build() throws RuntimeException {
 
 		try {
 
+			String tmp = Optional.ofNullable(this.hibernateCFG).orElse("hibernate.cfg.xml");
+
 			this.serviceRegistryBuilder = new StandardServiceRegistryBuilder()
-					.configure(Objects.requireNonNull(hibernateCFG, "hibernate.cfg.xml"))
+					.configure(tmp)
 					.build();
 
 			this.sessionFactory = new MetadataSources(this.serviceRegistryBuilder)

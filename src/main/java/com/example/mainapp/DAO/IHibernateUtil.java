@@ -7,7 +7,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import java.util.List;
 
 public interface IHibernateUtil {
-	SessionFactory buidIn(String hibernateCFG, Class typeClass) throws RuntimeException;
+	SessionFactory buildIn(String hibernateCFG) throws RuntimeException;
 
 	StandardServiceRegistry getServiceRegistryBuilder();
 

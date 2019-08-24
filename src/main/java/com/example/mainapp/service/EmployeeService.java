@@ -1,5 +1,7 @@
 package com.example.mainapp.service;
 
+import com.example.mainapp.DAO.HibernateUtil;
+import com.example.mainapp.DAO.IHibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.HibernateException;
@@ -7,6 +9,9 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,18 +21,33 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
+@Component
+@Qualifier(value = "employeeService")
 public class EmployeeService<T extends Employee> implements IEmployeeService<T> {
 
-	private final Class<T> typeParameterClass;
-	private final SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
+
+	private Class<T> typeParameterClass;
+
+	public void setTypeParameterClass(Class<T> typeParameterClass) {
+		this.typeParameterClass = typeParameterClass;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-	public EmployeeService(Class<T> typeParameterClass, SessionFactory sessionFactory) {
-		this.typeParameterClass = typeParameterClass;
+	public EmployeeService() {
+
+	}
+
+	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass) {
 		this.sessionFactory = sessionFactory;
+		this.typeParameterClass = typeParameterClass;
 	}
 
 	public synchronized List<T> getEmployees(String orderBy) {

@@ -30,6 +30,7 @@
         <!--        <property name="hbm2ddl.auto">create-drop</property>-->
 
         <mapping class="com.example.mainapp.DAO.entity.Employee"/><!--не работает HQL связка-->
+        <mapping class="com.example.mainapp.DAO.entity.Department"/><!--не работает HQL связка-->
 
         <!--        		<property name="default_entity_mode">dynamic-map</property>-->
         <!--        		<mapping resource="by/data/myweb/entity/ProductName.hbm.xml"/>-->
