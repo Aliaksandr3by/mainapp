@@ -1,9 +1,9 @@
 package com.example.mainapp;
 
 
-import com.example.mainapp.DAO.entity.Department;
-import com.example.mainapp.DAO.entity.Employee;
-import com.example.mainapp.DAO.entity.Gender;
+import com.example.mainapp.model.entity.Department;
+import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.model.entity.Gender;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.rest.EmployeeController;
 import org.junit.Ignore;

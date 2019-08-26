@@ -1,4 +1,4 @@
-package com.example.mainapp.DAO.entity;
+package com.example.mainapp.model.entity;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,9 +9,9 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
-@Setter
 @Entity
 @Table(name = "department", schema = "public")
 @Access(AccessType.PROPERTY)
@@ -33,11 +33,6 @@ public class Department implements Serializable {
 	}
 
 	public Department() {
-	}
-
-	public Department(String nameDepartment, LocalDateTime dateDepartment) {
-		this.nameDepartment = nameDepartment;
-		this.dateDepartment = dateDepartment;
 	}
 
 	public Department(Long idDepartment, String nameDepartment, LocalDateTime dateDepartment) {
@@ -72,5 +67,46 @@ public class Department implements Serializable {
 	@Type(type = "LocalDateTime")
 	public LocalDateTime getDateDepartment() {
 		return dateDepartment;
+	}
+
+
+	public void setDepartmentSet(Set<Employee> departmentSet) {
+		this.departmentSet = departmentSet;
+	}
+
+	public void setIdDepartment(Long idDepartment) {
+		this.idDepartment = idDepartment;
+	}
+
+	public void setNameDepartment(String nameDepartment) {
+		this.nameDepartment = nameDepartment;
+	}
+
+	public void setDateDepartment(LocalDateTime dateDepartment) {
+		this.dateDepartment = dateDepartment;
+	}
+
+	@Override
+	public String toString() {
+		return "Department{" +
+				"idDepartment=" + idDepartment +
+				", nameDepartment='" + nameDepartment + '\'' +
+				", dateDepartment=" + dateDepartment +
+				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Department that = (Department) o;
+		return idDepartment.equals(that.idDepartment) &&
+				nameDepartment.equals(that.nameDepartment) &&
+				dateDepartment.equals(that.dateDepartment);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idDepartment, nameDepartment, dateDepartment);
 	}
 }

@@ -1,4 +1,4 @@
-package com.example.mainapp.DAO;
+package com.example.mainapp.model;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;

@@ -8,8 +8,8 @@
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>com.example.mainapp.DAO.entity.Employee</class>
-        <class>com.example.mainapp.DAO.entity.Department</class>
+        <class>com.example.mainapp.model.entity.Employee</class>
+        <class>com.example.mainapp.model.entity.Department</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>

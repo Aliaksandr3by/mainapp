@@ -29,8 +29,8 @@
         <!--        <property name="hbm2ddl.auto">create</property>-->
         <!--        <property name="hbm2ddl.auto">create-drop</property>-->
 
-        <mapping class="com.example.mainapp.DAO.entity.Employee"/>
-        <mapping class="com.example.mainapp.DAO.entity.Department"/>
+        <mapping class="com.example.mainapp.model.entity.Employee"/>
+        <mapping class="com.example.mainapp.model.entity.Department"/>
 
         <!--        		<property name="default_entity_mode">dynamic-map</property>-->
         <!--        		<mapping resource="by/data/myweb/entity/ProductName.hbm.xml"/>-->

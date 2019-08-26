@@ -1,4 +1,4 @@
-package com.example.mainapp.DAO.entity;
+package com.example.mainapp.model.entity;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.annotations.GenericGenerator;

@@ -1,6 +1,6 @@
-package com.example.mainapp.DAO;
+package com.example.mainapp.model;
 
-import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.model.entity.Employee;
 
 import java.util.ArrayList;
 import java.util.List;

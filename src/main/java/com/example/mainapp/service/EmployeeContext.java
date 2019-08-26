@@ -1,6 +1,6 @@
 package com.example.mainapp.service;
 
-import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import org.hibernate.ObjectNotFoundException;
 

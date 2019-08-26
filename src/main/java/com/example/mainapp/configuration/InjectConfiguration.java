@@ -1,8 +1,10 @@
-package com.example.mainapp.service;
+package com.example.mainapp.configuration;
 
-import com.example.mainapp.DAO.HibernateUtil;
-import com.example.mainapp.DAO.IHibernateUtil;
-import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.model.HibernateUtil;
+import com.example.mainapp.model.IHibernateUtil;
+import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.service.EmployeeContext;
+import com.example.mainapp.service.EmployeeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 @Configuration
-public class EmployeeConfiguration {
+public class InjectConfiguration {
 
 	@Bean
 	public IHibernateUtil providerHibernateUtil() {

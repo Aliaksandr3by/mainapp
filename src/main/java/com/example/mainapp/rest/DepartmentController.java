@@ -1,6 +1,6 @@
 package com.example.mainapp.rest;
 
-import com.example.mainapp.DAO.entity.Department;
+import com.example.mainapp.model.entity.Department;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class DepartmentController {
 	private EntityManagerFactory emf;
 
 	@GetMapping(value = "/{id}")
-	public List<Department> testCRM(@PathVariable("id") Integer id) throws Exception {
+	public List<Department> getDepartment(@PathVariable("id") Integer id) throws Exception {
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;

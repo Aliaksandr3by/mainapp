@@ -1,7 +1,8 @@
 package com.example.mainapp.service;
 
-import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;

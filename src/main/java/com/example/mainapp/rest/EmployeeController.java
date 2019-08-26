@@ -1,6 +1,6 @@
 package com.example.mainapp.rest;
 
-import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.service.EmployeeContext;
 import org.springframework.http.HttpStatus;
