@@ -54,7 +54,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"employeeId\": 31,\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"departmentId\": 2,\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n}"
+							"raw": "    {\r\n\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"department\": {\r\n\r\n            \"nameDepartment\": \"we\",\r\n            \"dateDepartment\": \"2019-08-26T17:35:50\"\r\n        },\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n    }"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees/",
@@ -121,18 +121,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 15,\r\n        \"firstName\": \"tttttttttttttttttttttttt\",\r\n        \"lastName\": \"ttttttttt\",\r\n         \"departmentId\": 2,\r\n        \"jobTitle\": \"ttttttttt\",\r\n        \"gender\": 0\r\n    }"
+							"raw": "{\r\n    \"employeeId\": 5,\r\n    \"firstName\": \"ttttt\",\r\n    \"lastName\": \"tttttttttt\",\r\n    \"department\": {\r\n        \"idDepartment\": 2,\r\n        \"nameDepartment\": \"tttttttttt\",\r\n        \"dateDepartment\": \"2019-08-26T17:35:50\"\r\n    },\r\n    \"jobTitle\": \"tttttttttttt\",\r\n    \"gender\": \"FEMALE\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employees/15",
+							"raw": "http://localhost:8080/employees",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employees",
-								"15"
+								"employees"
 							]
 						}
 					},
@@ -157,10 +156,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 6\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 5\r\n    }"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employees/7",
+							"raw": "http://localhost:8080/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -168,7 +167,7 @@
 							"port": "8080",
 							"path": [
 								"employees",
-								"7"
+								""
 							]
 						}
 					},
@@ -193,10 +192,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 15,\r\n        \"firstName\": \"sasha\",\r\n        \"gender\": 0\r\n    }"
+							"raw": "{\r\n    \"employeeId\": 5,\r\n    \"firstName\": \"pppppppp\",\r\n\r\n    \"department\": {\r\n        \"idDepartment\": 2,\r\n        \"dateDepartment\": \"2055-08-26T17:35:50\"\r\n    },\r\n    \"jobTitle\": \"tttttttttttt\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employees/15",
+							"raw": "http://localhost:8080/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -204,7 +203,7 @@
 							"port": "8080",
 							"path": [
 								"employees",
-								"15"
+								""
 							]
 						}
 					},

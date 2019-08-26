@@ -8,9 +8,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Access(AccessType.FIELD)
 @Entity
 @Table(name = "employee", schema = "public")
+@Access(AccessType.PROPERTY)
 public class Employee implements Serializable {
 
 
@@ -20,7 +20,7 @@ public class Employee implements Serializable {
 				&& tmp.getLastName() == null
 				&& tmp.getGender() == null
 				&& tmp.getJobTitle() == null
-				&& tmp.getDepartmentId() == null;
+				&& tmp.getDepartment() == null;
 	}
 
 	public Employee employeeUpdater(Employee patch) {
@@ -31,7 +31,9 @@ public class Employee implements Serializable {
 		if (patch.getLastName() != null) this.setLastName(patch.getLastName());
 		if (patch.getGender() != null) this.setGender(patch.getGender());
 		if (patch.getJobTitle() != null) this.setJobTitle(patch.getJobTitle());
-		if (patch.getDepartmentId() != null) this.setDepartmentId(patch.getDepartmentId());
+		if (patch.getDepartment().getIdDepartment() != null) {
+			this.getDepartment().DepartmentUpdater(patch.getDepartment());
+		}
 
 		return this;
 	}
@@ -39,103 +41,84 @@ public class Employee implements Serializable {
 	public Employee() {
 	}
 
-	@Column(name = "employee_id", nullable = false)
-	@GenericGenerator(name = "increment", strategy = "increment")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Id
 	private Long employeeId;
-
-	@Column(name = "first_name", nullable = false)
-	@Type(type = "text")
 	private String firstName;
-
-	@Column(name = "last_name", nullable = false)
-	@Type(type = "text")
 	private String lastName;
-
-	@Column(name = "department_id", unique = false, nullable = false)
-	private Long departmentId;
-
-	@Column(name = "job_title", nullable = false)
-	@Type(type = "text")
+	private Department department;
 	private String jobTitle;
-
-	@Column(name = "gender", nullable = false)
-	@Enumerated(EnumType.ORDINAL)
 	private Gender gender;
 
-	public Employee(String firstName, String lastName, Long departmentId, String jobTitle, Gender gender) {
+	public Employee(String firstName, String lastName, Department departmentId, String jobTitle, Gender gender) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.departmentId = departmentId;
+		this.department = departmentId;
 		this.jobTitle = jobTitle;
 		this.gender = gender;
 	}
 
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "employee_id_seq")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Id
+	@Column(name = "employee_id", nullable = false)
 	public Long getEmployeeId() {
 		return employeeId;
+	}
+
+	@Column(name = "first_name", nullable = false)
+	@Type(type = "text")
+	public String getFirstName() {
+		return firstName;
+	}
+
+	@Column(name = "last_name", nullable = false)
+	@Type(type = "text")
+	@Basic
+	public String getLastName() {
+		return lastName;
+	}
+
+	//	@Column(name = "department_id", unique = false, nullable = false)
+//	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@JoinColumn(name = "department_id", nullable = false, referencedColumnName = "id_department")
+	public Department getDepartment() {
+		return department;
+	}
+
+	@Column(name = "job_title", nullable = false)
+	@Type(type = "text")
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	@Column(name = "gender", nullable = false)
+	@Enumerated(EnumType.ORDINAL)
+	public Gender getGender() {
+		return gender;
 	}
 
 	public void setEmployeeId(Long employeeId) {
 		this.employeeId = employeeId;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
 	}
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public Long getDepartmentId() {
-		return departmentId;
-	}
-
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
-	}
-
-	public String getJobTitle() {
-		return jobTitle;
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
 
-	public Gender getGender() {
-		return gender;
-	}
-
 	public void setGender(Gender gender) {
 		this.gender = gender;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Employee employee = (Employee) o;
-		return employeeId.equals(employee.employeeId) &&
-				firstName.equals(employee.firstName) &&
-				lastName.equals(employee.lastName) &&
-				departmentId.equals(employee.departmentId) &&
-				jobTitle.equals(employee.jobTitle) &&
-				gender == employee.gender;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(employeeId, firstName, lastName, departmentId, jobTitle, gender);
 	}
 
 	@Override
@@ -144,9 +127,27 @@ public class Employee implements Serializable {
 				"employeeId=" + employeeId +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
-				", departmentId=" + departmentId +
+				", department=" + department +
 				", jobTitle='" + jobTitle + '\'' +
 				", gender=" + gender +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Employee employee = (Employee) o;
+		return Objects.equals(employeeId, employee.employeeId) &&
+				Objects.equals(firstName, employee.firstName) &&
+				Objects.equals(lastName, employee.lastName) &&
+				Objects.equals(department, employee.department) &&
+				Objects.equals(jobTitle, employee.jobTitle) &&
+				gender == employee.gender;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(employeeId, firstName, lastName, department, jobTitle, gender);
 	}
 }

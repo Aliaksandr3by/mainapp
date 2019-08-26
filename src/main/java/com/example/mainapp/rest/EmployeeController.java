@@ -2,8 +2,7 @@ package com.example.mainapp.rest;
 
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.service.IEmployeeService;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.example.mainapp.service.EmployeeContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class EmployeeController {
 
 	@Resource(name = "providerEmployeeService")
 //	@Qualifier("providerEmployeeService")
-	private IEmployeeService<Employee> employeeService;
+	private EmployeeContext<Employee> employeeService;
 
 
 	public EmployeeController() {
@@ -27,24 +26,13 @@ public class EmployeeController {
 //		this.employeeService = ctx.getBean("providerEmployeeService", EmployeeService.class);
 	}
 
-//	@Autowired
-//	public EmployeeController(
-//			@Qualifier("hibernateUtil") IHibernateUtil iHibernateUtil,
-//			@Qualifier("employeeService") IEmployeeService employeeService
-//	) {
-//		this.employeeService = employeeService;
-//		this.employeeService.setTypeParameterClass(Employee.class);
-//		this.employeeService.setSessionFactory(iHibernateUtil.buildIn("hibernate.employeedb.cfg.xml"));
-//	}
-
 	/**
-	 * Все элементы
-	 *
+	 * Method gets all items
 	 * @return
 	 */
 	@GetMapping(value = "/")
 	public List<Employee> getEmployees() {
-		List<Employee> tmp = employeeService.getEmployees("employeeId")
+		List<Employee> tmp = (List<Employee>) employeeService.getEmployees("employeeId")
 //					.stream()
 //					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
 //					.peek(e -> System.out.println(e))
@@ -56,24 +44,24 @@ public class EmployeeController {
 
 
 	/**
-	 * элемент по ID
+	 * Method gets all items by id
 	 *
 	 * @param id
 	 * @return
 	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) {
-		Employee employee = employeeService.getEmployeeById(id);
 
-		if (!Objects.isNull(employee)) {
-			return new ResponseEntity<>(employee, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		Employee tmp = new Employee();
+		tmp.setEmployeeId(id);
+		Employee employee = employeeService.loadEmployeeById(tmp);
+
+		return new ResponseEntity<>(employee, Objects.nonNull(employee) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 	}
 
 
 	/**
-	 * Сохранение элемента
+	 * Method saves item
 	 *
 	 * @param employee
 	 * @return
@@ -82,11 +70,11 @@ public class EmployeeController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Employee saveEmployee(@RequestBody Employee employee) {
 
-		return employeeService.saveEmployeeById(employee);
+		return employeeService.createEmployee(employee);
 	}
 
 	/**
-	 * Полное Обновление по ID или добавление при отсутствии ID
+	 * Method completely updates an item
 	 *
 	 * @param employee
 	 * @return
@@ -98,7 +86,7 @@ public class EmployeeController {
 
 		Employee tmp = null;
 
-		if (Objects.isNull(tmp = employeeService.putEmployeeById(employee))) {
+		if (Objects.isNull(tmp = employeeService.updateEmployee(employee))) {
 			throw new NotFoundException("error put");
 		}
 
@@ -106,8 +94,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * This method patch entity
-	 * Need set id arg in body
+	 * Method patch an entity
+	 * Need sets an id in body
 	 *
 	 * @param employee
 	 * @return
@@ -115,15 +103,20 @@ public class EmployeeController {
 	@PatchMapping(value = "")
 	public ResponseEntity<Employee> patchPartEmployeeById(@RequestBody Employee employee) {
 
-		Employee tmp = employeeService.patchEmployeeById(employee);
+		Employee tmp = employeeService.patchEmployee(employee);
 
 		return new ResponseEntity<>(tmp, HttpStatus.OK);
 	}
 
+	/**
+	 * Method deletes an item
+	 * @param employee
+	 * @return
+	 */
 	@DeleteMapping(value = "")
 	public ResponseEntity<Employee> deleteEmployeeById(@RequestBody Employee employee) {
 
-		Employee tmp = employeeService.deleteEmployeeById(employee);
+		Employee tmp = employeeService.deleteEmployee(employee);
 
 		return new ResponseEntity<>(tmp, Objects.nonNull(tmp) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 	}

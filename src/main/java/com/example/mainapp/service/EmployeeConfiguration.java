@@ -27,11 +27,12 @@ public class EmployeeConfiguration {
 		return LogManager.getLogger(EmployeeService.class);
 	}
 
-	@Bean(name = "providerEmployeeService")
+	@Bean
 	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public IEmployeeService<Employee> providerEmployeeService() {
+	public EmployeeContext<Employee> providerEmployeeService() {
 
 		return new EmployeeService<>(providerHibernateUtil().getSessionFactory(), Employee.class);
 	}
+
 
 }

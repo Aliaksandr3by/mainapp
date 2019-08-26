@@ -3,10 +3,7 @@ package com.example.mainapp.service;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -22,8 +19,8 @@ import java.util.Objects;
 
 
 @Component
-@Qualifier(value = "employeeService")
-public class EmployeeService<T extends Employee> implements IEmployeeService<T> {
+@Qualifier(value = "providerEmployeeService")
+public class EmployeeService<T extends Employee> implements EmployeeContext<T> {
 
 	private SessionFactory sessionFactory;
 
@@ -54,7 +51,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	}
 
 	@Override
-	public synchronized List<T> getEmployees(String orderTag) throws IllegalArgumentException {
+	public synchronized List<T> getEmployees(String sortOrder) throws IllegalStateException, IllegalArgumentException {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -64,7 +61,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 			Root<T> criteriaRoot = criteriaQuery.from(this.typeParameterClass);
 
-			Path<String> employeeId = criteriaRoot.get(orderTag);
+			Path<String> employeeId = criteriaRoot.get(sortOrder);
 
 			criteriaQuery
 					.select(criteriaRoot)
@@ -75,27 +72,36 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 			List<T> tmp = query.list();
 
-			logger.info("get");
+			logger.info(tmp.toString());
 
 			return tmp;
 		}
 	}
 
 	@Override
-	public synchronized T getEmployeeById(Long id) throws ObjectNotFoundException {
+	public synchronized T loadEmployeeById(T item) throws ObjectNotFoundException {
 
-		if (id == null) throw new NotFoundException("non id");
+		try {
+			try (Session session = this.sessionFactory.openSession()) {
 
-		try (Session session = this.sessionFactory.openSession()) {
+				T element = session.load(typeParameterClass, item.getEmployeeId());
 
-			logger.info("get");
+				T tmp = Hibernate.unproxy(element, typeParameterClass);
 
-			return session.get(typeParameterClass, id);
+				logger.info(tmp.toString());
+
+				return tmp;
+			}
+		} catch (Exception e) {
+
+			logger.error(e);
+
+			throw e;
 		}
 	}
 
 	@Override
-	public synchronized T saveEmployeeById(T employee) {
+	public synchronized T createEmployee(T item) {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -103,7 +109,9 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				session.beginTransaction();
 
-				long id = (long) session.save(Objects.requireNonNull(employee));
+//				Department tmp = session.get(Department.class, employee.getDepartment().getIdDepartment());
+//				employee.setDepartment(tmp);
+				long id = (long) session.save(Objects.requireNonNull(item));
 
 				session.getTransaction().commit();
 
@@ -125,12 +133,12 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	/**
 	 * add or update if there is no ID
 	 *
-	 * @param employee
+	 * @param item
 	 * @return
 	 * @throws HibernateException
 	 */
 	@Override
-	public synchronized T putEmployeeById(@NotNull T employee) {
+	public synchronized T updateEmployee(@NotNull T item) {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -138,7 +146,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				T tmp = null;
 
-				if (Objects.nonNull(employee.getEmployeeId()) && Objects.isNull(tmp = session.get(typeParameterClass, employee.getEmployeeId()))) {
+				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(typeParameterClass, item.getEmployeeId()))) {
 					throw new NotFoundException("id is not found");
 				}
 
@@ -146,13 +154,13 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				session.beginTransaction();
 
-				session.saveOrUpdate(Objects.requireNonNull(employee));
+				session.saveOrUpdate(Objects.requireNonNull(item));
 
 				session.getTransaction().commit();
 
-				if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+				if (item.getEmployeeId() == null) throw new NotFoundException("non id");
 
-				return employee;
+				return item;
 
 			} catch (Exception e) {
 
@@ -168,7 +176,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	}
 
 	@Override
-	public synchronized T patchEmployeeById(T employee) throws NotFoundException {
+	public synchronized T patchEmployee(T item) throws NotFoundException {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -177,11 +185,11 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				T tmp = null;
 
-				if (Objects.isNull(employee.getEmployeeId()) || Objects.isNull(tmp = session.get(typeParameterClass, employee.getEmployeeId()))) {
+				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(tmp = session.get(typeParameterClass, item.getEmployeeId()))) {
 					throw new NotFoundException("ID not found during patch");
 				}
 
-				tmp.employeeUpdater(employee);
+				tmp.employeeUpdater(item);
 
 				session.update(Objects.requireNonNull(tmp));
 
@@ -203,9 +211,9 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	}
 
 	@Override
-	public synchronized T deleteEmployeeById(T employee) throws NotFoundException {
+	public synchronized T deleteEmployee(T item) throws NotFoundException {
 
-		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
+		if (item.getEmployeeId() == null) throw new NotFoundException("non id");
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -213,13 +221,13 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				session.beginTransaction();
 
-				T tmp = session.get(typeParameterClass, employee.getEmployeeId());
+				T tmp = session.get(typeParameterClass, item.getEmployeeId());
 
 				if (Objects.nonNull(tmp)) {
 
 					session.detach(tmp);
 
-					session.delete(employee);
+					session.delete(item);
 
 					session.getTransaction().commit();
 

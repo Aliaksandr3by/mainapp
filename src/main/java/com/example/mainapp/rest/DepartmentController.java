@@ -46,7 +46,7 @@ public class DepartmentController {
 
 			Root<Department> criteriaRoot = criteriaQuery.from(clazz);
 
-			Path<String> departmentId = criteriaRoot.get("department_id");
+			Path<String> departmentId = criteriaRoot.get("idDepartment");
 
 			criteriaQuery
 					.select(criteriaRoot)

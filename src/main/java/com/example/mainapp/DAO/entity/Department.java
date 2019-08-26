@@ -1,42 +1,76 @@
 package com.example.mainapp.DAO.entity;
 
 import com.example.mainapp.exeptions.NotFoundException;
-import jdk.nashorn.internal.objects.annotations.Constructor;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
 @Setter
-@Access(AccessType.FIELD)
 @Entity
 @Table(name = "department", schema = "public")
+@Access(AccessType.PROPERTY)
 public class Department implements Serializable {
 
-
-	@Column(name = "department_id", nullable = false)
-	@GenericGenerator(name = "increment", strategy = "increment")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Id
-	private Long departmentId;
-
-	@Column(name = "name_department", nullable = false)
-	@Type(type = "text")
+	private Set<Employee> departmentSet;
+	private Long idDepartment;
 	private String nameDepartment;
-
-	@Column(name = "date_department", nullable = false)
-	@Type(type = "LocalDateTime")
 	private LocalDateTime dateDepartment;
 
+	public Department DepartmentUpdater(Department patch) {
 
+		if (this.equals(patch)) throw new NotFoundException("Object is equals ");//FIXME
+
+		if (patch.getNameDepartment() != null) this.setNameDepartment(patch.getNameDepartment());
+		if (patch.getDateDepartment() != null) this.setDateDepartment(patch.getDateDepartment());
+
+		return this;
+	}
+
+	public Department() {
+	}
+
+	public Department(String nameDepartment, LocalDateTime dateDepartment) {
+		this.nameDepartment = nameDepartment;
+		this.dateDepartment = dateDepartment;
+	}
+
+	public Department(Long idDepartment, String nameDepartment, LocalDateTime dateDepartment) {
+		this.idDepartment = idDepartment;
+		this.nameDepartment = nameDepartment;
+		this.dateDepartment = dateDepartment;
+	}
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	public Set<Employee> getDepartmentSet() {
+		return departmentSet;
+	}
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "department_id_seq")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Id
+	@Column(name = "id_department", nullable = false)
+	public Long getIdDepartment() {
+		return idDepartment;
+	}
+
+	@NonNull
+	@Column(name = "name_department", nullable = false)
+	@Type(type = "text")
+	public String getNameDepartment() {
+		return nameDepartment;
+	}
+
+	@NonNull
+	@Column(name = "date_department", nullable = false)
+	@Type(type = "LocalDateTime")
+	public LocalDateTime getDateDepartment() {
+		return dateDepartment;
+	}
 }
