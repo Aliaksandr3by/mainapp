@@ -12,6 +12,7 @@ public interface IEmployeeService<T extends Employee> {
 	List<T> getEmployees(String orderBy);
 
 	void setTypeParameterClass(Class<T> typeParameterClass);
+
 	void setSessionFactory(SessionFactory sessionFactory);
 
 	T getEmployeeById(Long id) throws ObjectNotFoundException;
@@ -22,5 +23,5 @@ public interface IEmployeeService<T extends Employee> {
 
 	T patchEmployeeById(T employee) throws NotFoundException;
 
-	boolean deleteEmployeeById(T employee) throws NotFoundException;
+	T deleteEmployeeById(T employee) throws NotFoundException;
 }

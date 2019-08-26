@@ -1,6 +1,7 @@
 package com.example.mainapp.rest;
 
 import com.example.mainapp.DAO.entity.Employee;
+import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -97,16 +98,16 @@ public class EmployeeController {
 
 		Employee tmp = null;
 
-		if (Objects.nonNull(tmp = employeeService.putEmployeeById(employee))) {
-			return new ResponseEntity<>(tmp, isCreated ? HttpStatus.CREATED : HttpStatus.OK);
+		if (Objects.isNull(tmp = employeeService.putEmployeeById(employee))) {
+			throw new NotFoundException("error put");
 		}
 
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		return new ResponseEntity<>(tmp, isCreated ? HttpStatus.CREATED : HttpStatus.OK);
 	}
 
 	/**
-	 * Частичное Обновление по ID
-	 * при указании в теле
+	 * This method patch entity
+	 * Need set id arg in body
 	 *
 	 * @param employee
 	 * @return
@@ -120,10 +121,11 @@ public class EmployeeController {
 	}
 
 	@DeleteMapping(value = "")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "object was deleted")
-	public boolean deleteEmployeeById(@RequestBody Employee employee) {
+	public ResponseEntity<Employee> deleteEmployeeById(@RequestBody Employee employee) {
 
-		return employeeService.deleteEmployeeById(employee);
+		Employee tmp = employeeService.deleteEmployeeById(employee);
+
+		return new ResponseEntity<>(tmp, Objects.nonNull(tmp) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 	}
 
 }

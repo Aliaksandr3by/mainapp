@@ -1,21 +1,17 @@
 package com.example.mainapp.service;
 
-import com.example.mainapp.DAO.HibernateUtil;
-import com.example.mainapp.DAO.IHibernateUtil;
-import com.example.mainapp.DAO.entity.Department;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -23,6 +19,7 @@ import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
+
 
 @Component
 @Qualifier(value = "employeeService")
@@ -32,6 +29,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	private Class<T> typeParameterClass;
 
+	@Resource(name = "logger")
 	private Logger logger;
 
 	public void setTypeParameterClass(Class<T> typeParameterClass) {
@@ -50,13 +48,13 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	}
 
-	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass, Logger logger) {
+	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass) {
 		this.sessionFactory = sessionFactory;
 		this.typeParameterClass = typeParameterClass;
-		this.logger = logger;
 	}
 
-	public synchronized List<T> getEmployees(String orderBy) {
+	@Override
+	public synchronized List<T> getEmployees(String orderTag) throws IllegalArgumentException {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -66,7 +64,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 			Root<T> criteriaRoot = criteriaQuery.from(this.typeParameterClass);
 
-			Path<String> employeeId = criteriaRoot.get(orderBy);
+			Path<String> employeeId = criteriaRoot.get(orderTag);
 
 			criteriaQuery
 					.select(criteriaRoot)
@@ -77,20 +75,26 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 			List<T> tmp = query.list();
 
+			logger.info("get");
+
 			return tmp;
 		}
 	}
 
+	@Override
 	public synchronized T getEmployeeById(Long id) throws ObjectNotFoundException {
 
 		if (id == null) throw new NotFoundException("non id");
 
 		try (Session session = this.sessionFactory.openSession()) {
 
+			logger.info("get");
+
 			return session.get(typeParameterClass, id);
 		}
 	}
 
+	@Override
 	public synchronized T saveEmployeeById(T employee) {
 
 		try (Session session = this.sessionFactory.openSession()) {
@@ -106,10 +110,13 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 				return session.get(typeParameterClass, id);
 
 			} catch (Exception e) {
+
+				logger.error(e);
+
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
-					e.printStackTrace();
 				}
+
 				throw e;
 			}
 		}
@@ -122,6 +129,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	 * @return
 	 * @throws HibernateException
 	 */
+	@Override
 	public synchronized T putEmployeeById(@NotNull T employee) {
 
 		try (Session session = this.sessionFactory.openSession()) {
@@ -147,16 +155,19 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 				return employee;
 
 			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
+
+				logger.error(e);
+
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
-					e.printStackTrace();
 				}
+
 				throw e;
 			}
 		}
 	}
 
+	@Override
 	public synchronized T patchEmployeeById(T employee) throws NotFoundException {
 
 		try (Session session = this.sessionFactory.openSession()) {
@@ -180,7 +191,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 			} catch (Exception e) {
 
-				logger.error("patch: " + e.getMessage(), e);
+				logger.error(e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
@@ -191,7 +202,8 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		}
 	}
 
-	public synchronized boolean deleteEmployeeById(T employee) throws NotFoundException {
+	@Override
+	public synchronized T deleteEmployeeById(T employee) throws NotFoundException {
 
 		if (employee.getEmployeeId() == null) throw new NotFoundException("non id");
 
@@ -201,20 +213,28 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				session.beginTransaction();
 
-				if (!Objects.isNull(session.load(typeParameterClass, employee.getEmployeeId()))) {
+				T tmp = session.get(typeParameterClass, employee.getEmployeeId());
+
+				if (Objects.nonNull(tmp)) {
+
+					session.detach(tmp);
+
 					session.delete(employee);
+
+					session.getTransaction().commit();
+
+					return tmp;
+				} else {
+					throw new NotFoundException("entity was not found");
 				}
-
-				session.getTransaction().commit();
-
-				return true;
 
 			} catch (Exception e) {
 
-				logger.error("logger: " + e.getMessage(), e);
+				logger.error(e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
+					logger.info("rollback");
 				}
 
 				throw e;

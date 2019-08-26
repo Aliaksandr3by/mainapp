@@ -1,8 +1,6 @@
 package com.example.mainapp.rest;
 
 import com.example.mainapp.DAO.entity.Department;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.*;
@@ -17,20 +15,15 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class DepartmentController {
 
-
-	Logger logger = LoggerFactory.getLogger(Department.class);
-
 	public DepartmentController() {
-		logger.debug("Hello World");
+
 	}
 
-	@PersistenceUnit(unitName = "CRM")
+	@PersistenceUnit(unitName = "CRM") //FIXME
 	private EntityManagerFactory emf;
 
 	@GetMapping(value = "/{id}")
 	public List<Department> testCRM(@PathVariable("id") Integer id) throws Exception {
-
-		logger.info("Это информационное сообщение!");
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;
@@ -53,12 +46,11 @@ public class DepartmentController {
 
 			Root<Department> criteriaRoot = criteriaQuery.from(clazz);
 
-			Path<String> idDescription = criteriaRoot.get("idDescription");
-			Path<String> cardNumber = criteriaRoot.get("cardNumber");
+			Path<String> departmentId = criteriaRoot.get("department_id");
 
 			criteriaQuery
 					.select(criteriaRoot)
-					.where(criteriaBuilder.equal(idDescription, id))
+					.where(criteriaBuilder.equal(departmentId, id))
 			;
 
 			TypedQuery<Department> query = em.createQuery(criteriaQuery);
@@ -78,7 +70,6 @@ public class DepartmentController {
 		} catch (Exception e) {
 			if (entityTransaction.isActive()) {
 				entityTransaction.rollback();
-				logger.error(e.getMessage(), e);
 			}
 			throw e;
 		}

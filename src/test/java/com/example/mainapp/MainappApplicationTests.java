@@ -1,12 +1,10 @@
 package com.example.mainapp;
 
 
-import com.example.mainapp.DAO.HibernateUtil;
 import com.example.mainapp.DAO.entity.Employee;
 import com.example.mainapp.DAO.entity.Gender;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.rest.EmployeeController;
-import com.example.mainapp.service.EmployeeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -96,7 +94,7 @@ public class MainappApplicationTests {
 		Employee t = employeeController.saveEmployee(this.employee);
 		assertNotNull(employeeController.getEmployeeById(t.getEmployeeId()));
 		this.employee.setEmployeeId(t.getEmployeeId());
-		assertTrue(employeeController.deleteEmployeeById(this.employee));
+		assertNotNull(employeeController.deleteEmployeeById(this.employee));
 	}
 
 	/**
@@ -136,7 +134,7 @@ public class MainappApplicationTests {
 
 		Employee t = employeeController.saveEmployee(this.employee);
 		employee.setEmployeeId(t.getEmployeeId());
-		assertTrue(employeeController.deleteEmployeeById(this.employee));
+		assertNotNull(employeeController.deleteEmployeeById(this.employee));
 	}
 
 	/**

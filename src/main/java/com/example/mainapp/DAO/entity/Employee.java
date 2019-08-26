@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Access(AccessType.FIELD)
 @Entity
 @Table(name = "employee", schema = "public")
 public class Employee implements Serializable {
@@ -15,16 +16,11 @@ public class Employee implements Serializable {
 
 	public boolean IsEmpty(Employee tmp) {
 
-		if (tmp.getFirstName() == null
+		return tmp.getFirstName() == null
 				&& tmp.getLastName() == null
 				&& tmp.getGender() == null
 				&& tmp.getJobTitle() == null
-				&& tmp.getDepartmentId() == null
-		) {
-			return true;
-		}
-
-		return false;
+				&& tmp.getDepartmentId() == null;
 	}
 
 	public Employee employeeUpdater(Employee patch) {

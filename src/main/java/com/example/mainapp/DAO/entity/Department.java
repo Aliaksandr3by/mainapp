@@ -18,6 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
+@Access(AccessType.FIELD)
 @Entity
 @Table(name = "department", schema = "public")
 public class Department implements Serializable {
