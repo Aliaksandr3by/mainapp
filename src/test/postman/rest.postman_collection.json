@@ -121,7 +121,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"employeeId\": 5,\r\n    \"firstName\": \"ttttt\",\r\n    \"lastName\": \"tttttttttt\",\r\n    \"department\": {\r\n        \"idDepartment\": 2,\r\n        \"nameDepartment\": \"tttttttttt\",\r\n        \"dateDepartment\": \"2019-08-26T17:35:50\"\r\n    },\r\n    \"jobTitle\": \"tttttttttttt\",\r\n    \"gender\": \"FEMALE\"\r\n}"
+							"raw": "{\r\n    \"employeeId\": 21,\r\n    \"firstName\": \"ttttt\",\r\n    \"lastName\": \"tttttttttt\",\r\n    \"department\": {\r\n        \"idDepartment\": 2,\r\n        \"nameDepartment\": \"tttttttttt\",\r\n        \"dateDepartment\": \"2019-08-26T17:35:50\"\r\n    },\r\n    \"jobTitle\": \"tttttttttttt\",\r\n    \"gender\": \"FEMALE\"\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees",
@@ -156,7 +156,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 5\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 18\r\n    }"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees/",
@@ -168,6 +168,37 @@
 							"path": [
 								"employees",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"employeeId\": 18\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employees/20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employees",
+								"20"
 							]
 						}
 					},
@@ -192,7 +223,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"employeeId\": 5,\r\n    \"firstName\": \"pppppppp\",\r\n\r\n    \"department\": {\r\n        \"idDepartment\": 2,\r\n        \"dateDepartment\": \"2055-08-26T17:35:50\"\r\n    },\r\n    \"jobTitle\": \"tttttttttttt\"\r\n}"
+							"raw": "{\r\n    \"employeeId\": 10,\r\n    \"firstName\": \"p\",\r\n\r\n    \"department\": {\r\n        \"idDepartment\": 7,\r\n        \"nameDepartment\": \"uu\",\r\n        \"dateDepartment\": \"2033-08-26T17:35:50\"\r\n    },\r\n    \"jobTitle\": \"p\"\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees/",

@@ -1,8 +1,7 @@
 package com.example.mainapp.service;
 
-import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
-import org.apache.logging.log4j.Level;
+import com.example.mainapp.model.entity.Employee;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;
@@ -21,7 +20,7 @@ import java.util.Objects;
 
 @Component
 @Qualifier(value = "providerEmployeeService")
-public class EmployeeService<T extends Employee> implements EmployeeContext<T> {
+public class EmployeeService<T extends Employee> implements IEmployeeService<T> {
 
 	private SessionFactory sessionFactory;
 
@@ -102,7 +101,7 @@ public class EmployeeService<T extends Employee> implements EmployeeContext<T> {
 	}
 
 	@Override
-	public synchronized T createEmployee(T item) {
+	public synchronized T createEmployee(T item) throws Exception {
 
 		try (Session session = this.sessionFactory.openSession()) {
 
@@ -110,13 +109,22 @@ public class EmployeeService<T extends Employee> implements EmployeeContext<T> {
 
 				session.beginTransaction();
 
-//				Department tmp = session.get(Department.class, employee.getDepartment().getIdDepartment());
-//				employee.setDepartment(tmp);
-				long id = (long) session.save(Objects.requireNonNull(item));
+				if (Objects.nonNull(item.getEmployeeId())) {
+					throw new Exception("The object must not contain an ID");
+				}
+				if (item.IsEmpty()) {
+					throw new Exception("The object has a null properties");
+				}
+
+				long id = (long) session.save(item);
 
 				session.getTransaction().commit();
 
-				return session.get(typeParameterClass, id);
+				T tmp = session.get(typeParameterClass, id);
+
+				logger.info(tmp.toString());
+
+				return tmp;
 
 			} catch (Exception e) {
 

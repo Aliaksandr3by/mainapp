@@ -3,7 +3,7 @@ package com.example.mainapp.configuration;
 import com.example.mainapp.model.HibernateUtil;
 import com.example.mainapp.model.IHibernateUtil;
 import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.service.EmployeeContext;
+import com.example.mainapp.service.IEmployeeService;
 import com.example.mainapp.service.EmployeeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,13 +25,13 @@ public class InjectConfiguration {
 
 	@Bean
 	public Logger logger() {
-
-		return LogManager.getLogger(EmployeeService.class);
+		Logger logger = LogManager.getLogger(EmployeeService.class);
+		return logger;
 	}
 
 	@Bean
 	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public EmployeeContext<Employee> providerEmployeeService() {
+	public IEmployeeService<Employee> providerEmployeeService() {
 
 		return new EmployeeService<>(providerHibernateUtil().getSessionFactory(), Employee.class);
 	}

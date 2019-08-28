@@ -1,13 +1,18 @@
 package com.example.mainapp.rest;
 
-import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.service.EmployeeContext;
+import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.service.IEmployeeService;
+import org.hibernate.ObjectNotFoundException;
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.Resource;
+import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +23,7 @@ public class EmployeeController {
 
 	@Resource(name = "providerEmployeeService")
 //	@Qualifier("providerEmployeeService")
-	private EmployeeContext<Employee> employeeService;
+	private IEmployeeService<Employee> employeeService;
 
 
 	public EmployeeController() {
@@ -28,9 +33,12 @@ public class EmployeeController {
 
 	/**
 	 * Method gets all items
+	 *
 	 * @return
 	 */
-	@GetMapping(value = "/")
+	@GetMapping(value = "")
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.OK)
 	public List<Employee> getEmployees() {
 		List<Employee> tmp = (List<Employee>) employeeService.getEmployees("employeeId")
 //					.stream()
@@ -50,13 +58,18 @@ public class EmployeeController {
 	 * @return
 	 */
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) {
+	@ResponseStatus(value = HttpStatus.OK)
+	public Employee getEmployeeById(@PathVariable("id") Long id) {
+		try {
 
-		Employee tmp = new Employee();
-		tmp.setEmployeeId(id);
-		Employee employee = employeeService.loadEmployeeById(tmp);
+			Employee tmp = new Employee();
+			tmp.setEmployeeId(id);
 
-		return new ResponseEntity<>(employee, Objects.nonNull(employee) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+			return employeeService.loadEmployeeById(tmp);
+
+		} catch (ObjectNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Object Not Found Provide correct Id", e);
+		}
 	}
 
 
@@ -67,10 +80,16 @@ public class EmployeeController {
 	 * @return
 	 */
 	@PostMapping(value = "/")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public Employee saveEmployee(@RequestBody Employee employee) {
+		try {
 
-		return employeeService.createEmployee(employee);
+			return employeeService.createEmployee(employee);
+
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
+
 	}
 
 	/**
@@ -81,16 +100,15 @@ public class EmployeeController {
 	 */
 	@PutMapping(value = "")
 	public ResponseEntity<Employee> putEmployeeById(@RequestBody Employee employee) {
+		try {
 
-		boolean isCreated = Objects.isNull(employee.getEmployeeId());
+			boolean isCreated = Objects.isNull(employee.getEmployeeId());
 
-		Employee tmp = null;
+			return new ResponseEntity<>(employeeService.updateEmployee(employee), isCreated ? HttpStatus.CREATED : HttpStatus.OK);
 
-		if (Objects.isNull(tmp = employeeService.updateEmployee(employee))) {
-			throw new NotFoundException("error put");
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);
 		}
-
-		return new ResponseEntity<>(tmp, isCreated ? HttpStatus.CREATED : HttpStatus.OK);
 	}
 
 	/**
@@ -101,24 +119,52 @@ public class EmployeeController {
 	 * @return
 	 */
 	@PatchMapping(value = "")
-	public ResponseEntity<Employee> patchPartEmployeeById(@RequestBody Employee employee) {
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public Employee patchPartEmployeeById(@RequestBody Employee employee) {
+		try {
 
-		Employee tmp = employeeService.patchEmployee(employee);
+			return employeeService.patchEmployee(employee);
 
-		return new ResponseEntity<>(tmp, HttpStatus.OK);
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);
+		}
 	}
 
 	/**
-	 * Method deletes an item
+	 * This method removes the element according to the ID (set in the body)
+	 *
 	 * @param employee
 	 * @return
 	 */
 	@DeleteMapping(value = "")
-	public ResponseEntity<Employee> deleteEmployeeById(@RequestBody Employee employee) {
+	@ResponseStatus(value = HttpStatus.OK)
+	public Employee deleteEmployeeById(@RequestBody Employee employee) {
+		try {
 
-		Employee tmp = employeeService.deleteEmployee(employee);
+			return employeeService.deleteEmployee(employee);
 
-		return new ResponseEntity<>(tmp, Objects.nonNull(tmp) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);
+		}
+	}
+
+	/**
+	 * This method removes the element according to the ID
+	 *
+	 * @param id
+	 */
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void deleteEmployeeById(@PathVariable("id") Long id) {
+		try {
+
+			Employee employee = new Employee();
+			employee.setEmployeeId(id);
+			employeeService.deleteEmployee(employee);
+
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);
+		}
 	}
 
 }

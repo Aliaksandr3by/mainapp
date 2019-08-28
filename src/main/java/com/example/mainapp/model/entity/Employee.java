@@ -14,13 +14,13 @@ import java.util.Objects;
 public class Employee implements Serializable {
 
 
-	public boolean IsEmpty(Employee tmp) {
+	public boolean IsEmpty() {
 
-		return tmp.getFirstName() == null
-				&& tmp.getLastName() == null
-				&& tmp.getGender() == null
-				&& tmp.getJobTitle() == null
-				&& tmp.getDepartment() == null;
+		return this.getFirstName() == null
+				&& this.getLastName() == null
+				&& this.getGender() == null
+				&& this.getJobTitle() == null
+				&& this.getDepartment() == null;
 	}
 
 	public Employee employeeUpdater(Employee patch) {
