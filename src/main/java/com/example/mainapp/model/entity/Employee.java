@@ -1,11 +1,13 @@
 package com.example.mainapp.model.entity;
 
 import com.example.mainapp.exeptions.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -47,6 +49,7 @@ public class Employee implements Serializable {
 	private Department department;
 	private String jobTitle;
 	private Gender gender;
+	private Collection<Slave> slaves;
 
 	public Employee(String firstName, String lastName, Department departmentId, String jobTitle, Gender gender) {
 		this.firstName = firstName;
@@ -54,6 +57,12 @@ public class Employee implements Serializable {
 		this.department = departmentId;
 		this.jobTitle = jobTitle;
 		this.gender = gender;
+	}
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
+	public Collection<Slave> getSlaves() {
+		return slaves;
 	}
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "employee_id_seq")
@@ -95,6 +104,10 @@ public class Employee implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	public Gender getGender() {
 		return gender;
+	}
+
+	public void setSlaves(Collection<Slave> orders) {
+		this.slaves = orders;
 	}
 
 	public void setEmployeeId(Long employeeId) {

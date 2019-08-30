@@ -29,20 +29,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	@Resource(name = "logger")
 	private Logger logger;
 
-	public void setTypeParameterClass(Class<T> typeParameterClass) {
-		this.typeParameterClass = typeParameterClass;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
 	public EmployeeService() {
-
 	}
 
 	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass) {
@@ -52,7 +39,6 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	@Override
 	public synchronized List<T> getEmployees(String sortOrder) throws IllegalStateException, IllegalArgumentException {
-
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -80,7 +66,6 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	@Override
 	public synchronized T loadEmployeeById(T item) throws ObjectNotFoundException {
-
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
@@ -102,7 +87,6 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	@Override
 	public synchronized T createEmployee(T item) throws Exception {
-
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -148,7 +132,6 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 	 */
 	@Override
 	public synchronized T updateEmployee(@NotNull T item) {
-
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -186,7 +169,6 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 	@Override
 	public synchronized T patchEmployee(T item) throws NotFoundException {
-
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {

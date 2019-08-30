@@ -10,6 +10,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(path = "/department", produces = "application/json")
 @CrossOrigin(origins = "*")
@@ -32,10 +33,10 @@ public class DepartmentController {
 
 			Class<Department> clazz = Department.class;
 
-			emf = Persistence.createEntityManagerFactory("CRM");
+			//emf = Persistence.createEntityManagerFactory("CRM");
 
-			em = emf.createEntityManager();
-
+			em = this.emf.createEntityManager();
+//em.persist(null);
 			entityTransaction = em.getTransaction();
 
 			entityTransaction.begin();

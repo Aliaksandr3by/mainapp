@@ -2,19 +2,20 @@ package com.example.mainapp.rest;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.model.entity.Slave;
 import com.example.mainapp.service.IEmployeeService;
 import org.hibernate.ObjectNotFoundException;
-import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.Resource;
-import javax.validation.ConstraintViolationException;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/employees", produces = "application/json")
@@ -37,15 +38,26 @@ public class EmployeeController {
 	 * @return
 	 */
 	@GetMapping(value = "")
-	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Employee> getEmployees() {
 		List<Employee> tmp = (List<Employee>) employeeService.getEmployees("employeeId")
-//					.stream()
-//					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
-//					.peek(e -> System.out.println(e))
-//					.collect(Collectors.toList())
-				;
+				.stream()
+				.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
+				.limit(10)
+				.peek(e -> System.out.println(e))
+				.collect(Collectors.toList());
+
+		return tmp;
+	}
+
+	@GetMapping(value = "EmployeeSlaves")
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<Collection<Slave>> getEmployeeSlaves() {
+
+		List<Collection<Slave>> tmp = employeeService.getEmployees("employeeId")
+				.stream()
+				.map((e) -> e.getSlaves())
+				.collect(Collectors.toList());
 
 		return tmp;
 	}
