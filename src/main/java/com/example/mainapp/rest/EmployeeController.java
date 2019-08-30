@@ -57,11 +57,11 @@ public class EmployeeController {
 		List<Collection<Slave>> tmp = employeeService.getEmployees("employeeId")
 				.stream()
 				.map((e) -> e.getSlaves())
+				.filter(e -> !e.isEmpty())
 				.collect(Collectors.toList());
 
 		return tmp;
 	}
-
 
 	/**
 	 * Method gets all items by id

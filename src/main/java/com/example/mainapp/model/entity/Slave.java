@@ -25,7 +25,7 @@ public class Slave implements Serializable {
 		this.nameSlave = nameSlave;
 	}
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "slave_employee",
@@ -37,9 +37,9 @@ public class Slave implements Serializable {
 	}
 
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "department_id_seq")
-	@GenericGenerator(name = "increment", strategy = "increment")
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "slave_id_seq")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "id_slave", nullable = false)
 	public Long getIdSlave() {
 		return idSlave;

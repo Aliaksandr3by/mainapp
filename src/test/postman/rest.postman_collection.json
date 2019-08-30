@@ -34,6 +34,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/employees/EmployeeSlaves",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employees",
+								"EmployeeSlaves"
+							],
+							"query": [
+								{
+									"key": "employeeId",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

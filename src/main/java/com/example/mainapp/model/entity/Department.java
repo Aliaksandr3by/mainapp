@@ -48,9 +48,9 @@ public class Department implements Serializable {
 		return departmentSet;
 	}
 
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "department_id_seq")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@Id
 	@Column(name = "id_department", nullable = false)
 	public Long getIdDepartment() {
 		return idDepartment;

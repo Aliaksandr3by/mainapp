@@ -65,9 +65,9 @@ public class Employee implements Serializable {
 		return slaves;
 	}
 
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "employee_id_seq")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@Id
 	@Column(name = "employee_id", nullable = false)
 	public Long getEmployeeId() {
 		return employeeId;
