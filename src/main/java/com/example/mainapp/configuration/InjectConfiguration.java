@@ -3,6 +3,7 @@ package com.example.mainapp.configuration;
 import com.example.mainapp.model.HibernateUtil;
 import com.example.mainapp.model.IHibernateUtil;
 import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.service.EmployeeSlaveService;
 import com.example.mainapp.service.IEmployeeService;
 import com.example.mainapp.service.EmployeeService;
 import org.apache.logging.log4j.LogManager;
@@ -36,5 +37,10 @@ public class InjectConfiguration {
 		return new EmployeeService<>(providerHibernateUtil().getSessionFactory(), Employee.class);
 	}
 
+	@Bean
+	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+	public EmployeeSlaveService providerEmployeeSlaveService() {
 
+		return new EmployeeSlaveService(providerHibernateUtil().getSessionFactory());
+	}
 }

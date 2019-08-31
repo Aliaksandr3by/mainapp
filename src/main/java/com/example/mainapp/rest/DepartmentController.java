@@ -1,7 +1,10 @@
 package com.example.mainapp.rest;
 
 import com.example.mainapp.model.entity.Department;
+import com.example.mainapp.model.entity.Employee;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;

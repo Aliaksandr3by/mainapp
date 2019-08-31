@@ -25,12 +25,11 @@ public class Slave implements Serializable {
 		this.nameSlave = nameSlave;
 	}
 
-//	@JsonIgnore
+	//	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-			name = "slave_employee",
-			joinColumns = @JoinColumn(name = "id_slave", referencedColumnName = "id_slave"),
-			inverseJoinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+	@JoinTable(name = "slave_employee",
+			joinColumns = @JoinColumn(name = "ID_SLAVE", referencedColumnName = "id_slave", foreignKey = @ForeignKey(name = "fk_id_slave")),
+			inverseJoinColumns = @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "employee_id", foreignKey = @ForeignKey(name = "fk_employee_id"))
 	)
 	public Collection<Employee> getEmployees() {
 		return employees;

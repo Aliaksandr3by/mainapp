@@ -2,6 +2,8 @@ package com.example.mainapp.service;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.model.entity.EmployeeSlave;
+import com.example.mainapp.model.entity.Slave;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;

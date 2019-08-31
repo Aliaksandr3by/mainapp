@@ -2,6 +2,7 @@ package com.example.mainapp.service;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.model.entity.EmployeeSlave;
 import org.hibernate.ObjectNotFoundException;
 
 import java.util.Collection;
@@ -19,4 +20,5 @@ public interface IEmployeeService<T extends Employee> {
 	T patchEmployee(T item) throws NotFoundException;
 
 	T deleteEmployee(T item) throws NotFoundException;
+
 }

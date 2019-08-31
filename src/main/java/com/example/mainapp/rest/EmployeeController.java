@@ -2,7 +2,10 @@ package com.example.mainapp.rest;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.model.entity.EmployeeSlave;
+import com.example.mainapp.model.entity.EmployeeSlavePK;
 import com.example.mainapp.model.entity.Slave;
+import com.example.mainapp.service.EmployeeSlaveService;
 import com.example.mainapp.service.IEmployeeService;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ public class EmployeeController {
 //	@Qualifier("providerEmployeeService")
 	private IEmployeeService<Employee> employeeService;
 
+	@Resource(name = "providerEmployeeSlaveService")
+	private EmployeeSlaveService employeeSlaveService;
 
 	public EmployeeController() {
 //		ApplicationContext ctx = new AnnotationConfigApplicationContext(EmployeeConfiguration.class);
@@ -50,6 +55,7 @@ public class EmployeeController {
 		return tmp;
 	}
 
+	//FIXME
 	@GetMapping(value = "EmployeeSlaves")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Collection<Slave>> getEmployeeSlaves() {
@@ -97,6 +103,20 @@ public class EmployeeController {
 		try {
 
 			return employeeService.createEmployee(employee);
+
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
+
+	}
+
+	//FIXME
+	@PostMapping(value = "/EmployeeSlave")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlavePK employeeSlavePK) {
+		try {
+
+			return employeeSlaveService.createEmployeeSlave(employeeSlavePK);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

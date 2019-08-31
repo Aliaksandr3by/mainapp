@@ -32,6 +32,8 @@
         <mapping class="com.example.mainapp.model.entity.Employee"/>
         <mapping class="com.example.mainapp.model.entity.Department"/>
         <mapping class="com.example.mainapp.model.entity.Slave"/>
+        <mapping class="com.example.mainapp.model.entity.EmployeeSlave"/>
+<!--        <mapping class="com.example.mainapp.model.entity.EmployeeSlavePK"/>-->
 
         <!--        		<property name="default_entity_mode">dynamic-map</property>-->
         <!--        		<mapping resource="by/data/myweb/entity/ProductName.hbm.xml"/>-->
