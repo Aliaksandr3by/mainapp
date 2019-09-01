@@ -1,13 +1,10 @@
 package com.example.mainapp.configuration;
 
-import com.example.mainapp.model.HibernateUtil;
-import com.example.mainapp.model.IHibernateUtil;
+import com.example.mainapp.model.*;
 import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.service.EmployeeSlaveService;
-import com.example.mainapp.service.IEmployeeService;
-import com.example.mainapp.service.EmployeeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -18,29 +15,35 @@ import org.springframework.web.context.WebApplicationContext;
 @Configuration
 public class InjectConfiguration {
 
-	@Bean
-	public IHibernateUtil providerHibernateUtil() {
-
-		return new HibernateUtil("hibernate.employeedb.cfg.xml");
-	}
-
-	@Bean
+	@Bean(name = "LOG")
 	public Logger logger() {
-		Logger logger = LogManager.getLogger(EmployeeService.class);
-		return logger;
+		return LogManager.getLogger(EmployeeContext.class);
 	}
 
 	@Bean
-	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public IEmployeeService<Employee> providerEmployeeService() {
+	public SessionFactory sessionFactory() {
 
-		return new EmployeeService<>(providerHibernateUtil().getSessionFactory(), Employee.class);
+		return new HibernateUtil("hibernate.employeedb.cfg.xml").getSessionFactory();
 	}
 
-	@Bean
-	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public EmployeeSlaveService providerEmployeeSlaveService() {
+	//@Bean("typeClass")
+	@EmployeeQualifier
+	public  Class<Employee> typeClass() {
 
-		return new EmployeeSlaveService(providerHibernateUtil().getSessionFactory());
+		return Employee.class;
 	}
+
+	@Bean("employeeContext")
+	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+	public IEmployeeContext<Employee> providerEmployeeConfiguration() {
+
+		return new EmployeeContext<>(sessionFactory(), Employee.class);
+	}
+
+//	@Bean
+//	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//	public EmployeeSlaveContext providerEmployeeSlaveConfiguration() {
+//
+//		return new EmployeeSlaveContext(providerSessionFactory());
+//	}
 }

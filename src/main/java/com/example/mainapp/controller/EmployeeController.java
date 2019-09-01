@@ -1,19 +1,24 @@
-package com.example.mainapp.rest;
+package com.example.mainapp.controller;
 
 import com.example.mainapp.exeptions.NotFoundException;
+import com.example.mainapp.model.EmployeeSlaveContext;
+import com.example.mainapp.model.IEmployeeContext;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.EmployeeSlavePK;
 import com.example.mainapp.model.entity.Slave;
-import com.example.mainapp.service.EmployeeSlaveService;
-import com.example.mainapp.service.IEmployeeService;
+
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -25,17 +30,37 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
-	@Resource(name = "providerEmployeeService")
-//	@Qualifier("providerEmployeeService")
-	private IEmployeeService<Employee> employeeService;
+	//@Resource(name = "providerEmployeeConfiguration")
+	//@Autowired
+	//@Qualifier("providerEmployee")
+	@Inject
+	@Named("employeeContext")
+	private IEmployeeContext<Employee> employeeService;
 
-	@Resource(name = "providerEmployeeSlaveService")
-	private EmployeeSlaveService employeeSlaveService;
+	//@Resource(name = "providerEmployeeSlaveConfiguration")
+	//	@Autowired
+	//	@Qualifier(value = "providerEmployeeSlave")
+	@Inject
+	@Named("employeeSlaveContext")
+	private EmployeeSlaveContext employeeSlaveService;
 
 	public EmployeeController() {
+
+	}
+
+//	@Inject
+//	public EmployeeController(
+//			@Named("employeeContext") IEmployeeContext<Employee> employeeContext,
+//			@Named("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
+//	) {
+//		this.employeeService = employeeContext;
+//		this.employeeSlaveService = employeeSlaveContext;
+//	}
+
+//	public EmployeeController() {
 //		ApplicationContext ctx = new AnnotationConfigApplicationContext(EmployeeConfiguration.class);
 //		this.employeeService = ctx.getBean("providerEmployeeService", EmployeeService.class);
-	}
+//	}
 
 	/**
 	 * Method gets all items

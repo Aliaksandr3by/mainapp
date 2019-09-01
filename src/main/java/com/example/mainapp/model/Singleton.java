@@ -6,24 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class Model {
+public final class Singleton {
 
-	private static transient volatile Model instance; //важен порядок инициализации статик. переменных
+	private static transient volatile Singleton instance; //важен порядок инициализации статик. переменных
 
 	private final List<Employee> model = new ArrayList<>();
 
-	private Model() throws IllegalStateException {
+	private Singleton() throws IllegalStateException {
 		if (instance != null) {
 			throw new IllegalStateException("Singleton already initialized");
 		}
 	}
 
-	public static Model getInstance() {
+	public static Singleton getInstance() {
 
 		if (instance == null) {
-			synchronized (Model.class) {
+			synchronized (Singleton.class) {
 				if (instance == null) {
-					instance = new Model();
+					instance = new Singleton();
 				}
 			}
 		}

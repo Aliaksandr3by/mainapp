@@ -1,4 +1,4 @@
-package com.example.mainapp.service;
+package com.example.mainapp.model;
 
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
@@ -7,29 +7,32 @@ import com.example.mainapp.model.entity.Slave;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.web.context.WebApplicationContext;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 
-@Component
-@Qualifier(value = "providerEmployeeSlaveService")
-public class EmployeeSlaveService {
+@Named("employeeSlaveContext")
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class EmployeeSlaveContext {
+
 
 	private SessionFactory sessionFactory;
 
-	@Resource(name = "logger")
 	private Logger logger;
 
-	public EmployeeSlaveService() {
+	public EmployeeSlaveContext() {
 	}
 
-	public EmployeeSlaveService(SessionFactory sessionFactory) {
+	@Inject
+	public EmployeeSlaveContext(@Named("sessionFactory") SessionFactory sessionFactory, @Named("LOG") Logger logger) {
 		this.sessionFactory = sessionFactory;
+		this.logger = logger;
 	}
 
-	//test
 	public EmployeeSlave createEmployeeSlave(EmployeeSlavePK employeeSlavePK) {
 		try (Session session = this.sessionFactory.openSession()) {
 

@@ -1,4 +1,4 @@
-package com.example.mainapp.rest;
+package com.example.mainapp.controller;
 
 import com.example.mainapp.model.entity.Department;
 import com.example.mainapp.model.entity.Employee;

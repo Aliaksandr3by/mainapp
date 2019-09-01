@@ -1,16 +1,19 @@
-package com.example.mainapp.service;
+package com.example.mainapp.model;
 
+import com.example.mainapp.configuration.EmployeeQualifier;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.model.entity.EmployeeSlave;
-import com.example.mainapp.model.entity.Slave;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -20,24 +23,35 @@ import java.util.List;
 import java.util.Objects;
 
 
-@Component
-@Qualifier(value = "providerEmployeeService")
-public class EmployeeService<T extends Employee> implements IEmployeeService<T> {
+//@Named("employeeContext")
+//@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> {
 
 	private SessionFactory sessionFactory;
 
-	private Class<T> typeParameterClass;
+	private Class<T> typeClass;
 
-	@Resource(name = "logger")
+	@Inject
+	@Named("LOG")
 	private Logger logger;
 
-	public EmployeeService() {
+	public EmployeeContext() {
 	}
 
-	public EmployeeService(SessionFactory sessionFactory, Class<T> typeParameterClass) {
+	public EmployeeContext(SessionFactory sessionFactory, Class<T> typeClass) {
 		this.sessionFactory = sessionFactory;
-		this.typeParameterClass = typeParameterClass;
+		this.typeClass = typeClass;
 	}
+
+//	@Inject
+//	public EmployeeContext(
+//			@Named("sessionFactory") SessionFactory sessionFactory,
+//			@EmployeeQualifier Class<T> typeClass,
+//			@Named("LOG") Logger logger) {
+//		this.sessionFactory = sessionFactory;
+//		this.typeClass = typeClass;
+//		this.logger = logger;
+//	}
 
 	@Override
 	public synchronized List<T> getEmployees(String sortOrder) throws IllegalStateException, IllegalArgumentException {
@@ -45,9 +59,9 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
-			CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.typeParameterClass);
+			CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.typeClass);
 
-			Root<T> criteriaRoot = criteriaQuery.from(this.typeParameterClass);
+			Root<T> criteriaRoot = criteriaQuery.from(this.typeClass);
 
 			Path<String> employeeId = criteriaRoot.get(sortOrder);
 
@@ -71,9 +85,9 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
-				T element = session.load(typeParameterClass, item.getEmployeeId());
+				T element = session.load(typeClass, item.getEmployeeId());
 
-				T tmp = Hibernate.unproxy(element, typeParameterClass);
+				T tmp = Hibernate.unproxy(element, typeClass);
 
 				logger.info(tmp.toString());
 
@@ -106,7 +120,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				session.getTransaction().commit();
 
-				T tmp = session.get(typeParameterClass, id);
+				T tmp = session.get(typeClass, id);
 
 				logger.info(tmp.toString());
 
@@ -140,7 +154,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				T tmp = null;
 
-				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(typeParameterClass, item.getEmployeeId()))) {
+				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(typeClass, item.getEmployeeId()))) {
 					throw new NotFoundException("id is not found");
 				}
 
@@ -178,7 +192,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				T tmp = null;
 
-				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(tmp = session.get(typeParameterClass, item.getEmployeeId()))) {
+				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(tmp = session.get(typeClass, item.getEmployeeId()))) {
 					throw new NotFoundException("ID not found during patch");
 				}
 
@@ -214,7 +228,7 @@ public class EmployeeService<T extends Employee> implements IEmployeeService<T> 
 
 				session.beginTransaction();
 
-				T tmp = session.get(typeParameterClass, item.getEmployeeId());
+				T tmp = session.get(typeClass, item.getEmployeeId());
 
 				if (Objects.nonNull(tmp)) {
 

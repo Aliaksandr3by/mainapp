@@ -5,7 +5,7 @@ import com.example.mainapp.model.entity.Department;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.Gender;
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.rest.EmployeeController;
+import com.example.mainapp.controller.EmployeeController;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

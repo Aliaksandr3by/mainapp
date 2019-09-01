@@ -97,16 +97,11 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "PUT",
-			"item": [
+				},
 				{
 					"name": "http://localhost:8080/employee/employees",
 					"request": {
-						"method": "PATCH",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -117,23 +112,28 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 49,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 1\r\n    }"
+							"raw": "{\r\n  \"idSlave\": 1,\r\n  \"employeeId\": 23\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employee/employees",
+							"raw": "http://localhost:8080/employees/EmployeeSlave",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"employee",
-								"employees"
+								"employees",
+								"EmployeeSlave"
 							]
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": [
 				{
 					"name": "http://localhost:8080/employee/employees",
 					"request": {
@@ -262,6 +262,37 @@
 							"path": [
 								"employees",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/employee/employees",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"employeeId\": 49,\r\n        \"firstName\": \"1\",\r\n        \"lastName\": \"1\",\r\n        \"departmentId\": 99,\r\n        \"jobTitle\": \"1\",\r\n        \"gender\": 1\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/employee/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"employee",
+								"employees"
 							]
 						}
 					},
