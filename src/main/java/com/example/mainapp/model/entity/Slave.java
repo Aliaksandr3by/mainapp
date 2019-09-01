@@ -25,7 +25,7 @@ public class Slave implements Serializable {
 		this.nameSlave = nameSlave;
 	}
 
-	//	@JsonIgnore
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "slave_employee",
 			joinColumns = @JoinColumn(name = "ID_SLAVE", referencedColumnName = "id_slave", foreignKey = @ForeignKey(name = "fk_id_slave")),

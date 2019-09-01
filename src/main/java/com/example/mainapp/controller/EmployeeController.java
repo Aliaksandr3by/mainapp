@@ -7,16 +7,12 @@ import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.EmployeeSlavePK;
 import com.example.mainapp.model.entity.Slave;
-
 import org.hibernate.ObjectNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collection;
@@ -30,32 +26,32 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
-	//@Resource(name = "providerEmployeeConfiguration")
-	//@Autowired
-	//@Qualifier("providerEmployee")
-	@Inject
-	@Named("employeeContext")
+	//	@Resource(name = "providerEmployeeConfiguration")
+//	@Autowired
+//	@Qualifier("providerEmployee")
+//	@Inject
+//	@Named("employeeContext")
 	private IEmployeeContext<Employee> employeeService;
 
-	//@Resource(name = "providerEmployeeSlaveConfiguration")
-	//	@Autowired
-	//	@Qualifier(value = "providerEmployeeSlave")
-	@Inject
-	@Named("employeeSlaveContext")
+	//	@Resource(name = "providerEmployeeSlaveConfiguration")
+//	@Autowired
+//	@Qualifier(value = "providerEmployeeSlave")
+//	@Inject
+//	@Named("employeeSlaveContext")
 	private EmployeeSlaveContext employeeSlaveService;
 
 	public EmployeeController() {
 
 	}
 
-//	@Inject
-//	public EmployeeController(
-//			@Named("employeeContext") IEmployeeContext<Employee> employeeContext,
-//			@Named("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
-//	) {
-//		this.employeeService = employeeContext;
-//		this.employeeSlaveService = employeeSlaveContext;
-//	}
+	@Inject
+	public EmployeeController(
+			@Named("providerEmployeeContext") IEmployeeContext<Employee> employeeContext,
+			@Named("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
+	) {
+		this.employeeService = employeeContext;
+		this.employeeSlaveService = employeeSlaveContext;
+	}
 
 //	public EmployeeController() {
 //		ApplicationContext ctx = new AnnotationConfigApplicationContext(EmployeeConfiguration.class);
@@ -70,28 +66,37 @@ public class EmployeeController {
 	@GetMapping(value = "")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Employee> getEmployees() {
-		List<Employee> tmp = (List<Employee>) employeeService.getEmployees("employeeId")
-				.stream()
-				.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
-				.limit(10)
-				.peek(e -> System.out.println(e))
-				.collect(Collectors.toList());
+		try {
+			return employeeService.getEmployees("employeeId")
+					.stream()
+					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
+					.limit(10)
+					.peek(e -> System.out.println(e))
+					.collect(Collectors.toList());
 
-		return tmp;
+		} catch (Throwable e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 
-	//FIXME
+	/**
+	 * this method return all Employee what have slaves
+	 *
+	 * @return
+	 */
 	@GetMapping(value = "EmployeeSlaves")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Collection<Slave>> getEmployeeSlaves() {
+	public Collection<Employee> getEmployeeSlaves() {
+		try {
+			return employeeService.getEmployees("employeeId")
+					.stream()
+					.filter(e -> !e.getSlaves().isEmpty())
+//				.map((e) -> e.getSlaves())
+					.collect(Collectors.toList());
 
-		List<Collection<Slave>> tmp = employeeService.getEmployees("employeeId")
-				.stream()
-				.map((e) -> e.getSlaves())
-				.filter(e -> !e.isEmpty())
-				.collect(Collectors.toList());
-
-		return tmp;
+		} catch (Throwable e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -135,7 +140,6 @@ public class EmployeeController {
 
 	}
 
-	//FIXME
 	@PostMapping(value = "/EmployeeSlave")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlavePK employeeSlavePK) {

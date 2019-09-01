@@ -13,6 +13,8 @@ import java.util.Optional;
 @Qualifier(value = "hibernateUtil")
 public class HibernateUtil implements IHibernateUtil {
 
+	public static int count = 0;
+
 	private StandardServiceRegistry serviceRegistryBuilder;
 
 	private SessionFactory sessionFactory;
@@ -39,7 +41,7 @@ public class HibernateUtil implements IHibernateUtil {
 	}
 
 	public SessionFactory buildIn(String hibernateCFG) throws RuntimeException {
-
+		++count;
 		this.hibernateCFG = hibernateCFG;
 		return this.build();
 	}

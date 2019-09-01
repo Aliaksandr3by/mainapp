@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface IEmployeeContext<T extends Employee> {
 
-	Collection<T> getEmployees(String sortOrder);
+	Collection<T> getEmployees(String sortOrder) throws Exception;
 
 	T loadEmployeeById(T item) throws ObjectNotFoundException;
 

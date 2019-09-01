@@ -24,8 +24,6 @@ public class Department implements Serializable {
 
 	public Department DepartmentUpdater(Department patch) {
 
-		if (this.equals(patch)) throw new NotFoundException("Object is equals ");//FIXME
-
 		if (patch.getNameDepartment() != null) this.setNameDepartment(patch.getNameDepartment());
 		if (patch.getDateDepartment() != null) this.setDateDepartment(patch.getDateDepartment());
 

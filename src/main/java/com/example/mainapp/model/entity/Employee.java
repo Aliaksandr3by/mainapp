@@ -27,8 +27,6 @@ public class Employee implements Serializable {
 
 	public Employee employeeUpdater(Employee patch) {
 
-		if (this.equals(patch)) throw new NotFoundException("Object is equals ");//FIXME
-
 		if (patch.getFirstName() != null) this.setFirstName(patch.getFirstName());
 		if (patch.getLastName() != null) this.setLastName(patch.getLastName());
 		if (patch.getGender() != null) this.setGender(patch.getGender());
@@ -59,7 +57,7 @@ public class Employee implements Serializable {
 		this.gender = gender;
 	}
 
-	@JsonIgnore
+	//@JsonIgnore
 	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
 	public Collection<Slave> getSlaves() {
 		return slaves;

@@ -7,18 +7,18 @@ import com.example.mainapp.model.entity.Slave;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.RequestScope;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 
 @Named("employeeSlaveContext")
-@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@RequestScope
+//@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class EmployeeSlaveContext {
 
+	public static int count = 0;
 
 	private SessionFactory sessionFactory;
 
@@ -29,6 +29,7 @@ public class EmployeeSlaveContext {
 
 	@Inject
 	public EmployeeSlaveContext(@Named("sessionFactory") SessionFactory sessionFactory, @Named("LOG") Logger logger) {
+		++count;
 		this.sessionFactory = sessionFactory;
 		this.logger = logger;
 	}

@@ -6,11 +6,7 @@ import com.example.mainapp.model.entity.Employee;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.RequestScope;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,9 +19,11 @@ import java.util.List;
 import java.util.Objects;
 
 
-//@Named("employeeContext")
-//@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Named("employeeContext")
+@RequestScope
 public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> {
+
+	public static int count= 0;
 
 	private SessionFactory sessionFactory;
 
@@ -38,23 +36,29 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	public EmployeeContext() {
 	}
 
+	public EmployeeContext(SessionFactory sessionFactory) {
+		++count;
+		this.sessionFactory = sessionFactory;
+	}
+
 	public EmployeeContext(SessionFactory sessionFactory, Class<T> typeClass) {
+		++count;
 		this.sessionFactory = sessionFactory;
 		this.typeClass = typeClass;
 	}
-
-//	@Inject
-//	public EmployeeContext(
-//			@Named("sessionFactory") SessionFactory sessionFactory,
-//			@EmployeeQualifier Class<T> typeClass,
-//			@Named("LOG") Logger logger) {
-//		this.sessionFactory = sessionFactory;
-//		this.typeClass = typeClass;
-//		this.logger = logger;
-//	}
+	//FIXME
+	@Inject
+	public EmployeeContext(
+			@Named("sessionFactory") SessionFactory sessionFactory,
+			@EmployeeQualifier Class<T> typeClass,
+			@Named("LOG") Logger logger) {
+		this.sessionFactory = sessionFactory;
+		this.typeClass = typeClass;
+		this.logger = logger;
+	}
 
 	@Override
-	public synchronized List<T> getEmployees(String sortOrder) throws IllegalStateException, IllegalArgumentException {
+	public synchronized List<T> getEmployees(String sortOrder) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
