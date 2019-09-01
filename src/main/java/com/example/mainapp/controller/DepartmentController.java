@@ -17,7 +17,6 @@ import java.util.List;
 public class DepartmentController {
 
 	public DepartmentController() {
-
 	}
 
 	@PersistenceUnit(unitName = "CRM") //FIXME
@@ -26,7 +25,7 @@ public class DepartmentController {
 	@GetMapping(value = "/{id}")
 	public List<Department> getDepartment(@PathVariable("id") Integer id) throws Exception {
 
-		EntityManager em = null;
+		EntityManager em;
 		EntityTransaction entityTransaction = null;
 
 		try {

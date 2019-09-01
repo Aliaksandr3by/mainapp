@@ -6,15 +6,14 @@ import com.example.mainapp.model.IEmployeeContext;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.EmployeeSlavePK;
-import com.example.mainapp.model.entity.Slave;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +32,7 @@ public class EmployeeController {
 //	@Named("employeeContext")
 	private IEmployeeContext<Employee> employeeService;
 
-	//	@Resource(name = "providerEmployeeSlaveConfiguration")
+	//			@Resource(name = "providerEmployeeSlaveConfiguration")
 //	@Autowired
 //	@Qualifier(value = "providerEmployeeSlave")
 //	@Inject
@@ -44,10 +43,10 @@ public class EmployeeController {
 
 	}
 
-	@Inject
+	@Autowired
 	public EmployeeController(
-			@Named("providerEmployeeContext") IEmployeeContext<Employee> employeeContext,
-			@Named("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
+			@Qualifier("employeeComponent") IEmployeeContext<Employee> employeeContext,
+			@Qualifier("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
 	) {
 		this.employeeService = employeeContext;
 		this.employeeSlaveService = employeeSlaveContext;
@@ -67,12 +66,7 @@ public class EmployeeController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Employee> getEmployees() {
 		try {
-			return employeeService.getEmployees("employeeId")
-					.stream()
-					.sorted(Comparator.comparing(Employee::getFirstName).thenComparing(Comparator.comparing(Employee::getLastName)))
-					.limit(10)
-					.peek(e -> System.out.println(e))
-					.collect(Collectors.toList());
+			return (List<Employee>) employeeService.getEmployees("employeeId");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

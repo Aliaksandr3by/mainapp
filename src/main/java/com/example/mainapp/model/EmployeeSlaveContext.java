@@ -4,14 +4,14 @@ import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.EmployeeSlavePK;
 import com.example.mainapp.model.entity.Slave;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 
 @Named("employeeSlaveContext")
 @RequestScope
@@ -58,7 +58,7 @@ public class EmployeeSlaveContext {
 
 			} catch (Exception e) {
 
-				logger.error(e);
+				logger.error(e.getMessage(), e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();

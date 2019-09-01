@@ -1,15 +1,15 @@
 package com.example.mainapp.model;
 
-import com.example.mainapp.configuration.EmployeeQualifier;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -18,19 +18,16 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-
-@Named("employeeContext")
+@Component("employeeComponent")
 @RequestScope
 public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> {
 
-	public static int count= 0;
+	public static int count = 0;
 
 	private SessionFactory sessionFactory;
 
 	private Class<T> typeClass;
 
-	@Inject
-	@Named("LOG")
 	private Logger logger;
 
 	public EmployeeContext() {
@@ -41,17 +38,12 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 		this.sessionFactory = sessionFactory;
 	}
 
-	public EmployeeContext(SessionFactory sessionFactory, Class<T> typeClass) {
-		++count;
-		this.sessionFactory = sessionFactory;
-		this.typeClass = typeClass;
-	}
 	//FIXME
-	@Inject
+	@Autowired
 	public EmployeeContext(
-			@Named("sessionFactory") SessionFactory sessionFactory,
-			@EmployeeQualifier Class<T> typeClass,
-			@Named("LOG") Logger logger) {
+			@Qualifier("sessionFactory") SessionFactory sessionFactory,
+			@Qualifier("employeeClass") Class<T> typeClass,
+			@Qualifier("LOG") Logger logger) {
 		this.sessionFactory = sessionFactory;
 		this.typeClass = typeClass;
 		this.logger = logger;
@@ -99,7 +91,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 			}
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 
 			throw e;
 		}
@@ -132,7 +124,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 			} catch (Exception e) {
 
-				logger.error(e);
+				logger.error(e.getMessage(), e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
@@ -176,7 +168,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 			} catch (Exception e) {
 
-				logger.error(e);
+				logger.error(e.getMessage(), e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
@@ -210,7 +202,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 			} catch (Exception e) {
 
-				logger.error(e);
+				logger.error(e.getMessage(), e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
@@ -249,7 +241,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 			} catch (Exception e) {
 
-				logger.error(e);
+				logger.error(e.getMessage(), e);
 
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();

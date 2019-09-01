@@ -53,13 +53,8 @@ public class MainappApplicationTests {
 			"ln" + Math.random() * 20,
 			new Department(),
 			"jt" + Math.random() * 20,
-			Gender.FEMALE);
-
-	//FIXME
-//	@Test(expected = ObjectNotFoundException.class)
-//	public void mustGetObjectNotFoundException() {
-//		employeeController.getEmployeeById(999999L);
-//	}
+			Gender.FEMALE
+	);
 
 	@Test
 	public void voidThread() throws InterruptedException {
