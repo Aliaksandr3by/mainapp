@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
+@Component //определяет этот класс как кандидата для создания bean.
 @Qualifier(value = "hibernateUtil")
 public class HibernateUtil implements IHibernateUtil {
 

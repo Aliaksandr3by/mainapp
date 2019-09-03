@@ -7,7 +7,7 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,7 +18,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-@Component("employeeComponent")
+@Repository("employeeComponent")
+//предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
 @RequestScope
 public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> {
 

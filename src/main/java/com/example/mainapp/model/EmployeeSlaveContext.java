@@ -4,10 +4,9 @@ import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.EmployeeSlavePK;
 import com.example.mainapp.model.entity.Slave;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.inject.Inject;

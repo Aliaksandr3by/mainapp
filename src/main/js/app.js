@@ -20,12 +20,14 @@ class App extends Component {
 		super(props);
 		this.state = {
 			SetControlActionURL: this.props.SetControlActionURL,
-			items: this.getAll(),
+			items: [],
+			result: [],
 			isLoaded: false,
 			status: null,
 			error: null,
 			message: null,
 		};
+		this.getAll();
 	}
 
 	//взывается сразу же после отображения компонента на экране приведут к запуску жизненного цикла обновления и к повторному отображению компонента на экране
@@ -54,14 +56,6 @@ class App extends Component {
 	 */
 	getAll = async (e) => {
 		try {
-			const data = {
-				"employeeId": 3,
-				"firstName": "qwe",
-				"lastName": "qweqwe",
-				"departmentId": 1,
-				"jobTitle": "",
-				"gender": "FEMALE"
-			};
 
 			const response = await fetch(`${this.props.SetControlActionURL.urlControlActionGreeting}`, {
 				method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -82,15 +76,22 @@ class App extends Component {
 
 			if (Array.isArray(result) && result.length >= 0) {
 
+				this.stateChangeResult(result, "items");
+
 				this.setState({
-					items: result,
 					isLoaded: true,
 				});
 			}
+
+			console.dir(result);
+
 			return result;
 
 		} catch (error) {
 			console.error(error);
+			this.setState({
+				error: error,
+			});
 		}
 	};
 
@@ -152,15 +153,21 @@ class App extends Component {
 				<React.Fragment>
 					{
 						items.map((item, i) => {
-							return (<div className={"employee"} key={item["employeeId"]}>
-								<button data-employee={item["employeeId"]} type="button" className="btn"
-										onClick={(e) => this.deleteById(e)}>{`delete ${item["firstName"]}`}</button>
-								<div>{
-									Object.keys(item).map((element, i) => {
-										return (<p key={`${element}`}>{item[element]}</p>);
-									})
-								}</div>
-							</div>);
+
+							return (
+								<div className={"employee"} key={item["employeeId"]}>
+									<button data-employee={item["employeeId"]} type="button" className="btn"
+											onClick={(e) => this.deleteById(e)}>{`delete ${item["firstName"]}`}</button>
+									<div>{
+										Object.keys(item).map((element, i) => {
+											if (!Array.isArray(item[element])) {
+												return (<p key={`${element}`}>{item[element]}</p>);
+											}
+										})
+									}</div>
+								</div>
+							);
+
 						})
 					}
 				</React.Fragment>

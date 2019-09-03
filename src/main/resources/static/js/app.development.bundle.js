@@ -31871,21 +31871,13 @@ function (_Component) {
       var _ref = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(e) {
-        var data, response, result;
+        var response, result;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                data = {
-                  "employeeId": 3,
-                  "firstName": "qwe",
-                  "lastName": "qweqwe",
-                  "departmentId": 1,
-                  "jobTitle": "",
-                  "gender": "FEMALE"
-                };
-                _context.next = 4;
+                _context.next = 3;
                 return fetch("".concat(_this.props.SetControlActionURL.urlControlActionGreeting), {
                   method: "GET",
                   // *GET, POST, PUT, DELETE, etc.
@@ -31905,22 +31897,24 @@ function (_Component) {
 
                 });
 
-              case 4:
+              case 3:
                 response = _context.sent;
-                _context.next = 7;
+                _context.next = 6;
                 return response.json();
 
-              case 7:
+              case 6:
                 result = _context.sent;
                 console.dir(result);
 
                 if (Array.isArray(result) && result.length >= 0) {
+                  _this.stateChangeResult(result, "items");
+
                   _this.setState({
-                    items: result,
                     isLoaded: true
                   });
                 }
 
+                console.dir(result);
                 return _context.abrupt("return", result);
 
               case 13:
@@ -31928,7 +31922,11 @@ function (_Component) {
                 _context.t0 = _context["catch"](0);
                 console.error(_context.t0);
 
-              case 16:
+                _this.setState({
+                  error: _context.t0
+                });
+
+              case 17:
               case "end":
                 return _context.stop();
             }
@@ -32042,12 +32040,16 @@ function (_Component) {
 
     _this.state = {
       SetControlActionURL: _this.props.SetControlActionURL,
-      items: _this.getAll(),
+      items: [],
+      result: [],
       isLoaded: false,
       status: null,
       error: null,
       message: null
     };
+
+    _this.getAll();
+
     return _this;
   } //взывается сразу же после отображения компонента на экране приведут к запуску жизненного цикла обновления и к повторному отображению компонента на экране
 
@@ -32180,9 +32182,11 @@ function (_Component) {
               return _this2.deleteById(e);
             }
           }, "delete ".concat(item["firstName"])), react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", null, Object.keys(item).map(function (element, i) {
-            return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", {
-              key: "".concat(element)
-            }, item[element]);
+            if (!Array.isArray(item[element])) {
+              return react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("p", {
+                key: "".concat(element)
+              }, item[element]);
+            }
           })));
         }));
       } else if (error) {

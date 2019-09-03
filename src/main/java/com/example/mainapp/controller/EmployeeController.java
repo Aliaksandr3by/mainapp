@@ -1,14 +1,21 @@
 package com.example.mainapp.controller;
 
+import com.example.mainapp.configuration.InjectConfiguration;
 import com.example.mainapp.exeptions.NotFoundException;
+import com.example.mainapp.model.EmployeeContext;
 import com.example.mainapp.model.EmployeeSlaveContext;
 import com.example.mainapp.model.IEmployeeContext;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.EmployeeSlavePK;
 import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,10 +59,26 @@ public class EmployeeController {
 		this.employeeSlaveService = employeeSlaveContext;
 	}
 
-//	public EmployeeController() {
-//		ApplicationContext ctx = new AnnotationConfigApplicationContext(EmployeeConfiguration.class);
-//		this.employeeService = ctx.getBean("providerEmployeeService", EmployeeService.class);
-//	}
+	@GetMapping(value = "SessionFactory")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void EmployeeController(String tmp) {
+		try {
+
+			ApplicationContext ctx = new AnnotationConfigApplicationContext(InjectConfiguration.class);
+
+			SessionFactory sessionFactory = ctx.getBean("sessionFactory", SessionFactory.class);
+
+			Session session = sessionFactory.openSession();
+
+			Logger logger = ctx.getBean("LOG", Logger.class);
+
+			logger.info("session");
+
+
+		} catch (Throwable e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
+	}
 
 	/**
 	 * Method gets all items
