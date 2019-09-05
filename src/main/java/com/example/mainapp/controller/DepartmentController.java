@@ -1,8 +1,11 @@
 package com.example.mainapp.controller;
 
 import com.example.mainapp.model.entity.Department;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ejb.Stateless;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,23 +22,25 @@ public class DepartmentController {
 	public DepartmentController() {
 	}
 
-	@PersistenceUnit(unitName = "CRM") //FIXME
-	private EntityManagerFactory emf;
+//	@PersistenceUnit(unitName = "CRM")
+//	private EntityManagerFactory _emf;
+//
+//	@PersistenceContext
+//	private EntityManager _em;
+
+	@Autowired
+	@Qualifier("entityManager")
+	private EntityManager em;
 
 	@GetMapping(value = "/{id}")
 	public List<Department> getDepartment(@PathVariable("id") Integer id) throws Exception {
 
-		EntityManager em;
 		EntityTransaction entityTransaction = null;
 
 		try {
 
 			Class<Department> clazz = Department.class;
 
-			//emf = Persistence.createEntityManagerFactory("CRM");
-
-			em = this.emf.createEntityManager();
-//em.persist(null);
 			entityTransaction = em.getTransaction();
 
 			entityTransaction.begin();
@@ -62,8 +67,6 @@ public class DepartmentController {
 //			System.out.println(tmp.toString());
 
 			entityTransaction.commit();
-
-			emf.close();
 
 			return tmp;
 

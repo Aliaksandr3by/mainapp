@@ -17,7 +17,7 @@
 
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
-<!--        <property name="use_sql_comments">true</property>-->
+        <property name="use_sql_comments">true</property>
 
         <property name="current_session_context_class">
             org.hibernate.context.internal.ThreadLocalSessionContext
@@ -33,7 +33,7 @@
         <mapping class="com.example.mainapp.model.entity.Department"/>
         <mapping class="com.example.mainapp.model.entity.Slave"/>
         <mapping class="com.example.mainapp.model.entity.EmployeeSlave"/>
-<!--        <mapping class="com.example.mainapp.model.entity.EmployeeSlavePK"/>-->
+        <!--        <mapping class="com.example.mainapp.model.entity.EmployeeSlavePK"/>-->
 
         <!--        		<property name="default_entity_mode">dynamic-map</property>-->
         <!--        		<mapping resource="by/data/myweb/entity/ProductName.hbm.xml"/>-->

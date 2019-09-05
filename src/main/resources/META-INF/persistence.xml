@@ -3,19 +3,25 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
+    <!-- You must use the EntityManagerFactory to get an EntityManager-->
     <persistence-unit name="CRM" transaction-type="RESOURCE_LOCAL">
 
         <description>Persistence unit for Hibernate User Guide</description>
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <!--        <jta-data-source>myDS</jta-data-source>-->
+        <!--        <non-jta-data-source>myNonJtaDataSource</non-jta-data-source>-->
+
         <class>com.example.mainapp.model.entity.Employee</class>
         <class>com.example.mainapp.model.entity.Department</class>
         <class>com.example.mainapp.model.entity.Slave</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <class>com.example.mainapp.model.entity.EmployeeSlave</class>
+
+<!--        <exclude-unlisted-classes>true</exclude-unlisted-classes>-->
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
-        <validation-mode>CALLBACK</validation-mode>
+        <validation-mode>AUTO</validation-mode>
 
         <properties>
 
@@ -27,10 +33,11 @@
             <property name="javax.persistence.jdbc.password" value="guest"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!--            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>-->
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <!--            <property name="use_sql_comments" value="true"/>-->
+            <property name="use_sql_comments" value="true"/>
 
         </properties>
 

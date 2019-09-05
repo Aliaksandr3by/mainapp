@@ -51,7 +51,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public synchronized List<T> getEmployees(String sortOrder) throws Exception {
+	public List<T> getEmployees(String sortOrder) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -78,7 +78,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public synchronized T loadEmployeeById(T item) throws ObjectNotFoundException {
+	public T loadEmployeeById(T item) throws ObjectNotFoundException {
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
@@ -99,7 +99,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public synchronized T createEmployee(T item) throws Exception {
+	public T createEmployee(T item) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -144,7 +144,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	 * @throws HibernateException
 	 */
 	@Override
-	public synchronized T updateEmployee(@NotNull T item) {
+	public T updateEmployee(@NotNull T item) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -181,7 +181,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public synchronized T patchEmployee(T item) throws NotFoundException {
+	public T patchEmployee(T item) throws NotFoundException {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -215,7 +215,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public synchronized T deleteEmployee(T item) throws NotFoundException {
+	public T deleteEmployee(T item) throws NotFoundException {
 
 		if (item.getEmployeeId() == null) throw new NotFoundException("non id");
 
