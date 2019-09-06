@@ -18,8 +18,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-@Repository("employeeComponent")
 //предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
+@Repository("employeeComponent")
 @RequestScope
 public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> {
 

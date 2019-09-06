@@ -18,7 +18,8 @@
         <class>com.example.mainapp.model.entity.Slave</class>
         <class>com.example.mainapp.model.entity.EmployeeSlave</class>
 
-<!--        <exclude-unlisted-classes>true</exclude-unlisted-classes>-->
+        <!--        Запретить поиск отображаемых классов-->
+        <!--        <exclude-unlisted-classes>true</exclude-unlisted-classes>-->
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <validation-mode>AUTO</validation-mode>

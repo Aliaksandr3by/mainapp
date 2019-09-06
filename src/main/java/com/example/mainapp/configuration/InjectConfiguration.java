@@ -42,12 +42,11 @@ public class InjectConfiguration {
 		return new HibernateUtil("hibernate.employeedb.cfg.xml").getSessionFactory();
 	}
 
-	@Bean("entityManager")
+	@Bean("entityManagerFactory")
 	@SessionScope
-	public EntityManager managerFactory() {
+	public EntityManagerFactory managerFactory() {
 		return Persistence
 				.createEntityManagerFactory("CRM")
-				.createEntityManager()
 				;
 	}
 

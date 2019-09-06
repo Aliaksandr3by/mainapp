@@ -30,7 +30,10 @@ public class SlaveContext {
 	}
 
 	@Autowired
-	public SlaveContext(@Qualifier("sessionFactory") SessionFactory sessionFactory, @Qualifier("LOG") Logger logger) {
+	public SlaveContext(
+			@Qualifier("sessionFactory") SessionFactory sessionFactory,
+			@Qualifier("LOG") Logger logger
+	) {
 		++count;
 		this.sessionFactory = sessionFactory;
 		this.logger = logger;
