@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/slave", produces = "application/json")
+@RequestMapping(path = "/slaves", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class SlaveController {
 

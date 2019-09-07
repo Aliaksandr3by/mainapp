@@ -68,12 +68,9 @@ public class EmployeeController {
 
 			SessionFactory sessionFactory = ctx.getBean("sessionFactory", SessionFactory.class);
 
-			Session session = sessionFactory.openSession();
-
 			Logger logger = ctx.getBean("LOG", Logger.class);
 
 			logger.info("session");
-
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -90,26 +87,6 @@ public class EmployeeController {
 	public List<Employee> getEmployees() {
 		try {
 			return (List<Employee>) employeeService.getEmployees("employeeId");
-
-		} catch (Throwable e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * this method return all Employee what have slaves
-	 *
-	 * @return
-	 */
-	@GetMapping(value = "EmployeeSlaves")
-	@ResponseStatus(value = HttpStatus.OK)
-	public Collection<Employee> getEmployeeSlaves() {
-		try {
-			return employeeService.getEmployees("employeeId")
-					.stream()
-					.filter(e -> !e.getSlaves().isEmpty())
-//				.map((e) -> e.getSlaves())
-					.collect(Collectors.toList());
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -150,19 +127,6 @@ public class EmployeeController {
 		try {
 
 			return employeeService.createEmployee(employee);
-
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-		}
-
-	}
-
-	@PostMapping(value = "/EmployeeSlave")
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlavePK employeeSlavePK) {
-		try {
-
-			return employeeSlaveService.createEmployeeSlave(employeeSlavePK);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

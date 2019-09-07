@@ -1,8 +1,7 @@
 package com.example.mainapp.model.entity;
 
-import com.example.mainapp.exeptions.NotFoundException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.NonNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -41,7 +40,11 @@ public class Department implements Serializable {
 
 	@JsonIgnore
 	//должно совпадать с именем соответствующего поля в сущности на стороне «ко многим» отношения
-	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "department",
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			fetch = FetchType.EAGER,
+			orphanRemoval = true)
 	public Set<Employee> getDepartmentSet() {
 		return departmentSet;
 	}

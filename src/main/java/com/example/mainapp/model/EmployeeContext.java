@@ -21,13 +21,13 @@ import java.util.Objects;
 //предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
 @Repository("employeeComponent")
 @RequestScope
-public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> {
+public class EmployeeContext implements IEmployeeContext<Employee> {
 
 	public static int count = 0;
 
 	private SessionFactory sessionFactory;
 
-	private Class<T> typeClass;
+	private Class<Employee> typeClass;
 
 	private Logger logger;
 
@@ -43,7 +43,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	@Autowired
 	public EmployeeContext(
 			@Qualifier("sessionFactory") SessionFactory sessionFactory,
-			@Qualifier("employeeClass") Class<T> typeClass,
+			@Qualifier("employeeClass") Class<Employee> typeClass,
 			@Qualifier("LOG") Logger logger) {
 		this.sessionFactory = sessionFactory;
 		this.typeClass = typeClass;
@@ -51,14 +51,14 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public List<T> getEmployees(String sortOrder) throws Exception {
+	public List<Employee> getEmployees(String sortOrder) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
-			CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.typeClass);
+			CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(this.typeClass);
 
-			Root<T> criteriaRoot = criteriaQuery.from(this.typeClass);
+			Root<Employee> criteriaRoot = criteriaQuery.from(this.typeClass);
 
 			Path<String> employeeId = criteriaRoot.get(sortOrder);
 
@@ -67,9 +67,9 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 					.orderBy(criteriaBuilder.asc(employeeId))
 			;
 
-			Query<T> query = session.createQuery(criteriaQuery);
+			Query<Employee> query = session.createQuery(criteriaQuery);
 
-			List<T> tmp = query.list();
+			List<Employee> tmp = query.list();
 
 			logger.info(tmp.toString());
 
@@ -78,13 +78,13 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public T loadEmployeeById(T item) throws ObjectNotFoundException {
+	public Employee loadEmployeeById(Employee item) throws ObjectNotFoundException {
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
-				T element = session.load(typeClass, item.getEmployeeId());
+				Employee element = session.load(typeClass, item.getEmployeeId());
 
-				T tmp = Hibernate.unproxy(element, typeClass);
+				Employee tmp = Hibernate.unproxy(element, typeClass);
 
 				logger.info(tmp.toString());
 
@@ -99,7 +99,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public T createEmployee(T item) throws Exception {
+	public Employee createEmployee(Employee item) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -117,7 +117,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 				session.getTransaction().commit();
 
-				T tmp = session.get(typeClass, id);
+				Employee tmp = session.get(typeClass, id);
 
 				logger.info(tmp.toString());
 
@@ -144,22 +144,22 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	 * @throws HibernateException
 	 */
 	@Override
-	public T updateEmployee(@NotNull T item) {
+	public Employee updateEmployee(@NotNull Employee item) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
 
-				T tmp = null;
+				Employee tmp = null;
 
 				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(typeClass, item.getEmployeeId()))) {
 					throw new NotFoundException("id is not found");
 				}
 
-				if (Objects.nonNull(tmp)) session.detach(tmp);
+				//if (Objects.nonNull(tmp)) session.detach(tmp);
 
 				session.beginTransaction();
 
-				session.saveOrUpdate(Objects.requireNonNull(item));
+				session.saveOrUpdate(tmp);
 
 				session.getTransaction().commit();
 
@@ -181,13 +181,13 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public T patchEmployee(T item) throws NotFoundException {
+	public Employee patchEmployee(Employee item) throws NotFoundException {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
 				session.beginTransaction();
 
-				T tmp = null;
+				Employee tmp = null;
 
 				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(tmp = session.get(typeClass, item.getEmployeeId()))) {
 					throw new NotFoundException("ID not found during patch");
@@ -195,7 +195,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 				tmp.employeeUpdater(item);
 
-				session.update(Objects.requireNonNull(tmp));
+				session.update(tmp);
 
 				session.getTransaction().commit();
 
@@ -215,7 +215,7 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 	}
 
 	@Override
-	public T deleteEmployee(T item) throws NotFoundException {
+	public Employee deleteEmployee(Employee item) throws NotFoundException {
 
 		if (item.getEmployeeId() == null) throw new NotFoundException("non id");
 
@@ -225,13 +225,13 @@ public class EmployeeContext<T extends Employee> implements IEmployeeContext<T> 
 
 				session.beginTransaction();
 
-				T tmp = session.get(typeClass, item.getEmployeeId());
+				Employee tmp = session.get(typeClass, item.getEmployeeId());
 
 				if (Objects.nonNull(tmp)) {
 
-					session.detach(tmp);
+					//session.detach(tmp);
 
-					session.delete(item);
+					session.delete(tmp);
 
 					session.getTransaction().commit();
 

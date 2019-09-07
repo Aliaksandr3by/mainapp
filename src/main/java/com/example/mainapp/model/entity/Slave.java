@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -15,7 +16,7 @@ public class Slave implements Serializable {
 
 	private Long idSlave;
 	private String nameSlave;
-	private Collection<Employee> employees;
+	private Collection<Employee> employees = new ArrayList<>();
 
 	public Slave() {
 	}
@@ -26,7 +27,15 @@ public class Slave implements Serializable {
 	}
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(
+			fetch = FetchType.EAGER,
+			cascade = {
+			CascadeType.DETACH,
+			CascadeType.MERGE,
+			CascadeType.REFRESH,
+			CascadeType.PERSIST
+	}
+	)
 	@JoinTable(name = "slave_employee",
 			joinColumns = @JoinColumn(name = "ID_SLAVE", referencedColumnName = "id_slave", foreignKey = @ForeignKey(name = "fk_id_slave")),
 			inverseJoinColumns = @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "employee_id", foreignKey = @ForeignKey(name = "fk_employee_id"))
@@ -34,7 +43,6 @@ public class Slave implements Serializable {
 	public Collection<Employee> getEmployees() {
 		return employees;
 	}
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "slave_id_seq")

@@ -1,12 +1,11 @@
 package com.example.mainapp.model.entity;
 
-import com.example.mainapp.exeptions.NotFoundException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -47,7 +46,7 @@ public class Employee implements Serializable {
 	private Department department;
 	private String jobTitle;
 	private Gender gender;
-	private Collection<Slave> slaves;
+	private Collection<Slave> slaves = new ArrayList<>();
 
 	public Employee(String firstName, String lastName, Department departmentId, String jobTitle, Gender gender) {
 		this.firstName = firstName;
@@ -58,9 +57,20 @@ public class Employee implements Serializable {
 	}
 
 	//@JsonIgnore
-	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER, cascade = {
+			CascadeType.DETACH,
+			CascadeType.MERGE,
+			CascadeType.REFRESH,
+			CascadeType.PERSIST
+	})
 	public Collection<Slave> getSlaves() {
 		return slaves;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "department_id", nullable = false, referencedColumnName = "id_department")
+	public Department getDepartment() {
+		return department;
 	}
 
 	@Id
@@ -82,14 +92,6 @@ public class Employee implements Serializable {
 	@Basic
 	public String getLastName() {
 		return lastName;
-	}
-
-	//	@Column(name = "department_id", unique = false, nullable = false)
-//	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-	@JoinColumn(name = "department_id", nullable = false, referencedColumnName = "id_department")
-	public Department getDepartment() {
-		return department;
 	}
 
 	@Column(name = "job_title", nullable = false)

@@ -12,7 +12,6 @@ import java.util.Collection;
 @Table(name = "slave_employee")
 @IdClass(value = EmployeeSlavePK.class)
 public class EmployeeSlave implements Serializable {
-
 	@Id
 	@Column(name = "id_slave")
 	private Long idSlave;

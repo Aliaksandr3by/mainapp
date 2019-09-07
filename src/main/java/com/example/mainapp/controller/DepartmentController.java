@@ -1,7 +1,8 @@
 package com.example.mainapp.controller;
 
-import com.example.mainapp.model.DepartmentContext;
+import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Department;
+import com.example.mainapp.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -12,30 +13,55 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(path = "/department", produces = "application/json")
+@RequestMapping(path = "/departments", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class DepartmentController {
 
-	private DepartmentContext departmentContext;
+	private DepartmentService departmentService;
 
 	public DepartmentController() {
-
 	}
 
 	@Autowired
-	public DepartmentController(@Qualifier("departmentContext") DepartmentContext departmentContext) {
-		this.departmentContext = departmentContext;
+	public DepartmentController(
+			@Qualifier("departmentService") DepartmentService departmentService
+	) {
+		this.departmentService = departmentService;
 	}
 
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Department> getEmployees(@PathVariable("id") Integer id) {
+	public List<Department> getDepartmentById(@PathVariable("id") Integer id) {
 		try {
 
-			return departmentContext.getDepartment(id);
+			return departmentService.getDepartment(id);
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
+	}
+
+	@GetMapping(value = "")
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<Department> getDepartments() {
+		try {
+
+			return departmentService.getDepartments();
+
+		} catch (Throwable e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
+	}
+
+	@DeleteMapping(value = "")
+	@ResponseStatus(value = HttpStatus.OK)
+	public Department deleteDepartments(@RequestBody Department item) {
+		try {
+
+			return departmentService.deleteDepartment(item);
+
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);
 		}
 	}
 

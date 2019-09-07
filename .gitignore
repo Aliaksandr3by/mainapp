@@ -1,7 +1,8 @@
 node_modules/
-src/main/resources/static
-src/main/resources/tmp
+src/main/resources/static/
+src/main/resources/tmp/
 /package-lock.json
+logs/
 
 HELP.md
 target/
@@ -35,5 +36,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-/logs/archived/
