@@ -2,14 +2,10 @@ package com.example.mainapp.controller;
 
 import com.example.mainapp.configuration.InjectConfiguration;
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.model.EmployeeContext;
 import com.example.mainapp.model.EmployeeSlaveContext;
 import com.example.mainapp.model.IEmployeeContext;
 import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.model.entity.EmployeeSlave;
-import com.example.mainapp.model.entity.EmployeeSlavePK;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/employees", produces = "application/json")

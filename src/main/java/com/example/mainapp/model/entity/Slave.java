@@ -16,7 +16,7 @@ public class Slave implements Serializable {
 
 	private Long idSlave;
 	private String nameSlave;
-	private Collection<Employee> employees = new ArrayList<>();
+	private Collection<EmployeeSlave> employees = new ArrayList<>();
 
 	public Slave() {
 	}
@@ -27,20 +27,13 @@ public class Slave implements Serializable {
 	}
 
 	@JsonIgnore
-	@ManyToMany(
+	@OneToMany(
 			fetch = FetchType.EAGER,
-			cascade = {
-			CascadeType.DETACH,
-			CascadeType.MERGE,
-			CascadeType.REFRESH,
-			CascadeType.PERSIST
-	}
+			mappedBy = "slave",
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			orphanRemoval = true
 	)
-	@JoinTable(name = "slave_employee",
-			joinColumns = @JoinColumn(name = "ID_SLAVE", referencedColumnName = "id_slave", foreignKey = @ForeignKey(name = "fk_id_slave")),
-			inverseJoinColumns = @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "employee_id", foreignKey = @ForeignKey(name = "fk_employee_id"))
-	)
-	public Collection<Employee> getEmployees() {
+	public Collection<EmployeeSlave> getEmployees() {
 		return employees;
 	}
 
@@ -58,7 +51,7 @@ public class Slave implements Serializable {
 		return nameSlave;
 	}
 
-	public void setEmployees(Collection<Employee> employees) {
+	public void setEmployees(Collection<EmployeeSlave> employees) {
 		this.employees = employees;
 	}
 

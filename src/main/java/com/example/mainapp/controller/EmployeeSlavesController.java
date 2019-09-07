@@ -4,7 +4,6 @@ import com.example.mainapp.model.EmployeeSlaveContext;
 import com.example.mainapp.model.IEmployeeContext;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
-import com.example.mainapp.model.entity.EmployeeSlavePK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -43,13 +42,15 @@ public class EmployeeSlavesController {
 	 */
 	@GetMapping(value = "EmployeeSlaves")
 	@ResponseStatus(value = HttpStatus.OK)
-	public Collection<Employee> getEmployeeSlaves() {
+	public Collection<EmployeeSlave> getEmployeeSlaves() {
 		try {
-			return employeeContext.getEmployees("employeeId")
-					.stream()
-					.filter(e -> !e.getSlaves().isEmpty())
-//				.map((e) -> e.getSlaves())
-					.collect(Collectors.toList());
+//			return employeeContext.getEmployees("employeeId")
+//					.stream()
+//					.filter(e -> !e.getSlaves().isEmpty())
+////				.map((e) -> e.getSlaves())
+//					.collect(Collectors.toList());
+
+			return employeeSlaveContext.getEmployeeSlaves();
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -58,7 +59,7 @@ public class EmployeeSlavesController {
 
 	@PostMapping(value = "/EmployeeSlave")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlavePK employeeSlavePK) {
+	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlave employeeSlavePK) {
 		try {
 
 			return employeeSlaveContext.createEmployeeSlave(employeeSlavePK);

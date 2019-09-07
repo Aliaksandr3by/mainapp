@@ -27,7 +27,7 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 
 	private SessionFactory sessionFactory;
 
-	private Class<Employee> typeClass;
+	private Class<Employee> typeClass = Employee.class;
 
 	private Logger logger;
 
@@ -39,14 +39,11 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 		this.sessionFactory = sessionFactory;
 	}
 
-	//FIXME
 	@Autowired
 	public EmployeeContext(
 			@Qualifier("sessionFactory") SessionFactory sessionFactory,
-			@Qualifier("employeeClass") Class<Employee> typeClass,
 			@Qualifier("LOG") Logger logger) {
 		this.sessionFactory = sessionFactory;
-		this.typeClass = typeClass;
 		this.logger = logger;
 	}
 

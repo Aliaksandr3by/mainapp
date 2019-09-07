@@ -1,47 +1,44 @@
 package com.example.mainapp.model.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 
 @Entity
-@Access(AccessType.FIELD)
+@Access(AccessType.PROPERTY)
 @Table(name = "slave_employee")
-@IdClass(value = EmployeeSlavePK.class)
 public class EmployeeSlave implements Serializable {
-	@Id
-	@Column(name = "id_slave")
-	private Long idSlave;
 
-	@Id
-	@Column(name = "employee_id")
-	private Long employeeId;
+
+	private Slave slave;
+
+	private Employee employee;
 
 	public EmployeeSlave() {
 	}
 
-	public EmployeeSlave(Long idSlave, Long employeeId) {
-		this.idSlave = idSlave;
-		this.employeeId = employeeId;
+	public EmployeeSlave(Slave idSlave, Employee employeeId) {
+		this.slave = idSlave;
+		this.employee = employeeId;
 	}
 
-	public Long getIdSlave() {
-		return idSlave;
+	@Id
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	public Slave getSlave() {
+		return slave;
 	}
 
-	public Long getEmployeeId() {
-		return employeeId;
+	@Id
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setIdSlave(Long idSlave) {
-		this.idSlave = idSlave;
+	public void setSlave(Slave idSlave) {
+		this.slave = idSlave;
 	}
 
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
+	public void setEmployee(Employee employeeId) {
+		this.employee = employeeId;
 	}
 
 }

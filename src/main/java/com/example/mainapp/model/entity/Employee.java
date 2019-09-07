@@ -1,5 +1,6 @@
 package com.example.mainapp.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -46,7 +47,7 @@ public class Employee implements Serializable {
 	private Department department;
 	private String jobTitle;
 	private Gender gender;
-	private Collection<Slave> slaves = new ArrayList<>();
+	private Collection<EmployeeSlave> slaves = new ArrayList<>();
 
 	public Employee(String firstName, String lastName, Department departmentId, String jobTitle, Gender gender) {
 		this.firstName = firstName;
@@ -56,14 +57,15 @@ public class Employee implements Serializable {
 		this.gender = gender;
 	}
 
-	//@JsonIgnore
-	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER, cascade = {
-			CascadeType.DETACH,
-			CascadeType.MERGE,
-			CascadeType.REFRESH,
-			CascadeType.PERSIST
-	})
-	public Collection<Slave> getSlaves() {
+	@JsonIgnore
+
+	@OneToMany(
+			fetch = FetchType.EAGER,
+			mappedBy = "employee",
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			orphanRemoval = true
+	)
+	public Collection<EmployeeSlave> getSlaves() {
 		return slaves;
 	}
 
@@ -106,7 +108,7 @@ public class Employee implements Serializable {
 		return gender;
 	}
 
-	public void setSlaves(Collection<Slave> orders) {
+	public void setSlaves(Collection<EmployeeSlave> orders) {
 		this.slaves = orders;
 	}
 
