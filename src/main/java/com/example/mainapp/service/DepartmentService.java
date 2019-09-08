@@ -36,6 +36,11 @@ public class DepartmentService {
 		return this.departmentContext.getDepartments();
 	}
 
+	public Department createDepartment(Department item) {
+
+		return this.departmentContext.saveDepartment(item);
+	}
+
 	public Department deleteDepartment(Department item) {
 
 		return this.departmentContext.deleteDepartment(item);

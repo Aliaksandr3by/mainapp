@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Repository("departmentContext")
 @RequestScope
@@ -126,7 +127,7 @@ public class DepartmentContext {
 
 	}
 
-	public Department deleteDepartment(Department item)  {
+	public Department deleteDepartment(Department item) {
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;
@@ -141,13 +142,44 @@ public class DepartmentContext {
 
 			Department tmp = em.find(clazz, item.getIdDepartment());
 
-			em.remove(tmp);
+			if (Objects.nonNull(tmp)) {
+				em.remove(tmp);
+				entityTransaction.commit();
+			}
+
+			em.close();
+
+			return tmp;
+
+		} catch (Exception e) {
+			if (entityTransaction.isActive()) {
+				entityTransaction.rollback();
+			}
+			throw e;
+		}
+
+	}
+
+	public Department saveDepartment(Department item) {
+
+		EntityManager em = null;
+		EntityTransaction entityTransaction = null;
+
+		try {
+
+			em = emf.createEntityManager();
+
+			entityTransaction = em.getTransaction();
+
+			entityTransaction.begin();
+
+			em.persist(item);
 
 			entityTransaction.commit();
 
 			em.close();
 
-			return tmp;
+			return item;
 
 		} catch (Exception e) {
 			if (entityTransaction.isActive()) {

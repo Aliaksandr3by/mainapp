@@ -27,12 +27,7 @@ public class Slave implements Serializable {
 	}
 
 	@JsonIgnore
-	@OneToMany(
-			fetch = FetchType.EAGER,
-			mappedBy = "slave",
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-			orphanRemoval = true
-	)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "slave", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
 	public Collection<EmployeeSlave> getEmployees() {
 		return employees;
 	}

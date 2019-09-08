@@ -40,11 +40,7 @@ public class Department implements Serializable {
 
 	@JsonIgnore
 	//должно совпадать с именем соответствующего поля в сущности на стороне «ко многим» отношения
-	@OneToMany(
-			mappedBy = "department",
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-			fetch = FetchType.EAGER,
-			orphanRemoval = true)
+	@OneToMany(mappedBy = "department", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = true)
 	public Set<Employee> getDepartmentSet() {
 		return departmentSet;
 	}

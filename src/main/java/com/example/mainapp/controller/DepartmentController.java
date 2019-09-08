@@ -2,6 +2,7 @@ package com.example.mainapp.controller;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Department;
+import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,6 +52,19 @@ public class DepartmentController {
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
 		}
+	}
+
+	@PostMapping(value = "/")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public Department saveDepartment(@RequestBody Department item) {
+		try {
+
+			return departmentService.createDepartment(item);
+
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
+
 	}
 
 	@DeleteMapping(value = "")

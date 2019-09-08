@@ -57,8 +57,13 @@ public class Employee implements Serializable {
 		this.gender = gender;
 	}
 
-	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "department_id", nullable = false)
+	public Department getDepartment() {
+		return department;
+	}
 
+	@JsonIgnore
 	@OneToMany(
 			fetch = FetchType.EAGER,
 			mappedBy = "employee",
@@ -67,12 +72,6 @@ public class Employee implements Serializable {
 	)
 	public Collection<EmployeeSlave> getSlaves() {
 		return slaves;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name = "department_id", nullable = false, referencedColumnName = "id_department")
-	public Department getDepartment() {
-		return department;
 	}
 
 	@Id
