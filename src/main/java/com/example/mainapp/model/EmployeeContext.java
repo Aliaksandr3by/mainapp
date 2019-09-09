@@ -1,6 +1,7 @@
 package com.example.mainapp.model;
 
 import com.example.mainapp.exeptions.NotFoundException;
+import com.example.mainapp.model.entity.Department;
 import com.example.mainapp.model.entity.Employee;
 import org.hibernate.*;
 import org.hibernate.query.Query;
@@ -21,7 +22,7 @@ import java.util.Objects;
 //предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
 @Repository("employeeComponent")
 @RequestScope
-public class EmployeeContext implements IEmployeeContext<Employee> {
+public class EmployeeContext implements DataContext<Employee> {
 
 	public static int count = 0;
 
@@ -48,7 +49,7 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 	}
 
 	@Override
-	public List<Employee> getEmployees(String sortOrder) throws Exception {
+	public List<Employee> getAll(String sortOrder) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -75,7 +76,7 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 	}
 
 	@Override
-	public Employee loadEmployeeById(Employee item) throws ObjectNotFoundException {
+	public Employee load(Employee item) throws ObjectNotFoundException {
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
@@ -96,7 +97,7 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 	}
 
 	@Override
-	public Employee createEmployee(Employee item) throws Exception {
+	public Employee create(Employee item) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -141,7 +142,7 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 	 * @throws HibernateException
 	 */
 	@Override
-	public Employee updateEmployee(@NotNull Employee item) {
+	public Employee update(@NotNull Employee item) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -178,25 +179,34 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 	}
 
 	@Override
-	public Employee patchEmployee(Employee item) throws NotFoundException {
+	public Employee patch(Employee item) throws NotFoundException {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
 				session.beginTransaction();
 
-				Employee tmp = null;
-
-				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(tmp = session.get(typeClass, item.getEmployeeId()))) {
-					throw new NotFoundException("ID not found during patch");
+				Employee employee = null;
+				Department department = null;
+				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(employee = session.get(typeClass, item.getEmployeeId()))) {
+					throw new NotFoundException("ID employee not found during patch");
 				}
 
-				tmp.employeeUpdater(item);
+				if (Objects.nonNull(item.getDepartment())
+						&& Objects.nonNull(item.getDepartment().getIdDepartment())
+						&& Objects.isNull(department = session.get(Department.class, item.getDepartment().getIdDepartment()))
+				) {
+					throw new NotFoundException("ID Department not found during patch");
+				}
 
-				session.update(tmp);
+				//FIXME не знаю что эта штука должна делать с вложенными элементами
+				employee.patcherEmployee(item);
+				employee.setDepartment(department);
+
+				session.update(employee);
 
 				session.getTransaction().commit();
 
-				return tmp;
+				return employee;
 
 			} catch (Exception e) {
 
@@ -212,7 +222,7 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 	}
 
 	@Override
-	public Employee deleteEmployee(Employee item) throws NotFoundException {
+	public Employee delete(Employee item) throws NotFoundException {
 
 		if (item.getEmployeeId() == null) throw new NotFoundException("non id");
 
@@ -225,8 +235,6 @@ public class EmployeeContext implements IEmployeeContext<Employee> {
 				Employee tmp = session.get(typeClass, item.getEmployeeId());
 
 				if (Objects.nonNull(tmp)) {
-
-					//session.detach(tmp);
 
 					session.delete(tmp);
 

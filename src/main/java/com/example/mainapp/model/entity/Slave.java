@@ -1,6 +1,7 @@
 package com.example.mainapp.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -8,10 +9,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 @Table(name = "slave", schema = "public")
 @Access(AccessType.PROPERTY)
+@Setter
 public class Slave implements Serializable {
 
 	private Long idSlave;
@@ -35,7 +38,7 @@ public class Slave implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "slave_id_seq")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@Column(name = "id_slave", nullable = false)
+	@Column(name = "id_slave", nullable = false, updatable = false)
 	public Long getIdSlave() {
 		return idSlave;
 	}
@@ -46,17 +49,27 @@ public class Slave implements Serializable {
 		return nameSlave;
 	}
 
-	public void setEmployees(Collection<EmployeeSlave> employees) {
-		this.employees = employees;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Slave slave = (Slave) o;
+		return idSlave.equals(slave.idSlave) &&
+				nameSlave.equals(slave.nameSlave) &&
+				employees.equals(slave.employees);
 	}
 
-	public void setIdSlave(Long idSlave) {
-		this.idSlave = idSlave;
+	@Override
+	public int hashCode() {
+		return Objects.hash(idSlave, nameSlave, employees);
 	}
 
-	public void setNameSlave(String nameSlave) {
-		this.nameSlave = nameSlave;
+	@Override
+	public String toString() {
+		return "Slave{" +
+				"idSlave=" + idSlave +
+				", nameSlave='" + nameSlave + '\'' +
+				", employees=" + employees +
+				'}';
 	}
-
-
 }

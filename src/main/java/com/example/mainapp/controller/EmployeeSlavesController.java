@@ -1,7 +1,7 @@
 package com.example.mainapp.controller;
 
 import com.example.mainapp.model.EmployeeSlaveContext;
-import com.example.mainapp.model.IEmployeeContext;
+import com.example.mainapp.model.DataContext;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/EmployeeSlaves", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class EmployeeSlavesController {
 
-	private IEmployeeContext<Employee> employeeContext;
+	private DataContext<Employee> employeeContext;
 	private EmployeeSlaveContext employeeSlaveContext;
 
 	public EmployeeSlavesController() {
@@ -27,7 +26,7 @@ public class EmployeeSlavesController {
 
 	@Autowired
 	public EmployeeSlavesController(
-			@Qualifier("employeeComponent") IEmployeeContext<Employee> employeeContext,
+			@Qualifier("employeeComponent") DataContext<Employee> employeeContext,
 			@Qualifier("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
 	) {
 		this.employeeContext = employeeContext;
@@ -50,7 +49,7 @@ public class EmployeeSlavesController {
 ////				.map((e) -> e.getSlaves())
 //					.collect(Collectors.toList());
 
-			return employeeSlaveContext.getEmployeeSlaves();
+			return employeeSlaveContext.getAll("");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -62,7 +61,7 @@ public class EmployeeSlavesController {
 	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlave employeeSlavePK) {
 		try {
 
-			return employeeSlaveContext.createEmployeeSlave(employeeSlavePK);
+			return employeeSlaveContext.create(employeeSlavePK);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

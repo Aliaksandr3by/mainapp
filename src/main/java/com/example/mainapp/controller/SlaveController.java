@@ -1,5 +1,6 @@
 package com.example.mainapp.controller;
 
+import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.SlaveContext;
 import com.example.mainapp.model.entity.Slave;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class SlaveController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Slave> getEmployees() {
 		try {
-			return contextSlave.getSlave("idSlave");
+			return contextSlave.getAll("idSlave");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -42,11 +43,23 @@ public class SlaveController {
 	public Slave saveEmployee(@RequestBody Slave item) {
 		try {
 
-			return contextSlave.createSlave(item);
+			return contextSlave.create(item);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
 		}
 
+	}
+
+	@DeleteMapping(value = "")
+	@ResponseStatus(value = HttpStatus.OK)
+	public Slave deleteSlave(@RequestBody Slave employee) {
+		try {
+
+			return contextSlave.delete(employee);
+
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);
+		}
 	}
 }

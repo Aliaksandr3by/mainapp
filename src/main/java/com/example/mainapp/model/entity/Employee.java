@@ -1,6 +1,7 @@
 package com.example.mainapp.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "employee", schema = "public")
 @Access(AccessType.PROPERTY)
+@Setter
 public class Employee implements Serializable {
 
 
@@ -25,14 +27,15 @@ public class Employee implements Serializable {
 				&& this.getDepartment() == null;
 	}
 
-	public Employee employeeUpdater(Employee patch) {
+	public Employee patcherEmployee(Employee patch) {
 
 		if (patch.getFirstName() != null) this.setFirstName(patch.getFirstName());
 		if (patch.getLastName() != null) this.setLastName(patch.getLastName());
 		if (patch.getGender() != null) this.setGender(patch.getGender());
 		if (patch.getJobTitle() != null) this.setJobTitle(patch.getJobTitle());
-		if (patch.getDepartment().getIdDepartment() != null) {
-			this.getDepartment().DepartmentUpdater(patch.getDepartment());
+
+		if (Objects.nonNull(patch.getDepartment()) && patch.getDepartment().getIdDepartment() != null) {
+			this.getDepartment().patcherDepartment(patch.getDepartment());
 		}
 
 		return this;
@@ -77,7 +80,7 @@ public class Employee implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "employee_id_seq")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@Column(name = "employee_id", nullable = false)
+	@Column(name = "employee_id", nullable = false, updatable = false)
 	public Long getEmployeeId() {
 		return employeeId;
 	}
@@ -105,34 +108,6 @@ public class Employee implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	public Gender getGender() {
 		return gender;
-	}
-
-	public void setSlaves(Collection<EmployeeSlave> orders) {
-		this.slaves = orders;
-	}
-
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
 	}
 
 	@Override

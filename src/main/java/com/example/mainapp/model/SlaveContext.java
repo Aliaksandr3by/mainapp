@@ -1,6 +1,8 @@
 package com.example.mainapp.model;
 
+import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Slave;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -15,12 +17,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Repository("slaveContext")
 @RequestScope
-public class SlaveContext {
+public class SlaveContext implements DataContext<Slave> {
 
 	public static int count = 0;
+
+	private Class<Slave> clazz = Slave.class;
 
 	private SessionFactory sessionFactory;
 
@@ -39,14 +44,15 @@ public class SlaveContext {
 		this.logger = logger;
 	}
 
-	public List<Slave> getSlave(String sortOrder) throws Exception {
+	@Override
+	public List<Slave> getAll(String sortOrder) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
-			CriteriaQuery<Slave> criteriaQuery = criteriaBuilder.createQuery(Slave.class);
+			CriteriaQuery<Slave> criteriaQuery = criteriaBuilder.createQuery(clazz);
 
-			Root<Slave> criteriaRoot = criteriaQuery.from(Slave.class);
+			Root<Slave> criteriaRoot = criteriaQuery.from(clazz);
 
 			Path<String> id = criteriaRoot.get(sortOrder);
 
@@ -65,7 +71,8 @@ public class SlaveContext {
 		}
 	}
 
-	public Slave createSlave(Slave slave) {
+	@Override
+	public Slave create(Slave slave) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -76,7 +83,7 @@ public class SlaveContext {
 
 				session.getTransaction().commit();
 
-				Slave tmp = session.get(Slave.class, id);
+				Slave tmp = session.get(clazz, id);
 
 				logger.info(tmp.toString());
 
@@ -93,5 +100,59 @@ public class SlaveContext {
 				throw e;
 			}
 		}
+	}
+
+	@Override
+	public Slave delete(Slave item) {
+
+		if (item.getIdSlave() == null) throw new NotFoundException("non id");
+
+		try (Session session = this.sessionFactory.openSession()) {
+
+			try {
+
+				session.beginTransaction();
+
+				Slave tmp = session.get(clazz, item.getIdSlave());
+
+				if (Objects.nonNull(tmp)) {
+
+					session.delete(tmp);
+
+					session.getTransaction().commit();
+
+					return tmp;
+
+				} else {
+					throw new NotFoundException("entity was not found");
+				}
+
+			} catch (Exception e) {
+
+				logger.error(e.getMessage(), e);
+
+				if (session.getTransaction().isActive()) {
+					session.getTransaction().rollback();
+					logger.info("rollback");
+				}
+
+				throw e;
+			}
+		}
+	}
+
+	@Override
+	public Slave load(Slave item) throws ObjectNotFoundException {
+		return null;
+	}
+
+	@Override
+	public Slave update(Slave item) {
+		return null;
+	}
+
+	@Override
+	public Slave patch(Slave item) throws NotFoundException {
+		return null;
 	}
 }

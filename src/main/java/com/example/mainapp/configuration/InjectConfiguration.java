@@ -2,7 +2,6 @@ package com.example.mainapp.configuration;
 
 import com.example.mainapp.MainappApplication;
 import com.example.mainapp.helper.HibernateUtil;
-import com.example.mainapp.model.entity.Employee;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +12,12 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.annotation.SessionScope;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
 
 @Configuration
-//@ComponentScan("com.example.mainapp") //указывает где Spring искать классы, помеченные аннотацией @Component
+//указывает где Spring искать классы, помеченные аннотацией @Component
+//@ComponentScan(basePackageClasses = {com.example.mainapp.MainappApplication.class})
 public class InjectConfiguration {
 
 	@Bean(name = "LOG") // используется в конфигурационных классах для непосредственного создания бина.
@@ -27,12 +25,6 @@ public class InjectConfiguration {
 	public Logger logger() {
 		Logger logger = LoggerFactory.getLogger(MainappApplication.class);
 		return logger;
-	}
-
-	@Deprecated
-	@Bean("employeeClass")
-	public Class<Employee> employeeClass() {
-		return Employee.class;
 	}
 
 	@Bean("sessionFactory")

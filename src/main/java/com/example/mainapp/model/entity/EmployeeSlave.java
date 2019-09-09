@@ -1,11 +1,14 @@
 package com.example.mainapp.model.entity;
 
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Access(AccessType.PROPERTY)
 @Table(name = "slave_employee")
+@Setter
 public class EmployeeSlave implements Serializable {
 
 
@@ -31,14 +34,6 @@ public class EmployeeSlave implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	public Employee getEmployee() {
 		return employee;
-	}
-
-	public void setSlave(Slave idSlave) {
-		this.slave = idSlave;
-	}
-
-	public void setEmployee(Employee employeeId) {
-		this.employee = employeeId;
 	}
 
 }

@@ -1,8 +1,10 @@
 package com.example.mainapp.model;
 
+import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.Slave;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -13,14 +15,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Named("employeeSlaveContext")
 @RequestScope
-//@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class EmployeeSlaveContext {
+public class EmployeeSlaveContext implements DataContext<EmployeeSlave>{
 
 	public static int count = 0;
 
@@ -28,6 +28,7 @@ public class EmployeeSlaveContext {
 
 	private SessionFactory sessionFactory;
 
+	//@Resource(name = "LOG")
 	private Logger logger;
 
 	public EmployeeSlaveContext() {
@@ -40,7 +41,8 @@ public class EmployeeSlaveContext {
 		this.logger = logger;
 	}
 
-	public List<EmployeeSlave> getEmployeeSlaves() {
+	@Override
+	public List<EmployeeSlave> getAll(String sortOrder) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -63,7 +65,8 @@ public class EmployeeSlaveContext {
 		}
 	}
 
-	public EmployeeSlave createEmployeeSlave(EmployeeSlave employeeSlavePK) {
+	@Override
+	public EmployeeSlave create(EmployeeSlave employeeSlavePK) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -74,7 +77,7 @@ public class EmployeeSlaveContext {
 				Slave slave = session.get(Slave.class, employeeSlavePK.getSlave().getIdSlave());
 
 				EmployeeSlave employeeSlave = new EmployeeSlave(slave, employee);
-//session.detach(employeeSlave);
+
 				EmployeeSlave id = (EmployeeSlave) session.save(employeeSlave);
 
 				session.getTransaction().commit();
@@ -96,5 +99,25 @@ public class EmployeeSlaveContext {
 				throw e;
 			}
 		}
+	}
+
+	@Override
+	public EmployeeSlave load(EmployeeSlave item) throws ObjectNotFoundException {
+		return null;
+	}
+
+	@Override
+	public EmployeeSlave update(EmployeeSlave item) {
+		return null;
+	}
+
+	@Override
+	public EmployeeSlave delete(EmployeeSlave item) throws NotFoundException {
+		return null;
+	}
+
+	@Override
+	public EmployeeSlave patch(EmployeeSlave item) throws NotFoundException {
+		return null;
 	}
 }
