@@ -95,9 +95,7 @@ public class EmployeeContext implements DataContext<Employee> {
 	@Override
 	public Employee create(Employee item) throws NotFoundException {
 		try (Session session = this.sessionFactory.openSession()) {
-
 			try {
-
 				session.beginTransaction();
 
 				if (Objects.nonNull(item) && Objects.nonNull(item.getEmployeeId())) {
@@ -126,15 +124,12 @@ public class EmployeeContext implements DataContext<Employee> {
 				return tmp;
 
 			} catch (NotFoundException e) {
-
 				logger.error(e.getMessage(), e);
-
 				if (session.getTransaction().isActive()) {
 					session.getTransaction().rollback();
 				}
-
 				throw e;
-			} catch (HibernateException e){
+			} catch (HibernateException e) {
 				logger.error(e.getMessage(), e);
 				throw e;
 			}
@@ -159,8 +154,6 @@ public class EmployeeContext implements DataContext<Employee> {
 				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(clazzEmployee, item.getEmployeeId()))) {
 					throw new NotFoundException("id is not found");
 				}
-
-				//if (Objects.nonNull(tmp)) session.detach(tmp);
 
 				session.beginTransaction();
 
