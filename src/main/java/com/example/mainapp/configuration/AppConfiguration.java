@@ -1,7 +1,6 @@
 package com.example.mainapp.configuration;
 
 import com.example.mainapp.MainappApplication;
-import com.example.mainapp.helper.HibernateUtil;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,7 @@ import javax.persistence.Persistence;
 //указывает где Spring искать классы, помеченные аннотацией @Component
 //@ComponentScan(basePackageClasses = {com.example.mainapp.MainappApplication.class})
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class JavaBasedConfiguration {
+public class AppConfiguration {
 
 	private Logger logger  = LoggerFactory.getLogger(MainappApplication.class);
 
@@ -46,7 +45,7 @@ public class JavaBasedConfiguration {
 	@SessionScope
 	public SessionFactory sessionFactory() {
 
-		return new HibernateUtil("hibernate.employeedb.cfg.xml").getSessionFactory();
+		return new HibernateConfiguration(this.logger).build("hibernate.employeedb.cfg.xml");
 	}
 
 	@Bean("entityManagerFactory")

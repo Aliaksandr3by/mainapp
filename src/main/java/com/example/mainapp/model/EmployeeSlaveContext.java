@@ -21,7 +21,7 @@ import java.util.List;
 
 @Named("employeeSlaveContext")
 @RequestScope
-public class EmployeeSlaveContext implements DataContext<EmployeeSlave>{
+public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
 
 	public static int count = 0;
 

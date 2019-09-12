@@ -1,5 +1,6 @@
 package com.example.mainapp.service;
 
+import com.example.mainapp.exeptions.NotImplementedException;
 import com.example.mainapp.model.DepartmentContext;
 import com.example.mainapp.model.entity.Department;
 import org.hibernate.ObjectNotFoundException;
@@ -10,9 +11,9 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
 
-@Service("departmentService")
+@Service
 @RequestScope
-public class DepartmentService {
+public class DepartmentService implements IService<Department> {
 
 	private DepartmentContext departmentContext;
 
@@ -24,23 +25,37 @@ public class DepartmentService {
 		this.departmentContext = departmentContext;
 	}
 
-	public List<Department> getDepartments(String sortOrder) throws Exception {
+	@Override
+	public List<Department> getAll(String sortOrder) throws Exception {
 
 		return this.departmentContext.getAll(sortOrder);
 	}
 
-	public Department getDepartment(Department item) throws ObjectNotFoundException {
+	@Override
+	public Department load(Department item) throws ObjectNotFoundException {
 
 		return this.departmentContext.load(item);
 	}
 
-	public Department createDepartment(Department item) {
+	@Override
+	public Department create(Department item) {
 
 		return this.departmentContext.create(item);
 	}
 
-	public Department deleteDepartment(Department item) {
+	@Override
+	public Department delete(Department item) {
 
 		return this.departmentContext.delete(item);
+	}
+
+	@Override
+	public Department update(Department item) {
+		throw new NotImplementedException("Method is not implemented");
+	}
+
+	@Override
+	public Department patch(Department item) {
+		throw new NotImplementedException("Method is not implemented");
 	}
 }

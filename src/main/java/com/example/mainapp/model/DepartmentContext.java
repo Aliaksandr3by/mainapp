@@ -22,7 +22,7 @@ import java.util.Objects;
 
 @Repository("departmentContext")
 @RequestScope
-public class DepartmentContext implements DataContext<Department> {
+public class DepartmentContext implements IContext<Department> {
 
 	Class<Department> clazz = Department.class;
 

@@ -6,7 +6,7 @@ import org.hibernate.ObjectNotFoundException;
 
 import java.util.Collection;
 
-public interface DataContext<T> {
+public interface IContext<T> {
 
 	Collection<T> getAll(String sortOrder) throws Exception;
 

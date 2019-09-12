@@ -22,7 +22,7 @@ import java.util.Objects;
 //предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
 @Repository("employeeContext")
 @RequestScope
-public class EmployeeContext implements DataContext<Employee> {
+public class EmployeeContext implements IContext<Employee> {
 
 	private SessionFactory sessionFactory;
 

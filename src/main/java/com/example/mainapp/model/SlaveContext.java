@@ -21,7 +21,7 @@ import java.util.Objects;
 
 @Repository("slaveContext")
 @RequestScope
-public class SlaveContext implements DataContext<Slave> {
+public class SlaveContext implements IContext<Slave> {
 
 	public static int count = 0;
 

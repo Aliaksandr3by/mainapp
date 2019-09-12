@@ -1,6 +1,5 @@
 package com.example.mainapp.service;
 
-import com.example.mainapp.model.DataContext;
 import com.example.mainapp.model.EmployeeContext;
 import com.example.mainapp.model.entity.Employee;
 import org.hibernate.ObjectNotFoundException;
@@ -11,9 +10,9 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
 
-@Service("employeeService")
+@Service
 @RequestScope
-public class EmployeeService implements DataContext<Employee> {
+public class EmployeeService implements IService<Employee> {
 
 	private EmployeeContext context;
 
@@ -26,7 +25,7 @@ public class EmployeeService implements DataContext<Employee> {
 	}
 
 	@Override
-	public List<Employee> getAll(String sortOrder)  {
+	public List<Employee> getAll(String sortOrder) {
 
 		return this.context.getAll(sortOrder);
 	}
@@ -38,7 +37,7 @@ public class EmployeeService implements DataContext<Employee> {
 	}
 
 	@Override
-	public Employee create(Employee item){
+	public Employee create(Employee item) {
 
 		return this.context.create(item);
 	}

@@ -1,11 +1,10 @@
 package com.example.mainapp.controller;
 
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.model.DataContext;
+import com.example.mainapp.model.IContext;
 import com.example.mainapp.model.entity.Employee;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +18,14 @@ import java.util.Objects;
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
-	private DataContext<Employee> employeeService;
+	private IContext<Employee> employeeService;
 
 	public EmployeeController() {
 	}
 
 	@Autowired
-	public EmployeeController(@Qualifier("employeeService") DataContext<Employee> context) {
-		this.employeeService = context;
+	public EmployeeController(IContext<Employee> service) {
+		this.employeeService = service;
 	}
 
 	/**
