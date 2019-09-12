@@ -12,18 +12,33 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 @Configuration
 //указывает где Spring искать классы, помеченные аннотацией @Component
 //@ComponentScan(basePackageClasses = {com.example.mainapp.MainappApplication.class})
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class InjectConfiguration {
+
+	private Logger logger  = LoggerFactory.getLogger(MainappApplication.class);
+
+	@PostConstruct
+	public void init(){
+		logger.warn("init");
+	}
+
+	@PreDestroy
+	public void destroy(){
+		logger.warn("destroy");
+	}
 
 	@Bean(name = "LOG") // используется в конфигурационных классах для непосредственного создания бина.
 	@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 	public Logger logger() {
-		Logger logger = LoggerFactory.getLogger(MainappApplication.class);
+
 		return logger;
 	}
 

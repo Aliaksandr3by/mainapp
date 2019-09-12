@@ -52,12 +52,26 @@ public class Employee implements Serializable {
 	private Gender gender;
 	private Collection<EmployeeSlave> slaves = new ArrayList<>();
 
+	public Employee(Long employeeId) {
+		this.employeeId = employeeId;
+	}
+
 	public Employee(String firstName, String lastName, Department departmentId, String jobTitle, Gender gender) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.department = departmentId;
 		this.jobTitle = jobTitle;
 		this.gender = gender;
+	}
+
+	public Employee(Long employeeId, String firstName, String lastName, Department department, String jobTitle, Gender gender, Collection<EmployeeSlave> slaves) {
+		this.employeeId = employeeId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.department = department;
+		this.jobTitle = jobTitle;
+		this.gender = gender;
+		this.slaves = slaves;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -111,6 +125,24 @@ public class Employee implements Serializable {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Employee)) return false;
+		Employee employee = (Employee) o;
+		return employeeId.equals(employee.employeeId) &&
+				firstName.equals(employee.firstName) &&
+				lastName.equals(employee.lastName) &&
+				department.equals(employee.department) &&
+				jobTitle.equals(employee.jobTitle) &&
+				gender == employee.gender;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(employeeId, firstName, lastName, department, jobTitle, gender);
+	}
+
+	@Override
 	public String toString() {
 		return "Employee{" +
 				"employeeId=" + employeeId +
@@ -120,23 +152,5 @@ public class Employee implements Serializable {
 				", jobTitle='" + jobTitle + '\'' +
 				", gender=" + gender +
 				'}';
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Employee employee = (Employee) o;
-		return Objects.equals(employeeId, employee.employeeId) &&
-				Objects.equals(firstName, employee.firstName) &&
-				Objects.equals(lastName, employee.lastName) &&
-				Objects.equals(department, employee.department) &&
-				Objects.equals(jobTitle, employee.jobTitle) &&
-				gender == employee.gender;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(employeeId, firstName, lastName, department, jobTitle, gender);
 	}
 }

@@ -1,6 +1,7 @@
 package com.example.mainapp.model;
 
 import com.example.mainapp.exeptions.NotFoundException;
+import com.example.mainapp.exeptions.NotImplementedException;
 import com.example.mainapp.model.entity.Employee;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import com.example.mainapp.model.entity.Slave;
@@ -103,21 +104,21 @@ public class EmployeeSlaveContext implements DataContext<EmployeeSlave>{
 
 	@Override
 	public EmployeeSlave load(EmployeeSlave item) throws ObjectNotFoundException {
-		return null;
+		throw new NotImplementedException("Method is not implemented");
 	}
 
 	@Override
 	public EmployeeSlave update(EmployeeSlave item) {
-		return null;
+		throw new NotImplementedException("Method is not implemented");
 	}
 
 	@Override
 	public EmployeeSlave delete(EmployeeSlave item) throws NotFoundException {
-		return null;
+		throw new NotImplementedException("Method is not implemented");
 	}
 
 	@Override
 	public EmployeeSlave patch(EmployeeSlave item) throws NotFoundException {
-		return null;
+		throw new NotImplementedException("Method is not implemented");
 	}
 }

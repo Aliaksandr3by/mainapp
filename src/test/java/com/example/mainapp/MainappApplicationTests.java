@@ -34,7 +34,7 @@ class TestThread implements Runnable {
 		try {
 			++count;
 			Thread.currentThread().sleep((long) Math.ceil(Math.random() * 5000));
-			this.employeeController.saveEmployee(employee);
+			this.employeeController.createEmployee(employee);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +89,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustGetEmployeesOnId() {
 
-		Employee t = employeeController.saveEmployee(this.employee);
+		Employee t = employeeController.createEmployee(this.employee);
 		assertNotNull(employeeController.getEmployeeById(t.getEmployeeId()));
 		this.employee.setEmployeeId(t.getEmployeeId());
 		assertNotNull(employeeController.deleteEmployeeById(this.employee));
@@ -101,7 +101,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustGetAllEmployees() {
 
-		assertNotNull(employeeController.saveEmployee(this.employee));
+		assertNotNull(employeeController.createEmployee(this.employee));
 		assertNotNull(employeeController.getEmployees());
 		assertTrue(employeeController.getEmployees().size() > 0);
 	}
@@ -112,7 +112,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustSave() {
 
-		assertNotNull(employeeController.saveEmployee(this.employee));
+		assertNotNull(employeeController.createEmployee(this.employee));
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustNoSave() {
 
-		assertThrows(NullPointerException.class, () -> employeeController.saveEmployee(null));
+		assertThrows(NullPointerException.class, () -> employeeController.createEmployee(null));
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class MainappApplicationTests {
 	@Test
 	public void mustDeleted() {
 
-		Employee t = employeeController.saveEmployee(this.employee);
+		Employee t = employeeController.createEmployee(this.employee);
 		employee.setEmployeeId(t.getEmployeeId());
 		assertNotNull(employeeController.deleteEmployeeById(this.employee));
 	}

@@ -10,14 +10,14 @@ public interface DataContext<T> {
 
 	Collection<T> getAll(String sortOrder) throws Exception;
 
-	T load(T item) throws ObjectNotFoundException;
+	T load(T item) throws Exception;
 
 	T create(T item) throws Exception;
 
-	T update(T item);
+	T update(T item) throws Exception;
 
-	T delete(T item) throws NotFoundException;
+	T delete(T item) throws Exception;
 
-	T patch(T item) throws NotFoundException;
+	T patch(T item) throws Exception;
 
 }

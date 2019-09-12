@@ -20,15 +20,14 @@ import java.util.List;
 import java.util.Objects;
 
 //предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
-@Repository("employeeComponent")
+@Repository("employeeContext")
 @RequestScope
 public class EmployeeContext implements DataContext<Employee> {
 
-	public static int count = 0;
-
 	private SessionFactory sessionFactory;
 
-	private Class<Employee> typeClass = Employee.class;
+	private Class<Employee> clazzEmployee = Employee.class;
+	private Class<Department> clazzDepartment = Department.class;
 
 	private Logger logger;
 
@@ -36,7 +35,6 @@ public class EmployeeContext implements DataContext<Employee> {
 	}
 
 	public EmployeeContext(SessionFactory sessionFactory) {
-		++count;
 		this.sessionFactory = sessionFactory;
 	}
 
@@ -49,14 +47,14 @@ public class EmployeeContext implements DataContext<Employee> {
 	}
 
 	@Override
-	public List<Employee> getAll(String sortOrder) throws Exception {
+	public List<Employee> getAll(String sortOrder) throws IllegalStateException, IllegalArgumentException, HibernateException {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
-			CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(this.typeClass);
+			CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(this.clazzEmployee);
 
-			Root<Employee> criteriaRoot = criteriaQuery.from(this.typeClass);
+			Root<Employee> criteriaRoot = criteriaQuery.from(this.clazzEmployee);
 
 			Path<String> employeeId = criteriaRoot.get(sortOrder);
 
@@ -76,19 +74,17 @@ public class EmployeeContext implements DataContext<Employee> {
 	}
 
 	@Override
-	public Employee load(Employee item) throws ObjectNotFoundException {
+	public Employee load(Employee item) throws IllegalStateException, IllegalArgumentException, HibernateException {
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
-				Employee element = session.load(typeClass, item.getEmployeeId());
-
-				Employee tmp = Hibernate.unproxy(element, typeClass);
+				Employee tmp = Hibernate.unproxy(session.load(clazzEmployee, item.getEmployeeId()), clazzEmployee);
 
 				logger.info(tmp.toString());
 
 				return tmp;
 			}
-		} catch (Exception e) {
+		} catch (IllegalArgumentException | ObjectNotFoundException e) {
 
 			logger.error(e.getMessage(), e);
 
@@ -97,31 +93,39 @@ public class EmployeeContext implements DataContext<Employee> {
 	}
 
 	@Override
-	public Employee create(Employee item) throws Exception {
+	public Employee create(Employee item) throws NotFoundException {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
 
 				session.beginTransaction();
 
-				if (Objects.nonNull(item.getEmployeeId())) {
-					throw new Exception("The object must not contain an ID");
+				if (Objects.nonNull(item) && Objects.nonNull(item.getEmployeeId())) {
+					throw new NotFoundException("The object must not contain an ID");
 				}
-				if (item.IsEmpty()) {
-					throw new Exception("The object has a null properties");
+
+				if (Objects.nonNull(item.getDepartment()) && Objects.isNull(item.getDepartment().getIdDepartment())) {
+					throw new NotFoundException("The object must contain a Department");
+				}
+
+				//FIXME не знаю что эта штука должна делать
+				Department tmpD = null;
+				if (Objects.nonNull(tmpD = session.load(Department.class, item.getDepartment().getIdDepartment()))) {
+					tmpD = Hibernate.unproxy(tmpD, clazzDepartment);
+					item.setDepartment(tmpD);
 				}
 
 				long id = (long) session.save(item);
 
 				session.getTransaction().commit();
 
-				Employee tmp = session.get(typeClass, id);
+				Employee tmp = session.get(clazzEmployee, id);
 
 				logger.info(tmp.toString());
 
 				return tmp;
 
-			} catch (Exception e) {
+			} catch (NotFoundException e) {
 
 				logger.error(e.getMessage(), e);
 
@@ -129,6 +133,9 @@ public class EmployeeContext implements DataContext<Employee> {
 					session.getTransaction().rollback();
 				}
 
+				throw e;
+			} catch (HibernateException e){
+				logger.error(e.getMessage(), e);
 				throw e;
 			}
 		}
@@ -149,7 +156,7 @@ public class EmployeeContext implements DataContext<Employee> {
 
 				Employee tmp = null;
 
-				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(typeClass, item.getEmployeeId()))) {
+				if (Objects.nonNull(item.getEmployeeId()) && Objects.isNull(tmp = session.get(clazzEmployee, item.getEmployeeId()))) {
 					throw new NotFoundException("id is not found");
 				}
 
@@ -187,7 +194,7 @@ public class EmployeeContext implements DataContext<Employee> {
 
 				Employee employee = null;
 				Department department = null;
-				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(employee = session.get(typeClass, item.getEmployeeId()))) {
+				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(employee = session.get(clazzEmployee, item.getEmployeeId()))) {
 					throw new NotFoundException("ID employee not found during patch");
 				}
 
@@ -232,7 +239,7 @@ public class EmployeeContext implements DataContext<Employee> {
 
 				session.beginTransaction();
 
-				Employee tmp = session.get(typeClass, item.getEmployeeId());
+				Employee tmp = session.get(clazzEmployee, item.getEmployeeId());
 
 				if (Objects.nonNull(tmp)) {
 

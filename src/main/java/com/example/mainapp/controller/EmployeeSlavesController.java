@@ -17,7 +17,6 @@ import java.util.Collection;
 @CrossOrigin(origins = "*")
 public class EmployeeSlavesController {
 
-	private DataContext<Employee> employeeContext;
 	private EmployeeSlaveContext employeeSlaveContext;
 
 	public EmployeeSlavesController() {
@@ -26,10 +25,8 @@ public class EmployeeSlavesController {
 
 	@Autowired
 	public EmployeeSlavesController(
-			@Qualifier("employeeComponent") DataContext<Employee> employeeContext,
 			@Qualifier("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
 	) {
-		this.employeeContext = employeeContext;
 		this.employeeSlaveContext = employeeSlaveContext;
 	}
 
@@ -43,11 +40,6 @@ public class EmployeeSlavesController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public Collection<EmployeeSlave> getEmployeeSlaves() {
 		try {
-//			return employeeContext.getEmployees("employeeId")
-//					.stream()
-//					.filter(e -> !e.getSlaves().isEmpty())
-////				.map((e) -> e.getSlaves())
-//					.collect(Collectors.toList());
 
 			return employeeSlaveContext.getAll("");
 

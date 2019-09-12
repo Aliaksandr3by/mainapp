@@ -4,6 +4,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -36,4 +37,25 @@ public class EmployeeSlave implements Serializable {
 		return employee;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof EmployeeSlave)) return false;
+		EmployeeSlave that = (EmployeeSlave) o;
+		return slave.equals(that.slave) &&
+				employee.equals(that.employee);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(slave, employee);
+	}
+
+	@Override
+	public String toString() {
+		return "EmployeeSlave{" +
+				"slave=" + slave +
+				", employee=" + employee +
+				'}';
+	}
 }

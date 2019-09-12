@@ -30,24 +30,24 @@ public class DepartmentController {
 		this.departmentService = departmentService;
 	}
 
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Department> getDepartmentById(@PathVariable("id") Integer id) {
+	public List<Department> getDepartments() {
 		try {
 
-			return departmentService.getDepartment(id);
+			return departmentService.getDepartments("idDepartment");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
 		}
 	}
 
-	@GetMapping(value = "")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Department> getDepartments() {
+	public Department getDepartmentById(@PathVariable("id") Long id) {
 		try {
 
-			return departmentService.getDepartments();
+			return departmentService.getDepartment(new Department(id));
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

@@ -24,6 +24,10 @@ public class Slave implements Serializable {
 	public Slave() {
 	}
 
+	public Slave(Long idSlave) {
+		this.idSlave = idSlave;
+	}
+
 	public Slave(Long idSlave, String nameSlave) {
 		this.idSlave = idSlave;
 		this.nameSlave = nameSlave;
@@ -61,7 +65,7 @@ public class Slave implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idSlave, nameSlave, employees);
+		return Objects.hash(idSlave, nameSlave);
 	}
 
 	@Override
@@ -69,7 +73,6 @@ public class Slave implements Serializable {
 		return "Slave{" +
 				"idSlave=" + idSlave +
 				", nameSlave='" + nameSlave + '\'' +
-				", employees=" + employees +
 				'}';
 	}
 }

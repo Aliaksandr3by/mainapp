@@ -3,6 +3,7 @@ package com.example.mainapp.service;
 import com.example.mainapp.model.DepartmentContext;
 import com.example.mainapp.model.entity.Department;
 import lombok.Getter;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ public class DepartmentService {
 	private DepartmentContext departmentContext;
 
 	public DepartmentService() {
-
 	}
 
 	@Autowired
@@ -26,23 +26,23 @@ public class DepartmentService {
 		this.departmentContext = departmentContext;
 	}
 
-	public List<Department> getDepartment(Integer id) throws Exception {
+	public List<Department> getDepartments(String sortOrder) throws Exception {
 
-		return this.departmentContext.getDepartmentById(id);
+		return this.departmentContext.getAll(sortOrder);
 	}
 
-	public List<Department> getDepartments() throws Exception {
+	public Department getDepartment(Department item) throws ObjectNotFoundException {
 
-		return this.departmentContext.getDepartments();
+		return this.departmentContext.load(item);
 	}
 
 	public Department createDepartment(Department item) {
 
-		return this.departmentContext.saveDepartment(item);
+		return this.departmentContext.create(item);
 	}
 
 	public Department deleteDepartment(Department item) {
 
-		return this.departmentContext.deleteDepartment(item);
+		return this.departmentContext.delete(item);
 	}
 }
