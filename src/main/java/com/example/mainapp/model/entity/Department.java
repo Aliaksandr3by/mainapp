@@ -1,8 +1,6 @@
 package com.example.mainapp.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.NonNull;
-import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -15,7 +13,6 @@ import java.util.Set;
 @Entity
 @Table(name = "department", schema = "public")
 @Access(AccessType.PROPERTY)
-@Setter
 public class Department implements Serializable {
 
 	private Set<Employee> departmentSet;
@@ -58,18 +55,32 @@ public class Department implements Serializable {
 		return idDepartment;
 	}
 
-	@NonNull
 	@Column(name = "name_department", nullable = false)
 	@Type(type = "text")
 	public String getNameDepartment() {
 		return nameDepartment;
 	}
 
-	@NonNull
 	@Column(name = "date_department", nullable = false)
 	@Type(type = "LocalDateTime")
 	public LocalDateTime getDateDepartment() {
 		return dateDepartment;
+	}
+
+	public void setDepartmentSet(Set<Employee> departmentSet) {
+		this.departmentSet = departmentSet;
+	}
+
+	public void setIdDepartment(Long idDepartment) {
+		this.idDepartment = idDepartment;
+	}
+
+	public void setNameDepartment(String nameDepartment) {
+		this.nameDepartment = nameDepartment;
+	}
+
+	public void setDateDepartment(LocalDateTime dateDepartment) {
+		this.dateDepartment = dateDepartment;
 	}
 
 	@Override

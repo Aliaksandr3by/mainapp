@@ -1,7 +1,6 @@
 package com.example.mainapp.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -14,12 +13,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "employee", schema = "public")
 @Access(AccessType.PROPERTY)
-@Setter
 public class Employee implements Serializable {
 
-
+	//TODO delete
 	public boolean IsEmpty() {
-
 		return this.getFirstName() == null
 				&& this.getLastName() == null
 				&& this.getGender() == null
@@ -122,6 +119,34 @@ public class Employee implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	public Gender getGender() {
 		return gender;
+	}
+
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public void setSlaves(Collection<EmployeeSlave> slaves) {
+		this.slaves = slaves;
 	}
 
 	@Override

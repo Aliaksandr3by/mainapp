@@ -3,7 +3,6 @@ package com.example.mainapp.service;
 import com.example.mainapp.model.DataContext;
 import com.example.mainapp.model.EmployeeContext;
 import com.example.mainapp.model.entity.Employee;
-import lombok.Getter;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequestScope
 public class EmployeeService implements DataContext<Employee> {
 
-	@Getter
 	private EmployeeContext context;
 
 	public EmployeeService() {

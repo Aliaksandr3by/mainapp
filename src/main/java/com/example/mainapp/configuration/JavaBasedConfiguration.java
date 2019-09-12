@@ -21,7 +21,7 @@ import javax.persistence.Persistence;
 //указывает где Spring искать классы, помеченные аннотацией @Component
 //@ComponentScan(basePackageClasses = {com.example.mainapp.MainappApplication.class})
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class InjectConfiguration {
+public class JavaBasedConfiguration {
 
 	private Logger logger  = LoggerFactory.getLogger(MainappApplication.class);
 

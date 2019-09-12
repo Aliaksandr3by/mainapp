@@ -2,7 +2,6 @@ package com.example.mainapp.service;
 
 import com.example.mainapp.model.DepartmentContext;
 import com.example.mainapp.model.entity.Department;
-import lombok.Getter;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +14,6 @@ import java.util.List;
 @RequestScope
 public class DepartmentService {
 
-	@Getter
 	private DepartmentContext departmentContext;
 
 	public DepartmentService() {
