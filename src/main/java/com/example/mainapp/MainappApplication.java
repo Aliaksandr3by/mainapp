@@ -4,7 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@SpringBootApplication //определяет автоматическое сканирование пакета, где находится класс Application
+//определяет автоматическое сканирование пакета, где находится класс Application
+@SpringBootApplication
 public class MainappApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {

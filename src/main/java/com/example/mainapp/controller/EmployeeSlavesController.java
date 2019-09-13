@@ -39,7 +39,7 @@ public class EmployeeSlavesController {
 	public Collection<EmployeeSlave> getEmployeeSlaves() {
 		try {
 
-			return employeeSlaveContext.getAll("");
+			return employeeSlaveContext.findAll("");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -51,7 +51,7 @@ public class EmployeeSlavesController {
 	public EmployeeSlave saveEmployeeSlave(@RequestBody EmployeeSlave employeeSlavePK) {
 		try {
 
-			return employeeSlaveContext.create(employeeSlavePK);
+			return employeeSlaveContext.insert(employeeSlavePK);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

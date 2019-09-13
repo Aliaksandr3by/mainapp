@@ -22,15 +22,15 @@ import javax.persistence.Persistence;
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class AppConfiguration {
 
-	private Logger logger  = LoggerFactory.getLogger(MainappApplication.class);
+	private Logger logger = LoggerFactory.getLogger(MainappApplication.class);
 
 	@PostConstruct
-	public void init(){
+	public void init() {
 		logger.warn("init");
 	}
 
 	@PreDestroy
-	public void destroy(){
+	public void destroy() {
 		logger.warn("destroy");
 	}
 

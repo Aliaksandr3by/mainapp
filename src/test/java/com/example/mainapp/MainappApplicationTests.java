@@ -1,77 +1,68 @@
 package com.example.mainapp;
 
 
-import com.example.mainapp.model.entity.Department;
-import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.model.entity.Gender;
-import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.controller.EmployeeController;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.example.mainapp.exeptions.NotFoundException;
+import com.example.mainapp.model.EmployeeContext;
+import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.service.EmployeeService;
+import com.example.mainapp.service.IService;
+import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestThread implements Runnable {
-
-	public static int count = 0;
-
-	EmployeeController employeeController;
-	Employee employee;
-	Thread tmp;
-
-	public TestThread(EmployeeController employeeController, Employee employee) {
-		this.employeeController = employeeController;
-		this.employee = employee;
-		tmp = new Thread(this);
-		tmp.start();
-	}
-
-	@Override
-	public void run() {
-		try {
-			++count;
-			Thread.currentThread().sleep((long) Math.ceil(Math.random() * 5000));
-			this.employeeController.createEmployee(employee);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-}
-
-@Ignore
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class MainappApplicationTests {
 
-	private EmployeeController employeeController = new EmployeeController();
+	@Autowired
+	private Logger logger;
 
-	private Employee employee = new Employee(
-			"fn" + Math.random() * 20,
-			"ln" + Math.random() * 20,
-			new Department(),
-			"jt" + Math.random() * 20,
-			Gender.FEMALE
-	);
+	@Autowired
+	private SessionFactory sessionFactory;
 
-	@Test
-	public void voidThread() throws InterruptedException {
+	private EmployeeController employeeController;
 
-		for (int i = 0; i < 10; i++) {
-			TestThread tr = new TestThread(
-					new EmployeeController(),
-					new Employee(
-							TestThread.count + "fn" + Math.floor(Math.random() * 3),
-							TestThread.count + "ln" + Math.ceil(Math.random() * 3),
-							new Department(),
-							i + "jt" + (Math.random() * 3),
-							Gender.FEMALE));
-		}
-		System.out.println(TestThread.count);
-		Thread.currentThread().join(7000);
+	@Mock
+	private Employee employee;
+
+	//@Before
+	@BeforeEach
+	public void setUp() {
+		EmployeeContext employeeContext = new EmployeeContext(sessionFactory, logger);
+		IService<Employee> employeeService = new EmployeeService(employeeContext);
+		employeeController = new EmployeeController(employeeService);
+		MockitoAnnotations.initMocks(this);
 	}
+
+//	private Employee employee = new Employee(
+//			"fn" + Math.random() * 20,
+//			"ln" + Math.random() * 20,
+//			new Department(),
+//			"jt" + Math.random() * 20,
+//			Gender.FEMALE
+//	);
+
+	@DisplayName("Test Mock helloService + helloRepository")
+	@Test
+	public void mustGetNoNNull() {
+		List<Employee> list = employeeController.getEmployees();
+		logger.info("assertNotNull");
+		assertNotNull(employeeController);
+	}
+
 
 	/**
 	 * получение несуществующего элемента

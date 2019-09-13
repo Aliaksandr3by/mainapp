@@ -43,7 +43,7 @@ public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
 	}
 
 	@Override
-	public List<EmployeeSlave> getAll(String sortOrder) {
+	public List<EmployeeSlave> findAll(String sortOrder) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -67,7 +67,7 @@ public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
 	}
 
 	@Override
-	public EmployeeSlave create(EmployeeSlave employeeSlavePK) {
+	public EmployeeSlave insert(EmployeeSlave employeeSlavePK) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -103,7 +103,7 @@ public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
 	}
 
 	@Override
-	public EmployeeSlave load(EmployeeSlave item) throws ObjectNotFoundException {
+	public EmployeeSlave findById(EmployeeSlave item) throws ObjectNotFoundException {
 		throw new NotImplementedException("Method is not implemented");
 	}
 

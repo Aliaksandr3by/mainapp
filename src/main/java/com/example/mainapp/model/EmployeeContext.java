@@ -47,7 +47,7 @@ public class EmployeeContext implements IContext<Employee> {
 	}
 
 	@Override
-	public List<Employee> getAll(String sortOrder) throws IllegalStateException, IllegalArgumentException, HibernateException {
+	public List<Employee> findAll(String sortOrder) throws IllegalStateException, IllegalArgumentException, HibernateException {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -74,7 +74,7 @@ public class EmployeeContext implements IContext<Employee> {
 	}
 
 	@Override
-	public Employee load(Employee item) throws IllegalStateException, IllegalArgumentException, HibernateException {
+	public Employee findById(Employee item) throws IllegalStateException, IllegalArgumentException, HibernateException {
 		try {
 			try (Session session = this.sessionFactory.openSession()) {
 
@@ -93,7 +93,7 @@ public class EmployeeContext implements IContext<Employee> {
 	}
 
 	@Override
-	public Employee create(Employee item) throws NotFoundException {
+	public Employee insert(Employee item) throws NotFoundException {
 		try (Session session = this.sessionFactory.openSession()) {
 			try {
 				session.beginTransaction();

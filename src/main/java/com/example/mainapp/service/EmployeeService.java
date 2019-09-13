@@ -20,26 +20,26 @@ public class EmployeeService implements IService<Employee> {
 	}
 
 	@Autowired
-	public EmployeeService(@Qualifier("employeeContext") EmployeeContext departmentContext) {
-		this.context = departmentContext;
+	public EmployeeService(@Qualifier("employeeContext") EmployeeContext context) {
+		this.context = context;
 	}
 
 	@Override
-	public List<Employee> getAll(String sortOrder) {
+	public List<Employee> findAll(String sortOrder) {
 
-		return this.context.getAll(sortOrder);
+		return this.context.findAll(sortOrder);
 	}
 
 	@Override
-	public Employee load(Employee item) throws ObjectNotFoundException {
+	public Employee findById(Employee item) throws ObjectNotFoundException {
 
-		return this.context.load(item);
+		return this.context.findById(item);
 	}
 
 	@Override
-	public Employee create(Employee item) {
+	public Employee insert(Employee item) {
 
-		return this.context.create(item);
+		return this.context.insert(item);
 	}
 
 	@Override

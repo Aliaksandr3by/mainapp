@@ -53,7 +53,7 @@ public class DepartmentContext implements IContext<Department> {
 	}
 
 	@Override
-	public List<Department> getAll(String sortOrder) throws Exception {
+	public List<Department> findAll(String sortOrder) throws Exception {
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;
@@ -98,7 +98,7 @@ public class DepartmentContext implements IContext<Department> {
 	}
 
 	@Override
-	public Department load(Department item) throws ObjectNotFoundException {
+	public Department findById(Department item) throws ObjectNotFoundException {
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;
@@ -144,7 +144,7 @@ public class DepartmentContext implements IContext<Department> {
 	}
 
 	@Override
-	public Department create(Department item) {
+	public Department insert(Department item) {
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;

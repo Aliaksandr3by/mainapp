@@ -31,7 +31,7 @@ public class SlaveController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Slave> getEmployees() {
 		try {
-			return contextSlave.getAll("idSlave");
+			return contextSlave.findAll("idSlave");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -43,7 +43,7 @@ public class SlaveController {
 	public Slave saveEmployee(@RequestBody Slave item) {
 		try {
 
-			return contextSlave.create(item);
+			return contextSlave.insert(item);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

@@ -30,7 +30,7 @@ public class DepartmentController {
 	public List<Department> getDepartments() {
 		try {
 
-			return departmentService.getAll("idDepartment");
+			return (List<Department>) departmentService.findAll("idDepartment");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -42,7 +42,7 @@ public class DepartmentController {
 	public Department getDepartmentById(@PathVariable("id") Long id) {
 		try {
 
-			return departmentService.load(new Department(id));
+			return departmentService.findById(new Department(id));
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -54,7 +54,7 @@ public class DepartmentController {
 	public Department saveDepartment(@RequestBody Department item) {
 		try {
 
-			return departmentService.create(item);
+			return departmentService.insert(item);
 
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

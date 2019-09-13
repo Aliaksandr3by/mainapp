@@ -26,21 +26,21 @@ public class DepartmentService implements IService<Department> {
 	}
 
 	@Override
-	public List<Department> getAll(String sortOrder) throws Exception {
+	public List<Department> findAll(String sortOrder) throws Exception {
 
-		return this.departmentContext.getAll(sortOrder);
+		return this.departmentContext.findAll(sortOrder);
 	}
 
 	@Override
-	public Department load(Department item) throws ObjectNotFoundException {
+	public Department findById(Department item) throws ObjectNotFoundException {
 
-		return this.departmentContext.load(item);
+		return this.departmentContext.findById(item);
 	}
 
 	@Override
-	public Department create(Department item) {
+	public Department insert(Department item) {
 
-		return this.departmentContext.create(item);
+		return this.departmentContext.insert(item);
 	}
 
 	@Override

@@ -2,19 +2,19 @@ package com.example.mainapp.service;
 
 import org.hibernate.ObjectNotFoundException;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface IService<T> {
 
-	List<T> getAll(String sortOrder) throws Exception;
+	Collection<T> findAll(String sortOrder) throws Exception;
 
-	T load(T item) throws ObjectNotFoundException;
+	T findById(T item) throws ObjectNotFoundException;
 
-	T create(T item);
-
-	T delete(T item);
+	T insert(T item);
 
 	T update(T item);
+
+	T delete(T item);
 
 	T patch(T item);
 }

@@ -3,6 +3,7 @@ package com.example.mainapp.controller;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.IContext;
 import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.service.IService;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,13 @@ import java.util.Objects;
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
-	private IContext<Employee> employeeService;
+	private IService<Employee> employeeService;
 
 	public EmployeeController() {
 	}
 
 	@Autowired
-	public EmployeeController(IContext<Employee> service) {
+	public EmployeeController(IService<Employee> service) {
 		this.employeeService = service;
 	}
 
@@ -38,7 +39,7 @@ public class EmployeeController {
 	public List<Employee> getEmployees() {
 		try {
 
-			return (List<Employee>) employeeService.getAll("employeeId");
+			return (List<Employee>) employeeService.findAll("employeeId");
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e.getCause());
@@ -56,7 +57,7 @@ public class EmployeeController {
 	public Employee getEmployeeById(@PathVariable("id") Long id) {
 		try {
 
-			return employeeService.load(new Employee(id));
+			return employeeService.findById(new Employee(id));
 
 		} catch (ObjectNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e.getCause());
@@ -77,7 +78,7 @@ public class EmployeeController {
 	public Employee createEmployee(@RequestBody Employee employee) {
 		try {
 
-			return employeeService.create(employee);
+			return employeeService.insert(employee);
 
 		} catch (Throwable e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e.getCause());

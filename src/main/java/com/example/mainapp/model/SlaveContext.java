@@ -45,7 +45,7 @@ public class SlaveContext implements IContext<Slave> {
 	}
 
 	@Override
-	public List<Slave> getAll(String sortOrder) throws Exception {
+	public List<Slave> findAll(String sortOrder) throws Exception {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -72,7 +72,7 @@ public class SlaveContext implements IContext<Slave> {
 	}
 
 	@Override
-	public Slave create(Slave slave) {
+	public Slave insert(Slave slave) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {
@@ -142,7 +142,7 @@ public class SlaveContext implements IContext<Slave> {
 	}
 
 	@Override
-	public Slave load(Slave item) throws ObjectNotFoundException {
+	public Slave findById(Slave item) throws ObjectNotFoundException {
 		return null;
 	}
 
