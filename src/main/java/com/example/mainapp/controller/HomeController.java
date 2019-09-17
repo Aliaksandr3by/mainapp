@@ -12,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 @CrossOrigin(origins = "*")
 public class HomeController {
 
+	public static final String NAME = "HomeController";
+
 	public HomeController() {
 	}
 

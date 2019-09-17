@@ -3,7 +3,6 @@ package com.example.mainapp.controller;
 import com.example.mainapp.model.EmployeeSlaveContext;
 import com.example.mainapp.model.entity.EmployeeSlave;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,9 +21,7 @@ public class EmployeeSlavesController {
 	}
 
 	@Autowired
-	public EmployeeSlavesController(
-			@Qualifier("employeeSlaveContext") EmployeeSlaveContext employeeSlaveContext
-	) {
+	public EmployeeSlavesController(EmployeeSlaveContext employeeSlaveContext) {
 		this.employeeSlaveContext = employeeSlaveContext;
 	}
 

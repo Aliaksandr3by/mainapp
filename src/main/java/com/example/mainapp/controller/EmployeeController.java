@@ -158,9 +158,7 @@ public class EmployeeController {
 	public void deleteEmployeeById(@PathVariable("id") Long id) {
 		try {
 
-			Employee employee = new Employee();
-			employee.setEmployeeId(id);
-			employeeService.delete(employee);
+			employeeService.delete( new Employee(id));
 
 		} catch (NotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Id", e);

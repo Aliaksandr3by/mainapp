@@ -10,16 +10,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.RequestScope;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Named("employeeSlaveContext")
+@Repository
 @RequestScope
 public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
 
@@ -29,14 +30,13 @@ public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
 
 	private SessionFactory sessionFactory;
 
-	//@Resource(name = "LOG")
 	private Logger logger;
 
 	public EmployeeSlaveContext() {
 	}
 
-	@Inject
-	public EmployeeSlaveContext(@Named("sessionFactory") SessionFactory sessionFactory, @Named("LOG") Logger logger) {
+	@Autowired
+	public EmployeeSlaveContext(@Qualifier("sessionFactory") SessionFactory sessionFactory, @Qualifier("LOG") Logger logger) {
 		++count;
 		this.sessionFactory = sessionFactory;
 		this.logger = logger;
