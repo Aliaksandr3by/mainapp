@@ -5,13 +5,12 @@ import com.example.mainapp.exeptions.NotImplementedException;
 import com.example.mainapp.model.entity.Department;
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,7 +19,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 
-@Repository("departmentContext")
+@Repository
 @RequestScope
 public class DepartmentContext implements IContext<Department> {
 
@@ -43,13 +42,13 @@ public class DepartmentContext implements IContext<Department> {
 		logger.info("departmentContext was destroyed");
 	}
 
-	@Autowired
-	public DepartmentContext(
-			@Qualifier("LOG") Logger logger,
-			@Qualifier("entityManagerFactory") EntityManagerFactory emf
-	) {
+	public DepartmentContext() {
+	}
+
+	@Inject
+	public DepartmentContext(Logger logger, EntityManagerFactory managerFactory) {
 		this.logger = logger;
-		this.emf = emf;
+		this.emf = managerFactory;
 	}
 
 	@Override

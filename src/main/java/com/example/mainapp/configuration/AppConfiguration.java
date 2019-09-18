@@ -48,7 +48,7 @@ public class AppConfiguration {
 		return new HibernateConfiguration(this.logger).build("hibernate.employeedb.cfg.xml");
 	}
 
-	@Bean("entityManagerFactory")
+	@Bean
 	@SessionScope
 	public EntityManagerFactory managerFactory() {
 		return Persistence

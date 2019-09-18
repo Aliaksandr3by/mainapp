@@ -5,7 +5,6 @@ import com.example.mainapp.model.DepartmentContext;
 import com.example.mainapp.model.entity.Department;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -21,7 +20,7 @@ public class DepartmentService implements IService<Department> {
 	}
 
 	@Autowired
-	public DepartmentService(@Qualifier("departmentContext") DepartmentContext departmentContext) {
+	public DepartmentService(DepartmentContext departmentContext) {
 		this.departmentContext = departmentContext;
 	}
 

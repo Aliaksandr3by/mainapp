@@ -2,7 +2,6 @@ package com.example.mainapp;
 
 
 import com.example.mainapp.controller.EmployeeController;
-import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.EmployeeContext;
 import com.example.mainapp.model.entity.Department;
 import com.example.mainapp.model.entity.Employee;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -24,8 +22,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
-
-import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,10 +39,12 @@ public class MainappApplicationTests {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	private EmployeeContext employeeContext;
+	private IService<Employee> employeeService;
 	private EmployeeController employeeController;
 
 	private Department department1 = new Department(
-			1L,"qwe", LocalDateTime.now()
+			1L, "qwe", LocalDateTime.now()
 	);
 
 	private Employee employee = new Employee(
@@ -58,30 +56,32 @@ public class MainappApplicationTests {
 	);
 
 	@Mock
-	private Employee employee1;
+	private Employee employeeMock;
 
 	//@Before
 	@BeforeEach
 	public void setUp() {
 
-		EmployeeContext employeeContext = new EmployeeContext(sessionFactory, logger);
-		IService<Employee> employeeService = new EmployeeService(employeeContext);
+		employeeContext = new EmployeeContext(sessionFactory, logger);
+		employeeService = new EmployeeService(employeeContext);
 		employeeController = new EmployeeController(employeeService);
 
 		MockitoAnnotations.initMocks(this);
+
+		Mockito.when(employeeMock.getFirstName()).thenReturn("fn2");
 
 	}
 
 	/**
 	 * получение существующего элемента
 	 */
+	@DisplayName("it deletes employee on ID")
 	@Test
-	public void mustGetEmployeesOnId() {
+	public void mustDeleteEmployee() {
 
-		Employee t = employeeController.createEmployee(employee1);
-		assertNotNull(employeeController.getEmployeeById(t.getEmployeeId()));
-		this.employee.setEmployeeId(t.getEmployeeId());
-		assertNotNull(employeeController.deleteEmployeeById(this.employee));
+		Employee t = employeeContext.insert(employee);
+		assertEquals(employeeContext.delete(t), t);
+
 	}
 
 	@DisplayName("it gets all employees")
@@ -102,7 +102,6 @@ public class MainappApplicationTests {
 //		assertNull(employeeController.getEmployeeById(9999999L));
 		assertThrows(ResponseStatusException.class, () -> employeeController.getEmployeeById(null));
 	}
-
 
 
 	/**
