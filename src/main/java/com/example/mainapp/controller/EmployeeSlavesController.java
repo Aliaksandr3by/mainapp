@@ -1,7 +1,7 @@
 package com.example.mainapp.controller;
 
 import com.example.mainapp.model.EmployeeSlaveContext;
-import com.example.mainapp.model.entity.EmployeeSlave;
+import com.example.mainapp.entity.EmployeeSlave;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

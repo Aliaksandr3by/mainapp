@@ -1,7 +1,7 @@
 package com.example.mainapp.controller;
 
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.model.entity.Department;
+import com.example.mainapp.entity.Department;
 import com.example.mainapp.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

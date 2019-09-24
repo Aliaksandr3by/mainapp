@@ -1,8 +1,9 @@
 package com.example.mainapp.model;
 
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.model.entity.Department;
-import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.entity.Department;
+import com.example.mainapp.entity.Employee;
+import com.example.mainapp.repositories.CrudRepository;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import java.util.Objects;
 //предназначен для хранения, извлечения и поиска. Как правило, используется для работы с базами данных.
 @Repository("employeeContext")
 @RequestScope
-public class EmployeeContext implements IContext<Employee> {
+public class EmployeeContext implements CrudRepository<Employee> {
 
 	private SessionFactory sessionFactory;
 

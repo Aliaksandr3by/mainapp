@@ -1,4 +1,4 @@
-package com.example.mainapp.model.entity;
+package com.example.mainapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;

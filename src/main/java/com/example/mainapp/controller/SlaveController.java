@@ -2,7 +2,7 @@ package com.example.mainapp.controller;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.model.SlaveContext;
-import com.example.mainapp.model.entity.Slave;
+import com.example.mainapp.entity.Slave;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;

@@ -13,10 +13,10 @@
         <!--        <jta-data-source>myDS</jta-data-source>-->
         <!--        <non-jta-data-source>myNonJtaDataSource</non-jta-data-source>-->
 
-        <class>com.example.mainapp.model.entity.Employee</class>
-        <class>com.example.mainapp.model.entity.Department</class>
-        <class>com.example.mainapp.model.entity.Slave</class>
-        <class>com.example.mainapp.model.entity.EmployeeSlave</class>
+        <class>com.example.mainapp.entity.Employee</class>
+        <class>com.example.mainapp.entity.Department</class>
+        <class>com.example.mainapp.entity.Slave</class>
+        <class>com.example.mainapp.entity.EmployeeSlave</class>
 
         <!--        Запретить поиск отображаемых классов-->
         <!--        <exclude-unlisted-classes>true</exclude-unlisted-classes>-->

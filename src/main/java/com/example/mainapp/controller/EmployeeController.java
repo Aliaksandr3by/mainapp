@@ -1,8 +1,7 @@
 package com.example.mainapp.controller;
 
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.model.IContext;
-import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.entity.Employee;
 import com.example.mainapp.service.IService;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,9 +2,10 @@ package com.example.mainapp.model;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.exeptions.NotImplementedException;
-import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.model.entity.EmployeeSlave;
-import com.example.mainapp.model.entity.Slave;
+import com.example.mainapp.entity.Employee;
+import com.example.mainapp.entity.EmployeeSlave;
+import com.example.mainapp.entity.Slave;
+import com.example.mainapp.repositories.CrudRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @Repository
 @RequestScope
-public class EmployeeSlaveContext implements IContext<EmployeeSlave> {
+public class EmployeeSlaveContext implements CrudRepository<EmployeeSlave> {
 
 	public static int count = 0;
 

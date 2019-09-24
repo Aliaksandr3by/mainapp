@@ -2,15 +2,16 @@ package com.example.mainapp.model;
 
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.exeptions.NotImplementedException;
-import com.example.mainapp.model.entity.Department;
+import com.example.mainapp.entity.Department;
+import com.example.mainapp.repositories.CrudRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,7 +22,7 @@ import java.util.Objects;
 
 @Repository
 @RequestScope
-public class DepartmentContext implements IContext<Department> {
+public class DepartmentContext implements CrudRepository<Department> {
 
 	Class<Department> clazz = Department.class;
 
@@ -45,7 +46,7 @@ public class DepartmentContext implements IContext<Department> {
 	public DepartmentContext() {
 	}
 
-	@Inject
+	@Autowired
 	public DepartmentContext(Logger logger, EntityManagerFactory managerFactory) {
 		this.logger = logger;
 		this.emf = managerFactory;

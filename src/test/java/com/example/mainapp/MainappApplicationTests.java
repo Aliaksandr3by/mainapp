@@ -3,9 +3,9 @@ package com.example.mainapp;
 
 import com.example.mainapp.controller.EmployeeController;
 import com.example.mainapp.model.EmployeeContext;
-import com.example.mainapp.model.entity.Department;
-import com.example.mainapp.model.entity.Employee;
-import com.example.mainapp.model.entity.Gender;
+import com.example.mainapp.entity.Department;
+import com.example.mainapp.entity.Employee;
+import com.example.mainapp.entity.Gender;
 import com.example.mainapp.service.EmployeeService;
 import com.example.mainapp.service.IService;
 import org.hibernate.SessionFactory;

@@ -1,7 +1,8 @@
 package com.example.mainapp.model;
 
 import com.example.mainapp.exeptions.NotFoundException;
-import com.example.mainapp.model.entity.Slave;
+import com.example.mainapp.entity.Slave;
+import com.example.mainapp.repositories.CrudRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +22,7 @@ import java.util.Objects;
 
 @Repository("slaveContext")
 @RequestScope
-public class SlaveContext implements IContext<Slave> {
+public class SlaveContext implements CrudRepository<Slave> {
 
 	public static int count = 0;
 

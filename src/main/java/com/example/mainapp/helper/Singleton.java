@@ -1,6 +1,6 @@
 package com.example.mainapp.helper;
 
-import com.example.mainapp.model.entity.Employee;
+import com.example.mainapp.entity.Employee;
 
 import java.util.ArrayList;
 import java.util.List;

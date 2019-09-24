@@ -1,10 +1,10 @@
-package com.example.mainapp.model;
+package com.example.mainapp.repositories;
 
 import org.hibernate.ObjectNotFoundException;
 
 import java.util.Collection;
 
-public interface IContext<T> {
+public interface CrudRepository<T> {
 
 	Collection<T> findAll(String sortOrder) throws Exception;
 
