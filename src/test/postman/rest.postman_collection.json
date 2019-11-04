@@ -91,7 +91,7 @@
 					"response": []
 				},
 				{
-					"name": "/departments/",
+					"name": "get /departments/",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -123,7 +123,7 @@
 			"name": "POST",
 			"item": [
 				{
-					"name": "/employees/",
+					"name": "create /employees/",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -136,7 +136,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"department\": {\r\n\t\t\t\"idDepartment\": 4\r\n        },\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n    }"
+							"raw": "    {\r\n\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"department\": {\r\n\t\t\t        \"idDepartment\": 9,\r\n        \"nameDepartment\": \"q9\",\r\n        \"dateDepartment\": \"2019-09-08T06:08:50\"\r\n        },\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n    }"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees/",
@@ -167,7 +167,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"employee\":  {\r\n        \"employeeId\": 28\r\n    },\r\n       \"slave\": {\r\n        \"idSlave\": 8\r\n    }\r\n}"
+							"raw": "{\r\n    \"employee\":  {\r\n        \"employeeId\": 9\r\n    },\r\n    \"slave\": {\r\n        \"idSlave\": 3\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/EmployeeSlaves/EmployeeSlave",
@@ -179,6 +179,68 @@
 							"path": [
 								"EmployeeSlaves",
 								"EmployeeSlave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create /slaves/",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameDepartment\": \"q4\",\r\n    \"dateDepartment\": \"2019-09-08T06:08:50\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:8080/departments/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"departments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create /slaves/",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nameSlave\": \"q5\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/slaves/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"slaves",
+								""
 							]
 						}
 					},
@@ -225,7 +287,7 @@
 			"name": "DELETE",
 			"item": [
 				{
-					"name": "/employees/",
+					"name": "delete /employees/",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -238,7 +300,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"employeeId\": 25\r\n    }"
+							"raw": "    {\r\n        \"employeeId\": 13\r\n    }"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees/",
@@ -300,7 +362,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"idDepartment\": 11\r\n}"
+							"raw": "{\r\n    \"idDepartment\": 2\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/departments/",
@@ -311,6 +373,37 @@
 							"port": "8080",
 							"path": [
 								"departments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete /slaves/",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idSlave\": 2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/slaves/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"slaves",
 								""
 							]
 						}
@@ -336,7 +429,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"employeeId\": 11,\r\n    \"firstName\": \"p\",\r\n\r\n    \"department\": 12,\r\n    \"jobTitle\": \"p\"\r\n}"
+							"raw": "{\r\n    \"employeeId\": 9,\r\n    \"firstName\": \"1\",\r\n    \"lastName\": \"2\",\r\n    \"department\": {\r\n        \"idDepartment\": 8,\r\n        \"nameDepartment\": \"wewe\",\r\n        \"dateDepartment\": \"2019-09-08T06:08:50\"\r\n    },\r\n    \"jobTitle\": \"3\",\r\n    \"gender\": \"0\"\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/employees/",

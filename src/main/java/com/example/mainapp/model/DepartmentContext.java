@@ -1,8 +1,8 @@
 package com.example.mainapp.model;
 
+import com.example.mainapp.entity.Department;
 import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.exeptions.NotImplementedException;
-import com.example.mainapp.entity.Department;
 import com.example.mainapp.repositories.CrudRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
@@ -12,7 +12,10 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -24,12 +27,9 @@ import java.util.Objects;
 @RequestScope
 public class DepartmentContext implements CrudRepository<Department> {
 
-	Class<Department> clazz = Department.class;
+	private Class<Department> clazz = Department.class;
 
 	private Logger logger;
-
-	@PersistenceUnit(unitName = "CRM") //FIXME
-	private EntityManagerFactory _emf;
 
 	private EntityManagerFactory emf;
 
@@ -53,7 +53,7 @@ public class DepartmentContext implements CrudRepository<Department> {
 	}
 
 	@Override
-	public List<Department> findAll(String sortOrder) throws Exception {
+	public List<Department> findAll(String sortOrder) {
 
 		EntityManager em = null;
 		EntityTransaction entityTransaction = null;
@@ -84,15 +84,15 @@ public class DepartmentContext implements CrudRepository<Department> {
 
 			entityTransaction.commit();
 
-			em.close();
-
 			return tmp;
 
 		} catch (Exception e) {
-			if (entityTransaction.isActive()) {
+			if (Objects.nonNull(entityTransaction) && entityTransaction.isActive()) {
 				entityTransaction.rollback();
 			}
 			throw e;
+		} finally {
+			if (em != null && em.isOpen()) em.close();
 		}
 
 	}
@@ -130,15 +130,15 @@ public class DepartmentContext implements CrudRepository<Department> {
 
 			entityTransaction.commit();
 
-			em.close();
-
 			return tmp;
 
 		} catch (Exception e) {
-			if (entityTransaction.isActive()) {
+			if (Objects.nonNull(entityTransaction) && entityTransaction.isActive()) {
 				entityTransaction.rollback();
 			}
 			throw e;
+		} finally {
+			if (em != null && em.isOpen()) em.close();
 		}
 
 	}
@@ -161,15 +161,15 @@ public class DepartmentContext implements CrudRepository<Department> {
 
 			entityTransaction.commit();
 
-			em.close();
-
 			return item;
 
 		} catch (Exception e) {
-			if (entityTransaction.isActive()) {
+			if (Objects.nonNull(entityTransaction) && entityTransaction.isActive()) {
 				entityTransaction.rollback();
 			}
 			throw e;
+		} finally {
+			if (em != null && em.isOpen()) em.close();
 		}
 	}
 
@@ -194,15 +194,15 @@ public class DepartmentContext implements CrudRepository<Department> {
 				entityTransaction.commit();
 			}
 
-			em.close();
-
 			return tmp;
 
 		} catch (Exception e) {
-			if (entityTransaction.isActive()) {
+			if (Objects.nonNull(entityTransaction) && entityTransaction.isActive()) {
 				entityTransaction.rollback();
 			}
 			throw e;
+		} finally {
+			if (em != null && em.isOpen()) em.close();
 		}
 	}
 
