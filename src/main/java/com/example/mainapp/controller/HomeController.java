@@ -12,16 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 @CrossOrigin(origins = "*")
 public class HomeController {
 
-	public static final String NAME = "HomeController";
-
 	public HomeController() {
 	}
 
 	@RequestMapping(value = {"/", "/index", "/home", "/default"}, method = RequestMethod.GET)
 	public ModelAndView defaultMethod() {
 		System.out.println("home");
-		ModelAndView mav = new ModelAndView("index.html");
-		return mav;
+		return new ModelAndView("index.html");
 	}
 
 	public static void main(String[] args) {

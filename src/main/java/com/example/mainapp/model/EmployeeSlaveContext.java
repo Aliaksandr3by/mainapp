@@ -25,8 +25,6 @@ import java.util.List;
 @RequestScope
 public class EmployeeSlaveContext implements CrudRepository<EmployeeSlave> {
 
-	public static int count = 0;
-
 	private Class<EmployeeSlave> typeClass = EmployeeSlave.class;
 
 	private SessionFactory sessionFactory;
@@ -38,7 +36,6 @@ public class EmployeeSlaveContext implements CrudRepository<EmployeeSlave> {
 
 	@Autowired
 	public EmployeeSlaveContext(@Qualifier("sessionFactory") SessionFactory sessionFactory, @Qualifier("LOG") Logger logger) {
-		++count;
 		this.sessionFactory = sessionFactory;
 		this.logger = logger;
 	}

@@ -17,8 +17,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 @Configuration
-//указывает где Spring искать классы, помеченные аннотацией @Component
-//@ComponentScan(basePackageClasses = {com.example.mainapp.MainappApplication.class})
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class AppConfiguration {
 
@@ -26,30 +24,28 @@ public class AppConfiguration {
 
 	@PostConstruct
 	public void init() {
-		logger.warn("init");
+		logger.warn(" init ");
 	}
 
 	@PreDestroy
 	public void destroy() {
-		logger.warn("destroy");
+		logger.warn(" destroy ");
 	}
 
 	@Bean(name = "LOG") // используется в конфигурационных классах для непосредственного создания бина.
-	@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//	@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 	public Logger logger() {
 
 		return logger;
 	}
 
-	@Bean("sessionFactory")
-	@SessionScope
+	@Bean
 	public SessionFactory sessionFactory() {
 
 		return new HibernateConfiguration(this.logger).build("hibernate.employeedb.cfg.xml");
 	}
 
 	@Bean
-	@SessionScope
 	public EntityManagerFactory managerFactory() {
 		return Persistence
 				.createEntityManagerFactory("CRM")

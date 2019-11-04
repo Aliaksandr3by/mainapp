@@ -1,8 +1,8 @@
 package com.example.mainapp.model;
 
-import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.entity.Department;
 import com.example.mainapp.entity.Employee;
+import com.example.mainapp.exeptions.NotFoundException;
 import com.example.mainapp.repositories.CrudRepository;
 import org.hibernate.*;
 import org.hibernate.query.Query;
@@ -103,13 +103,13 @@ public class EmployeeContext implements CrudRepository<Employee> {
 					throw new NotFoundException("The object must not contain an ID");
 				}
 
-				if (Objects.nonNull(item.getDepartment()) && Objects.isNull(item.getDepartment().getIdDepartment())) {
+				if (Objects.nonNull(item) && Objects.nonNull(item.getDepartment()) && Objects.isNull(item.getDepartment().getIdDepartment())) {
 					throw new NotFoundException("The object must contain a Department");
 				}
 
 				//FIXME не знаю что эта штука должна делать
-				Department tmpD = null;
-				if (Objects.nonNull(tmpD = session.load(Department.class, item.getDepartment().getIdDepartment()))) {
+				Department tmpD;
+				if (Objects.nonNull(item) && Objects.nonNull(tmpD = session.load(Department.class, item.getDepartment().getIdDepartment()))) {
 					tmpD = Hibernate.unproxy(tmpD, clazzDepartment);
 					item.setDepartment(tmpD);
 				}
@@ -186,7 +186,7 @@ public class EmployeeContext implements CrudRepository<Employee> {
 			try {
 				session.beginTransaction();
 
-				Employee employee = null;
+				Employee employee;
 				Department department = null;
 				if (Objects.isNull(item.getEmployeeId()) || Objects.isNull(employee = session.get(clazzEmployee, item.getEmployeeId()))) {
 					throw new NotFoundException("ID employee not found during patch");
