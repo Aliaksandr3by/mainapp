@@ -9,18 +9,19 @@
 			"name": "GET",
 			"item": [
 				{
-					"name": "/employees/",
+					"name": "employees/",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/employees/",
+							"raw": "http://localhost:8080/api/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"employees",
 								""
 							],
@@ -36,7 +37,7 @@
 					"response": []
 				},
 				{
-					"name": "/EmployeeSlaves/EmployeeSlaves/",
+					"name": "EmployeeSlaves/EmployeeSlaves/",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -64,7 +65,7 @@
 					"response": []
 				},
 				{
-					"name": "/slaves/",
+					"name": "slaves/",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -91,7 +92,7 @@
 					"response": []
 				},
 				{
-					"name": "get /departments/",
+					"name": "departments/",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -136,16 +137,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"department\": {\r\n\t\t\t        \"idDepartment\": 9,\r\n        \"nameDepartment\": \"q9\",\r\n        \"dateDepartment\": \"2019-09-08T06:08:50\"\r\n        },\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n    }"
+							"raw": "    {\r\n\r\n        \"firstName\": \"asdadadqwe\",\r\n        \"lastName\": \"qweqeqeq\",\r\n        \"department\": {\r\n\t\t\t        \"idDepartment\": 1,\r\n        \"nameDepartment\": \"q9\",\r\n        \"dateDepartment\": \"2019-09-08T06:08:50\"\r\n        },\r\n        \"jobTitle\": \"weqeqweqeqe2\",\r\n        \"gender\": \"FEMALE\"\r\n    }"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employees/",
+							"raw": "http://localhost:8080/api/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"employees",
 								""
 							]
@@ -167,7 +169,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"employee\":  {\r\n        \"employeeId\": 9\r\n    },\r\n    \"slave\": {\r\n        \"idSlave\": 3\r\n    }\r\n}"
+							"raw": "{\r\n    \"employee\":  {\r\n        \"employeeId\": 9\r\n    },\r\n    \"slave\": {\r\n        \"idSlave\": 4\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/EmployeeSlaves/EmployeeSlave",
@@ -303,13 +305,14 @@
 							"raw": "    {\r\n        \"employeeId\": 13\r\n    }"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employees/",
+							"raw": "http://localhost:8080/api/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"employees",
 								""
 							]
@@ -432,13 +435,14 @@
 							"raw": "{\r\n    \"employeeId\": 9,\r\n    \"firstName\": \"1\",\r\n    \"lastName\": \"2\",\r\n    \"department\": {\r\n        \"idDepartment\": 8,\r\n        \"nameDepartment\": \"wewe\",\r\n        \"dateDepartment\": \"2019-09-08T06:08:50\"\r\n    },\r\n    \"jobTitle\": \"3\",\r\n    \"gender\": \"0\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/employees/",
+							"raw": "http://localhost:8080/api/employees/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"employees",
 								""
 							]

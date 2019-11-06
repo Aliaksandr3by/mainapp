@@ -97,10 +97,11 @@ public class MainappApplicationTests {
 	 * получение несуществующего элемента
 	 */
 	@Test
-	public void mustGetNull() {
+	public void mustGetNull() throws Exception {
 
 //		assertNull(employeeController.getEmployeeById(9999999L));
 		assertThrows(ResponseStatusException.class, () -> employeeController.getEmployeeById(null));
+		throw new Exception();
 	}
 
 

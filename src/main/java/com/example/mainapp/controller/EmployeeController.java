@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(path = "/employees", produces = "application/json")
+@RequestMapping(path = "api/employees", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
