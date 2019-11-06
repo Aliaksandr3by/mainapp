@@ -101,7 +101,7 @@ public class MainappApplicationTests {
 
 //		assertNull(employeeController.getEmployeeById(9999999L));
 		assertThrows(ResponseStatusException.class, () -> employeeController.getEmployeeById(null));
-		throw new Exception();
+//		throw new Exception("tuytut");
 	}
 
 
