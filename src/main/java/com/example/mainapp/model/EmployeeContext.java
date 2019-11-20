@@ -145,7 +145,7 @@ public class EmployeeContext implements CrudRepository<Employee> {
 	 * @throws HibernateException
 	 */
 	@Override
-	public Employee update(@NotNull Employee item) {
+	public Employee update(Employee item) {
 		try (Session session = this.sessionFactory.openSession()) {
 
 			try {

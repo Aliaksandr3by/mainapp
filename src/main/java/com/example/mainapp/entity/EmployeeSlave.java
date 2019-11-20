@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@Table(name = "slave_employee")
+@Table(name = "slave_employee", schema = "public")
 public class EmployeeSlave implements Serializable {
 
 

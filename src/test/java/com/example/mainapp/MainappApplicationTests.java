@@ -9,6 +9,7 @@ import com.example.mainapp.entity.Gender;
 import com.example.mainapp.service.EmployeeService;
 import com.example.mainapp.service.IService;
 import org.hibernate.SessionFactory;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,6 +90,7 @@ public class MainappApplicationTests {
 	public void mustGetNoNNull() {
 		List<Employee> list = employeeController.getEmployees();
 		logger.info("assertNotNull");
+//		Assert.fail();
 		assertNotNull(employeeController);
 	}
 
