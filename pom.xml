@@ -23,7 +23,7 @@
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<springframework.version>2.2.1.RELEASE</springframework.version>
+		<springframework.version>2.2.11.RELEASE</springframework.version>
 	</properties>
 
 	<dependencies>
